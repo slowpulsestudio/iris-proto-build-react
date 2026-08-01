@@ -26,12 +26,14 @@ project-type/ios
 - `vercel-prototype` — if the project deploys prototypes to Vercel
 - `architecture` — general code structure rules
 - `testing` — testing standards
+- `image-generation` — if the project calls an AI image-generation API
 
 **From `project-type/` — pick exactly one:**
 - `ios` — Swift iOS app
 - `chrome-extension` — Chrome browser extension
 - `python-mac` — Python desktop app for Mac (PyInstaller)
 - `python-website` — Python web app (FastAPI etc.)
+- `python-cli` — Python local script/CLI tool (no packaging or server)
 - `web-scraper` — Python scraping project
 
 ---

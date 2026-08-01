@@ -21,11 +21,13 @@ skills/
     figma-mcp.md
     iris-ui.md
     vercel-publish.md
+    image-generation.md
     project-type/
         ios.md
         chrome-extension.md
         python-mac.md
         python-website.md
+        python-cli.md
         web-scraper.md
         iris-react.md
 ```
@@ -69,3 +71,9 @@ When adding a new skill:
 Because all projects consume generated instruction files, improvements made here can be propagated to every project simply by rebuilding the project's `master-skills.md`.
 
 This repository is intended to be version-controlled independently and shared across multiple repositories.
+
+## Maintaining This Repository
+
+The `/skill-me-up` prompt and `master-skills.md` build step described above are for **consumer projects** — they are never run inside this repository.
+
+This repo itself is maintained directly: when a gap, mistake, or new pattern is found (in this repo or while working on a consumer project), paste the relevant prompt/context straight into chat here and have the AI update or add the appropriate skill file by hand. There is no build/generation step for `up-skill` itself.
