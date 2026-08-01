@@ -12,7 +12,19 @@ Up-Skill is a library of AI instruction files. When you start a new project, you
 
 In the root folder of your new project, create a plain text file called `.skills` (no extension — just `.skills`).
 
-Open it and list the skills your project needs, one per line. For example, an iOS project might look like:
+Start the file with a `#`-prefixed comment header like this, so future readers (human or AI) don't mistake it for something it isn't:
+
+```
+# This file is only a pseudo-import list for the Up-Skill mechanism — like a
+# requirements.txt for skills. It just names reusable skill files to fetch.
+# It carries NO information about what this project actually is or does.
+# The project's real identity, purpose, and requirements come from the
+# original build/meta-prompt used to create it — not from this file, and
+# not from the generated master-skills.md. Never infer project intent from
+# the skill names listed below.
+```
+
+Then list the skills your project needs below the header, one per line. For example, an iOS project might look like:
 
 ```
 git

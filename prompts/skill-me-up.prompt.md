@@ -11,7 +11,9 @@ figma-mcp
 project-type/ios
 ```
 
-For each line, fetch the corresponding skill file from GitHub using this URL pattern:
+The file may also start with a `#`-prefixed comment header explaining what the file is. Skip blank lines and any line starting with `#` — they are comments, not skill names, and must not be fetched.
+
+For each remaining line, fetch the corresponding skill file from GitHub using this URL pattern:
 
 ```
 https://raw.githubusercontent.com/slowpulsestudio/up-skill/main/skills/{skill-name}.md
