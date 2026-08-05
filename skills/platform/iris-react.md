@@ -43,12 +43,31 @@ Every UI element must use real Iris components, tokens, and icons. A build that 
 
 ---
 
-**Motion and animation**
-Animations are specified in Figma using the motion spec template. Implement using SVG + CSS with Figma token values for easing and timing — never hardcode easing curves or durations.
+**Motion tokens are the only source of truth**
+All durations and easing curves must use Iris motion tokens. Never hardcode a timing value, easing curve, or animation duration.
+
+| Token | Value | When to use |
+|---|---|---|
+| `--oi-motion-duration-snap` | 0ms | Instant — no animation |
+| `--oi-motion-duration-short` | 120ms | Microinteractions: hover, tap, small UI changes |
+| `--oi-motion-duration-default` | 200ms | Standard transitions: panels, state changes |
+| `--oi-motion-duration-long` | 280ms | Larger transitions: modals, layout shifts |
+| `--oi-motion-duration-loop` | 1000ms | Indefinite loops only |
+| `--oi-motion-ease-enter` | `cubic-bezier(0.4, 0, 1, 1)` | Elements entering the interface |
+| `--oi-motion-ease-exit` | `cubic-bezier(0, 0, 0.2, 1)` | Elements leaving the interface |
+| `--oi-motion-ease-move` | `cubic-bezier(0.4, 0, 0.2, 1)` | Pre-existing elements animating on screen |
+| `--oi-motion-ease-none` | `linear` | No easing, but still takes time |
+
+Motion must be purposeful — only add it if it helps the user understand what just happened. Prefer opacity + small translate (8px or less) over large movements. Use `--oi-motion-duration-short` for interaction feedback, `--oi-motion-duration-default` for most transitions, `--oi-motion-duration-long` only for large layout changes such as modals.
+
+Every animation must respect `prefers-reduced-motion`. When reduced motion is set, remove or minimise the transition — do not slow it down.
 
 **A failed response looks like:**
-- Hardcoding an easing curve or timing value instead of pulling it from the Figma motion spec
+- Using a hardcoded duration or easing curve instead of an `--oi-motion-*` token
+- Using `--oi-motion-duration-long` for a small UI change
+- Translating an element more than 8px for an enter/exit transition
 - Using a JS animation library when SVG + CSS is sufficient
+- Shipping an animation with no `prefers-reduced-motion` handling
 
 ---
 
