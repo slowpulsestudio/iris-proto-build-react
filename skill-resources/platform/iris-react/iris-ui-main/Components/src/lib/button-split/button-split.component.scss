@@ -1,0 +1,105 @@
+:host {
+  display: inline-block;
+}
+
+.iris-button-split {
+  display: inline-flex;
+  gap: 1px;
+
+  &__action,
+  &__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--oi-button-size-height-default);
+    border: none;
+    font-family: var(--oi-font-family-default);
+    font-size: var(--oi-font-size-s);
+    font-weight: var(--oi-font-weight-600);
+    line-height: var(--oi-line-height-s);
+    cursor: pointer;
+    transition: background-color var(--oi-motion-duration-short);
+  }
+
+  &__action {
+    padding: 0 var(--oi-spacing-s);
+    gap: var(--oi-button-gap-default);
+    border-radius: var(--oi-border-radius-default) 0 0 var(--oi-border-radius-default);
+  }
+
+  &__toggle {
+    padding: 0 var(--oi-spacing-xs);
+    border-radius: 0 var(--oi-border-radius-default) var(--oi-border-radius-default) 0;
+  }
+
+  // Primary variant
+  &--primary &__action,
+  &--primary &__toggle {
+    background-color: var(--oi-button-background-primary);
+    color: var(--oi-content-color-constant);
+    box-shadow: var(--oi-shadow-low);
+  }
+
+  &--primary &__action:hover:not(:disabled) {
+    background-color: var(--oi-button-background-primary-hover);
+  }
+
+  &--primary &__action:active:not(:disabled) {
+    background-color: var(--oi-button-background-primary-active);
+  }
+
+  &--primary &__toggle:hover:not(:disabled) {
+    background-color: var(--oi-button-background-primary-hover);
+  }
+
+  &--primary &__toggle:active:not(:disabled) {
+    background-color: var(--oi-button-background-primary-active);
+  }
+
+  // Ghost variant
+  &--ghost &__action,
+  &--ghost &__toggle {
+    background-color: transparent;
+    color: var(--oi-content-color-secondary);
+  }
+
+  &--ghost &__action:hover:not(:disabled) {
+    background-color: var(--oi-button-background-secondary-hover);
+  }
+
+  &--ghost &__action:active:not(:disabled) {
+    background-color: var(--oi-button-background-secondary-active);
+  }
+
+  &--ghost &__toggle:hover:not(:disabled) {
+    background-color: var(--oi-button-background-secondary-hover);
+  }
+
+  &--ghost &__toggle:active:not(:disabled) {
+    background-color: var(--oi-button-background-secondary-active);
+  }
+
+  // Disabled state
+  &__action:disabled,
+  &__toggle:disabled {
+    background-color: var(--oi-button-background-disabled);
+    color: var(--oi-content-color-disabled);
+    cursor: not-allowed;
+  }
+
+  // Focus
+  &__action:focus-visible,
+  &__toggle:focus-visible {
+    outline: none;
+    box-shadow: var(--oi-focus-ring);
+    z-index: 1;
+    position: relative;
+  }
+
+  // Primary shadow (0,2,0) would override the generic focus rule (0,1,1) above.
+  // Repeating with the variant prefix bumps specificity to 0,2,1 so the ring wins.
+  &--primary &__action:focus-visible,
+  &--primary &__toggle:focus-visible {
+    box-shadow: var(--oi-focus-ring);
+  }
+}

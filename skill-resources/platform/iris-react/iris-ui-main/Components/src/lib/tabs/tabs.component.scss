@@ -1,0 +1,90 @@
+:host {
+  display: block;
+}
+
+.iris-tabs {
+  display: flex;
+  border-bottom: var(--oi-border-width-default) solid var(--oi-border-color-muted);
+  gap: var(--oi-spacing-s);
+
+  &__item {
+    display: inline-flex;
+    align-items: center;
+    padding: 0;
+    margin-bottom: var(--oi-spacing-s);
+    border: none;
+    background: none;
+    cursor: pointer;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: calc(-1 * var(--oi-spacing-s));
+      left: 0;
+      right: 0;
+      height: var(--oi-border-width-l);
+      background-color: transparent;
+      border-radius: var(--oi-border-radius-s) var(--oi-border-radius-s) 0 0;
+      transition: background-color var(--oi-motion-duration-short);
+    }
+
+    &--active {
+      .iris-tabs__item-content {
+        background-color: var(--oi-background-color-tertiary);
+        color: var(--oi-content-color-primary);
+        font-weight: var(--oi-font-weight-600);
+      }
+
+      &::after {
+        background-color: var(--oi-border-color-focus);
+      }
+    }
+
+    &:hover:not(&--active) {
+      .iris-tabs__item-content {
+        color: var(--oi-content-color-primary);
+      }
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--oi-focus-ring);
+      border-radius: var(--oi-border-radius-s);
+    }
+  }
+
+  &__item-content {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--oi-spacing-xs);
+    padding: var(--oi-spacing-xs) var(--oi-spacing-s);
+    border-radius: var(--oi-border-radius-default);
+    font-family: var(--oi-font-family-default);
+    font-size: var(--oi-font-size-s);
+    font-weight: var(--oi-font-weight-400);
+    color: var(--oi-content-color-tertiary);
+    transition:
+      background-color var(--oi-motion-duration-short),
+      color var(--oi-motion-duration-short);
+  }
+
+  &__counter {
+    font-size: var(--oi-font-size-s);
+    color: var(--oi-content-color-tertiary);
+
+    &--action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 19px;
+      padding: 2px;
+      border-radius: var(--oi-border-radius-s);
+      background-color: var(--oi-base-color-info);
+      font-family: var(--oi-font-family-code);
+      font-size: var(--oi-font-size-xs);
+      font-weight: var(--oi-font-weight-600);
+      color: var(--oi-content-color-constant);
+    }
+  }
+}

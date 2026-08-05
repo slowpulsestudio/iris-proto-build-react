@@ -1,0 +1,90 @@
+{
+  "light": {
+    "--oi-shadow-none": {
+      "$type": "string",
+      "$value": "none"
+    },
+    "--oi-shadow-low": {
+      "$type": "string",
+      "$value": "0px 2px 4px rgba(2, 6, 24, 0.08)"
+    },
+    "--oi-shadow-mid": {
+      "$type": "string",
+      "$value": "0px 12px 30px rgba(2, 6, 24, 0.16), 0px 2px 3px rgba(2, 6, 24, 0.12)"
+    },
+    "--oi-shadow-high": {
+      "$type": "string",
+      "$value": "0px 16px 48px rgba(2, 6, 24, 0.24)"
+    },
+    "--oi-focus-ring": {
+      "$type": "string",
+      "$value": "0 0 0 1.5px var(--oi-background-color-primary), 0 0 0 3px var(--oi-border-color-focus)"
+    }
+  },
+  "dark": {
+    "--oi-shadow-none": {
+      "$type": "string",
+      "$value": "none"
+    },
+    "--oi-shadow-low": {
+      "$type": "string",
+      "$value": "inset 0px 0.5px 0px rgba(255, 255, 255, 0.12), inset 0px 0px 0px 0.5px rgba(255, 255, 255, 0.11)"
+    },
+    "--oi-shadow-mid": {
+      "$type": "string",
+      "$value": "0px 0px 0px 1px rgba(255, 255, 255, 0.16), 0px 2px 12px rgba(59, 51, 69, 0.16)"
+    },
+    "--oi-shadow-high": {
+      "$type": "string",
+      "$value": "0px 16px 56px rgba(255, 255, 255, 0.12), inset 0px 0px 0px 1px rgba(255, 255, 255, 0.16)"
+    },
+    "--oi-focus-ring": {
+      "$type": "string",
+      "$value": "0 0 0 1.5px var(--oi-background-color-primary), 0 0 0 3px var(--oi-border-color-focus)"
+    }
+  },
+  "hc-light": {
+    "--oi-shadow-none": {
+      "$type": "string",
+      "$value": "none"
+    },
+    "--oi-shadow-low": {
+      "$type": "string",
+      "$value": "0px 0px 0px 1px var(--oi-border-color-muted), 0px 2px 4px rgba(2, 6, 24, 0.08);"
+    },
+    "--oi-shadow-mid": {
+      "$type": "string",
+      "$value": "0px 0px 0px 1px var(--oi-border-color-strong), 0px 12px 30px rgba(2, 6, 24, 0.16), 0px 2px 3px rgba(2, 6, 24, 0.12);"
+    },
+    "--oi-shadow-high": {
+      "$type": "string",
+      "$value": "0px 0px 0px 1px var(--oi-border-color-default), 0px 16px 48px rgba(2, 6, 24, 0.24);"
+    },
+    "--oi-focus-ring": {
+      "$type": "string",
+      "$value": "0 0 0 1.5px ButtonFace, 0 0 0 3px ButtonText"
+    }
+  },
+  "hc-dark": {
+    "--oi-shadow-none": {
+      "$type": "string",
+      "$value": "none"
+    },
+    "--oi-shadow-low": {
+      "$type": "string",
+      "$value": "0px 0px 0px 1px var(--oi-border-color-muted), inset 0px 0px 0px 0.5px rgba(255, 255, 255, 0.11);"
+    },
+    "--oi-shadow-mid": {
+      "$type": "string",
+      "$value": "0px 0px 0px 1px var(--oi-border-color-strong), 0px 0px 0px 1px rgba(255, 255, 255, 0.12), 0px 2px 12px rgba(59, 51, 69, 0.16);"
+    },
+    "--oi-shadow-high": {
+      "$type": "string",
+      "$value": "0px 0px 0px 1px var(--oi-border-color-default), 0px 16px 56px rgba(255, 255, 255, 0.12);"
+    },
+    "--oi-focus-ring": {
+      "$type": "string",
+      "$value": "0 0 0 1.5px ButtonFace, 0 0 0 3px ButtonText"
+    }
+  }
+}

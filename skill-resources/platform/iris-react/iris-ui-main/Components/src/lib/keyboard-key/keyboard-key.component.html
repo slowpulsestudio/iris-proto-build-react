@@ -1,0 +1,12 @@
+@if (displayKeys().length === 1) {
+  <kbd class="iris-keyboard-key">{{ displayKeys()[0] }}</kbd>
+} @else {
+  <kbd class="iris-keyboard-key iris-keyboard-key--combination">
+    @for (key of displayKeys(); track $index) {
+      @if (!$first) {
+        <span class="iris-keyboard-key__separator">+</span>
+      }
+      <kbd class="iris-keyboard-key">{{ key }}</kbd>
+    }
+  </kbd>
+}

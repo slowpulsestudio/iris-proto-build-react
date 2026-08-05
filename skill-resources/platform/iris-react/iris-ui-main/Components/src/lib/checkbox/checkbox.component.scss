@@ -1,0 +1,103 @@
+:host {
+  display: block;
+}
+
+.iris-checkbox {
+  display: inline-grid;
+  grid-template-columns: auto 1fr;
+  column-gap: var(--oi-spacing-s);
+  row-gap: var(--oi-spacing-xs);
+  align-items: center;
+  cursor: pointer;
+  font-family: var(--oi-font-family-default);
+
+  &--md {
+    column-gap: var(--oi-spacing-m);
+  }
+
+  &--disabled {
+    cursor: not-allowed;
+    opacity: var(--oi-opacity-content-disabled);
+  }
+
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--oi-size-xs);
+    height: var(--oi-size-xs);
+    flex-shrink: 0;
+  }
+
+  &:focus-visible {
+    outline: none;
+
+    .iris-checkbox__container {
+      box-shadow: var(--oi-focus-ring);
+      border-radius: var(--oi-border-radius-s);
+    }
+  }
+
+  &__box {
+    width: var(--oi-size-xs);
+    height: var(--oi-size-xs);
+    border: var(--oi-border-width-l) solid var(--oi-border-color-strong);
+    border-radius: var(--oi-border-radius-default);
+    position: relative;
+    transition:
+      background-color var(--oi-motion-duration-short),
+      border-color var(--oi-motion-duration-short);
+
+    &--checked,
+    &--mixed {
+      background-color: var(--oi-base-color-brand);
+      border-color: var(--oi-base-color-brand);
+      color: var(--oi-content-color-constant);
+    }
+  }
+
+  &--md &__box {
+    width: 20px;
+    height: 20px;
+  }
+
+  &--md &__container {
+    width: 20px;
+    height: 20px;
+  }
+
+  &--md &__icon {
+    width: var(--oi-size-xs);
+    height: var(--oi-size-xs);
+  }
+
+  &--md &__label {
+    font-size: var(--oi-font-size-m);
+  }
+
+  &__icon {
+    position: absolute;
+    inset: 0;
+    width: 75%;
+    height: 75%;
+    margin: auto;
+  }
+
+  &__content {
+    display: contents;
+  }
+
+  &__label {
+    font-size: var(--oi-font-size-s);
+    font-weight: var(--oi-font-weight-400);
+    color: var(--oi-content-color-primary);
+    line-height: var(--oi-line-height-m);
+  }
+
+  &__supporting-text {
+    grid-column: 2;
+    font-size: var(--oi-font-size-xs);
+    color: var(--oi-content-color-tertiary);
+    line-height: var(--oi-line-height-m);
+  }
+}

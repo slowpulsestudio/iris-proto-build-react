@@ -1,0 +1,11 @@
+<div
+  class="iris-popover"
+  [class.iris-popover--xs]="padding() === 'xs'"
+  [class.iris-popover--sm]="padding() === 'sm'"
+  [class.iris-popover--md]="padding() === 'md'"
+  [class.iris-popover--lg]="padding() === 'lg'"
+  role="dialog"
+  [attr.aria-label]="ariaLabel() || null"
+>
+  <ng-container [ngTemplateOutlet]="contentTemplate()" />
+</div>

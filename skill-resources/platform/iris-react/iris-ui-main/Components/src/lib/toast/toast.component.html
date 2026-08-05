@@ -1,0 +1,54 @@
+<div
+  class="iris-toast"
+  [class.iris-toast--info]="type() === 'info'"
+  [class.iris-toast--warning]="type() === 'warning'"
+  [class.iris-toast--error]="type() === 'error'"
+  [class.iris-toast--success]="type() === 'success'"
+  [attr.role]="liveRole()"
+  aria-atomic="true"
+>
+    <div class="iris-toast__icon">
+        @if (type() === 'info') {
+          <iris-icon name="Info" [size]="24" [decorative]="true" />
+        }
+        @if (type() === 'warning') {
+          <iris-icon name="WarningCircle" [size]="24" [decorative]="true" />
+        }
+        @if (type() === 'error') {
+          <iris-icon name="Warning" [size]="24" [decorative]="true" />
+        }
+        @if (type() === 'success') {
+          <iris-icon name="CheckCircle" [size]="24" [decorative]="true" />
+        }
+      </div>
+    <div class="iris-toast__content">
+      <div class="iris-toast__text">
+        <span class="iris-toast__title">
+          <span class="iris-screen-reader-only">{{ typeLabel() }}: </span>
+          {{ title() }}</span
+        >
+        @if (supportingText()) {
+          <span class="iris-toast__supporting-text">{{ supportingText() }}</span>
+        }
+      </div>
+      @if (hasPrimaryAction() || hasSecondaryAction()) {
+        <div class="iris-toast__actions">
+          @if (hasPrimaryAction()) {
+            <button class="iris-toast__action iris-toast__action--primary" (click)="primaryAction.emit()">
+              {{ primaryActionLabel() }}
+            </button>
+          }
+          @if (hasSecondaryAction()) {
+            <button class="iris-toast__action iris-toast__action--secondary" (click)="secondaryAction.emit()">
+              {{ secondaryActionLabel() }}
+            </button>
+          }
+        </div>
+      }
+    </div>
+    @if (dismissible()) {
+      <button class="iris-toast__dismiss" (click)="dismiss()" [attr.aria-label]="dismissAriaLabel()">
+        <iris-icon name="X" [size]="20" [decorative]="true" />
+      </button>
+    }
+  </div>

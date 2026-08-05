@@ -1,0 +1,7 @@
+<a class="iris-link"
+  [class.iris-link--lg]="size() === 'lg'"
+  [class.iris-link--disabled]="disabled()"
+  [attr.href]="disabled() ? null : href()"
+  [attr.target]="target() || null"
+  [attr.aria-disabled]="disabled() || null"
+  [attr.tabindex]="disabled() ? -1 : null">{{ displayText() }}</a>

@@ -1,0 +1,54 @@
+{/* Copyright © 2026 One Identity LLC. ALL RIGHTS RESERVED. */}
+import { Meta, Canvas, ArgTypes, Controls } from '@storybook/addon-docs/blocks';
+import * as RadioButtonsStories from './radio-buttons.stories';
+import * as RadioButtonStories from './radio-button.stories';
+
+<Meta of={RadioButtonsStories} />
+
+# Radio Buttons
+
+Use `iris-radio-group` with one or more `iris-radio-button` children when the user must choose exactly one option. The group owns the selected value, applies the shared size, and can be bound as an Angular form control. Each button contributes its own required `value`, projected label content, optional `supportingText`, and optional per-option `disabled` state.
+
+## Interactive Demo
+
+<Canvas of={RadioButtonsStories.Overview} />
+<Controls of={RadioButtonsStories.Overview} />
+
+## Sizes
+
+Set the group's `size` input to `sm` (default) or `md`. Every child radio button inherits that size from the group.
+
+<Canvas of={RadioButtonsStories.Default} />
+<Canvas of={RadioButtonsStories.Medium} />
+
+## Supporting Text
+
+`supportingText` renders a secondary line under the option label for that specific radio button.
+
+<Canvas of={RadioButtonsStories.WithSupportingText} />
+
+## Disabled state
+
+Apply `disabled` to the group to disable every option. Apply `disabled` to an individual `iris-radio-button` to keep the rest of the group interactive.
+
+<Canvas of={RadioButtonsStories.Disabled} />
+<Canvas of={RadioButtonsStories.DisabledOption} />
+
+## Forms
+
+`iris-radio-group` implements `ControlValueAccessor`, so it can be used with `formControl` or `formControlName`. User selection updates the form value and emits `selectionChange`. Programmatic writes through the form update the selected option without emitting `selectionChange`.
+
+## Accessibility
+
+- The group host renders with `role="radiogroup"` and `aria-disabled`.
+- Supply a group label via `ariaLabel`; it maps to `aria-label` on the group host. Alternatively, associate a visible label element in your page markup using `aria-labelledby`.
+- Each radio host renders with `role="radio"`, `aria-checked`, `aria-disabled`, and `tabindex="0"` while enabled.
+- Keyboard support is limited to `Tab` for focus movement and `Space` for selection. Arrow-key navigation is not implemented.
+
+## Radio Button Group API
+
+<ArgTypes of={RadioButtonsStories} sort="alpha" />
+
+## Radio Button API
+
+<ArgTypes of={RadioButtonStories} sort="alpha" />

@@ -1,0 +1,144 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes iris-sidesheet-in {
+  from {
+    opacity: 0;
+    transform: translateX(1rem) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes iris-sidesheet-out {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(1rem) scale(0.985);
+  }
+}
+
+.iris-sidesheet {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--oi-background-color-primary);
+  border-left: var(--oi-border-width-default) solid var(--oi-border-color-default);
+  border-radius: var(--oi-border-radius-l);
+  box-shadow: var(--oi-shadow-low);
+  overflow: hidden;
+  transform-origin: right center;
+  animation: iris-sidesheet-in var(--oi-motion-duration-200) var(--oi-motion-ease-out) both;
+
+  &--closing {
+    animation: iris-sidesheet-out var(--oi-motion-duration-200) var(--oi-motion-ease-out) forwards;
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--oi-spacing-m);
+    padding: var(--oi-spacing-l);
+    border-bottom: var(--oi-border-width-default) solid var(--oi-border-color-default);
+    flex-shrink: 0;
+  }
+
+  &__title-icon {
+    flex-shrink: 0;
+    color: var(--oi-content-color-primary);
+  }
+
+  &__title-group {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__title {
+    margin: 0;
+    font-family: var(--oi-font-family-default);
+    font-size: var(--oi-font-size-l);
+    font-weight: var(--oi-font-weight-600);
+    line-height: var(--oi-line-height-s);
+    color: var(--oi-content-color-primary);
+  }
+
+  &__subtitle {
+    margin: var(--oi-spacing-xs) 0 0;
+    font-family: var(--oi-font-family-default);
+    font-size: var(--oi-font-size-s);
+    font-weight: var(--oi-font-weight-400);
+    line-height: var(--oi-line-height-m);
+    color: var(--oi-content-color-secondary);
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--oi-spacing-xs);
+    flex-shrink: 0;
+  }
+
+  &__action-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--oi-size-s);
+    height: var(--oi-size-s);
+    padding: 0;
+    border: none;
+    border-radius: var(--oi-border-radius-s);
+    background: transparent;
+    color: var(--oi-content-color-secondary);
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--oi-background-color-secondary);
+    }
+
+    &:focus-visible {
+      box-shadow: var(--oi-focus-ring);
+      outline: none;
+    }
+  }
+
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    gap: var(--oi-spacing-m);
+    padding: var(--oi-spacing-l);
+    border-top: var(--oi-border-width-default) solid var(--oi-border-color-default);
+    flex-shrink: 0;
+
+    /* Hide empty footer — :has() is supported in all modern browsers (Chrome 105+, Safari 15.4+, Firefox 121+). */
+    &:not(:has(*)) {
+      display: none;
+    }
+
+    &--start {
+      justify-content: flex-start;
+    }
+
+    &--center {
+      justify-content: center;
+    }
+
+    &--end {
+      justify-content: flex-end;
+    }
+  }
+}

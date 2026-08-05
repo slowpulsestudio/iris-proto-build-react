@@ -1,0 +1,28 @@
+<svg
+  class="iris-spinner"
+  [class.iris-spinner--sm]="size() === 'sm'"
+  [class.iris-spinner--default]="size() === 'default'"
+  [class.iris-spinner--lg]="size() === 'lg'"
+  [class.iris-spinner--loop]="isLoop()"
+  [class.iris-spinner--completion]="isCompletion()"
+  viewBox="0 0 24 24"
+  xmlns="http://www.w3.org/2000/svg"
+  fill="none"
+  aria-hidden="true"
+>
+  <circle class="iris-spinner__track" cx="12" cy="12" r="9" />
+  @if (isLoop()) {
+    <circle class="iris-spinner__arc" cx="12" cy="12" r="9" stroke-linecap="round" [attr.stroke-dasharray]="loopDash" />
+  }
+  @if (isCompletion()) {
+    <circle
+      class="iris-spinner__progress"
+      cx="12"
+      cy="12"
+      r="9"
+      stroke-linecap="round"
+      transform="rotate(-90 12 12)"
+      [attr.stroke-dasharray]="progressDash()"
+    />
+  }
+</svg>

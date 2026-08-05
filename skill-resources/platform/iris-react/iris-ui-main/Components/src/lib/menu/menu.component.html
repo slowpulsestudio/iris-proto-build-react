@@ -1,0 +1,31 @@
+<ul class="iris-menu" role="menu" #menu>
+  @for (item of items(); track $index) {
+    @if (item.type === 'item') {
+      <li
+        #itemEl
+        class="iris-menu__item"
+        [class.iris-menu__item--disabled]="item.disabled"
+        [class.iris-menu__item--has-children]="item.children?.length"
+        [class.iris-menu__item--destructive]="item.destructive"
+        role="menuitem"
+        tabindex="-1"
+        [attr.aria-disabled]="item.disabled"
+        [attr.aria-haspopup]="item.children?.length ? 'menu' : null"
+        (click)="onItemClick(item, itemEl)"
+        (keydown)="onItemKeydown($event, item, itemEl)"
+        (mouseenter)="onItemMouseEnter(item, itemEl)"
+        (mouseleave)="onItemMouseLeave()"
+      >
+        @if (item.icon) {
+          <iris-icon class="iris-menu__item-icon" [name]="item.icon" [size]="20" [decorative]="true" />
+        }
+        <span class="iris-menu__item-label">{{ item.label }}</span>
+        @if (item.children?.length) {
+          <iris-icon class="iris-menu__item-trailing-icon" name="CaretRight" [size]="20" [decorative]="true" />
+        }
+      </li>
+    } @else {
+      <li class="iris-menu__separator" role="separator"></li>
+    }
+  }
+</ul>

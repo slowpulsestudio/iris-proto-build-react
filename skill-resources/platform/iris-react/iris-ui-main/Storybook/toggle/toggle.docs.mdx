@@ -1,0 +1,39 @@
+{/* Copyright © 2026 One Identity LLC. ALL RIGHTS RESERVED. */}
+import { Meta, Canvas, ArgTypes, Controls } from '@storybook/addon-docs/blocks';
+import * as ToggleStories from './toggle.stories';
+
+<Meta of={ToggleStories} />
+
+# Toggle
+
+A binary switch for immediate on / off changes. Current implementation renders only switch control itself; consumers must supply visible label text outside component.
+
+## Interactive Demo
+
+Off and on states shown side by side. Toggle `disabled` control to apply same interaction lock to both.
+
+<Canvas of={ToggleStories.Overview} />
+<Controls of={ToggleStories.Overview} />
+
+## Disabled state
+
+Apply `disabled` to prevent interaction. Angular forms can also disable control through `ControlValueAccessor`.
+
+<Canvas of={ToggleStories.Disabled} />
+<Canvas of={ToggleStories.DisabledOn} />
+
+## Forms integration
+
+`iris-toggle` implements `ControlValueAccessor`, so it works with reactive forms, `formControlName`, and `ngModel`. Toggling updates form value immediately and marks control as touched.
+
+## Accessibility
+
+- Toggle renders native `<button type="button">` with `role="switch"`.
+- `aria-checked` reflects current boolean state.
+- Enter and Space activation come from native button behaviour; component adds no custom key handlers.
+- Disabled state is represented by native `disabled` attribute on button. Current implementation does not add `aria-disabled` or `aria-required`.
+- Provide visible label outside component so switch purpose is clear.
+
+## API
+
+<ArgTypes of={ToggleStories} sort="alpha" />

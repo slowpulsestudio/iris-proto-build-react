@@ -1,0 +1,62 @@
+{/* Copyright © 2026 One Identity LLC. ALL RIGHTS RESERVED. */}
+import { Meta, Canvas, ArgTypes, Controls } from '@storybook/addon-docs/blocks';
+import * as TreeStories from './tree.stories';
+
+<Meta of={TreeStories} />
+
+# Tree
+
+A hierarchical list for nested parent-child data. Each node shows one leading icon, optional nested children, and single-selection state driven by `activeNodeId`.
+
+Parent rows can be expanded from row click, caret button, or keyboard. Current implementation shows optional trailing affordance icons, but those trailing icons are decorative only.
+
+## Interactive Demo
+
+<Canvas of={TreeStories.Overview} />
+<Controls of={TreeStories.Overview} />
+
+## Active node
+
+Set `activeNodeId` to a node `id` to highlight current selection. Clicking or keyboard-selecting a row emits `activeNodeIdChange` and `nodeSelectionChange`.
+
+<Canvas of={TreeStories.ActiveNode} />
+
+## Expansion behavior
+
+- Clicking parent row selects it and expands it if it is collapsed.
+- Clicking already expanded parent row keeps it expanded.
+- Caret button toggles parent open and closed without selecting row.
+
+## Without trailing icons
+
+Set `showTrailingIcons` to `false` to hide decorative trailing affordances globally. A single node can also opt out by setting `showTrailingIcons: false` on that node.
+
+<Canvas of={TreeStories.WithoutTrailingIcons} />
+
+## Accessibility
+
+- Root list uses `role="tree"`. Nested child lists use `role="group"`.
+- Each node uses `role="treeitem"`.
+- Parent nodes expose `aria-expanded`; active node exposes `aria-selected="true"`.
+- Caret button label switches between `collapseAriaLabel` (default `'Collapse'`) and `expandAriaLabel` (default `'Expand'`). Localise these for non-English UIs.
+- Supply `ariaLabel` to label the tree landmark when multiple trees exist on the page.
+- Enter or Space selects focused row. Arrow Right expands collapsed parent. Arrow Left collapses expanded parent.
+- Arrow Down and Arrow Up move focus to next or previous visible row in DOM order.
+- Every visible row has `tabindex="0"` in current implementation; component does not use roving tabindex or `aria-level`.
+
+## API
+
+<ArgTypes of={TreeStories} sort="alpha" />
+
+### TreeNode
+
+Each entry in `nodes` array, and recursively in `children`, must conform to `TreeNode`.
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `id` | `string` | ✓ | Unique identifier used for active-node tracking. |
+| `label` | `string` | ✓ | Visible node label. |
+| `icon` | `string` | | Optional icon override. Without it, parents use folder icons and leaf nodes use `Placeholder`. |
+| `expanded` | `boolean` | | Initial expanded state for parent nodes. |
+| `children` | `TreeNode[]` | | Nested child nodes. Presence of children makes node expandable. |
+| `showTrailingIcons` | `boolean` | | Per-node override for decorative trailing affordances. `false` hides them even when component input is `true`. |

@@ -1,0 +1,36 @@
+{/* Copyright © 2026 One Identity LLC. ALL RIGHTS RESERVED. */}
+import { Meta, Canvas, ArgTypes, Controls } from '@storybook/addon-docs/blocks';
+import * as TagStories from './tag.stories';
+
+<Meta of={TagStories} />
+
+# Tag
+
+`iris-tag` renders a text label with an optional remove action. The component is consumer-controlled: activating the remove affordance emits `removed`, but your application decides whether the tag actually disappears.
+
+`text` supplies the visible label. `removable` defaults to `true`; when set to `false`, only the focusable text remains.
+
+## Interactive Demo
+
+<Canvas of={TagStories.Overview} />
+<Controls of={TagStories.Overview} />
+
+## Default
+
+<Canvas of={TagStories.Default} />
+
+## Not removable
+
+When `removable` is `false`, the component renders only the tag text and no remove button.
+
+<Canvas of={TagStories.NotRemovable} />
+
+## Accessibility
+
+- When present, the remove button label defaults to `"Remove"`. Override `removeAriaLabel` to localise it.
+- Clicking the remove button emits `removed` and stops the click from bubbling to ancestors.
+- Pressing `Enter` or `Space` on the remove button emits `removed`.
+
+## API
+
+<ArgTypes of={TagStories} sort="alpha" />

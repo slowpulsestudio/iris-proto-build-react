@@ -1,0 +1,124 @@
+{/* Copyright © 2026 One Identity LLC. ALL RIGHTS RESERVED. */}
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ToastStories from './toast.stories';
+
+<Meta of={ToastStories} />
+
+# Toast
+
+A brief notification surface for status messaging and optional follow-up actions. Toasts are displayed programmatically via `IrisToastService` and are not declared in templates.
+
+## When to use
+
+| Type | Use when |
+|---|---|
+| **Info** | Providing neutral information or context |
+| **Warning** | Alerting user to a potential issue that needs attention |
+| **Error** | Communicating failure or blocking issue |
+| **Success** | Confirming completed action or positive outcome |
+
+## Usage
+
+Inject `IrisToastService` and call `show()` with an `IrisToastConfig` object. The method returns an `IrisToastRef` that can be used to dismiss the toast programmatically or to react to its dismissal.
+
+```ts
+import { IrisToastService } from '@iris-ui/components';
+
+@Component({ ... })
+export class MyComponent {
+  private readonly toast = inject(IrisToastService);
+
+  notify(): void {
+    const ref = this.toast.show({
+      type: 'success',
+      title: 'Changes saved',
+      supportingText: 'Your settings have been updated.',
+    });
+
+    // React to action clicks and dismissal via a single observable
+    ref.afterDismissed().subscribe((reason) => {
+      if (reason === 'primaryAction') console.log('primary clicked');
+      if (reason === 'secondaryAction') console.log('secondary clicked');
+      if (reason === 'dismissed') console.log('closed without action');
+    });
+  }
+}
+```
+
+## Overview
+
+Click a button to trigger a toast.
+
+<Canvas of={ToastStories.Overview} />
+
+## Interactive Demo
+
+<Canvas of={ToastStories.Interactive} />
+<Controls of={ToastStories.Interactive} />
+
+## Types
+
+### Info
+
+<Canvas of={ToastStories.Default} />
+
+### Warning
+
+<Canvas of={ToastStories.Warning} />
+
+### Error
+
+<Canvas of={ToastStories.Error} />
+
+### Success
+
+<Canvas of={ToastStories.Success} />
+
+## Actions
+
+<Canvas of={ToastStories.WithActions} />
+
+## Dismissal and actions
+
+- `dismissible` controls whether the × button renders. Clicking it removes the toast and notifies `afterDismissed()`.
+- Action button clicks emit via `afterDismissed()` with reason `'primaryAction'` or `'secondaryAction'`. Clicking an action also dismisses the toast automatically.
+- Auto-dismiss fires after `duration` ms. Calling `ref.dismiss()` before the timer cancels the timer.
+- When actions are present, `duration` defaults to `null` so users always have time to interact.
+
+## Accessibility
+
+- `role="status"` (polite) is used for `info` and `success` types; `role="alert"` (assertive) for `warning` and `error`.
+- `aria-atomic="true"` ensures assistive technologies announce the full toast content on update.
+- A visually-hidden type prefix (e.g. `"Error: "`) is prepended to the title and announced by screen readers. All four prefixes are localizable via `infoAriaLabel`, `warningAriaLabel`, `errorAriaLabel`, `successAriaLabel` in `IrisToastConfig`.
+- The dismiss button label defaults to `"Dismiss"`. Override `dismissAriaLabel` for non-English UIs.
+- Focus is never moved to the toast. Toasts are non-modal and must not disrupt the user's current focus position.
+
+## IrisToastConfig
+
+| Property | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `title` | `string` | ✓ | — | Heading text shown in bold |
+| `type` | `ToastType` | | `'info'` | Semantic type |
+| `supportingText` | `string` | | `''` | Body copy below title |
+| `dismissible` | `boolean` | | `true` | Show dismiss (×) button |
+| `duration` | `number \| null` | | `5000` | Auto-dismiss delay in ms; `null` disables auto-dismiss |
+| `dismissAriaLabel` | `string` | | `'Dismiss'` | Accessible label for dismiss button |
+| `primaryActionLabel` | `string` | | — | Label for the primary action button |
+| `secondaryActionLabel` | `string` | | — | Label for the secondary action button, independent of primary |
+
+### IrisToastRef
+
+| Method | Returns | Description |
+|---|---|---|
+| `dismiss()` | `void` | Removes the toast immediately |
+| `afterDismissed()` | `Observable<IrisToastDismissReason>` | Emits once when the toast is removed, carrying the dismiss reason, then completes |
+
+### IrisToastDismissReason
+
+| Value | When emitted |
+|---|---|
+| `'dismissed'` | × button clicked, auto-dismiss timer fired, or `ref.dismiss()` called |
+| `'primaryAction'` | Primary action button was clicked |
+| `'secondaryAction'` | Secondary action button was clicked |
+
+Clicking an action button both sets the reason and triggers dismissal — no need to call `ref.dismiss()` manually from an action handler.

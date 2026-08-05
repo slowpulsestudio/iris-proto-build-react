@@ -1,0 +1,44 @@
+{/* Copyright © 2026 One Identity LLC. ALL RIGHTS RESERVED. */}
+import { Meta, Canvas, ArgTypes, Controls } from '@storybook/addon-docs/blocks';
+import * as ButtonGroupStories from './button-group.stories';
+
+<Meta of={ButtonGroupStories} />
+
+# Button Group
+
+Groups multiple `iris-button` actions in a single horizontal container and applies one shared size to every child button.
+
+## Interactive Demo
+
+<Canvas of={ButtonGroupStories.Overview} />
+<Controls of={ButtonGroupStories.Overview} />
+
+## Sizes
+
+Two group sizes are available: `default` and `lg`.
+
+<Canvas of={ButtonGroupStories.Default} />
+<Canvas of={ButtonGroupStories.Large} />
+
+## Direction
+
+Set `direction="reverse"` to apply the reverse layout class.
+
+<Canvas of={ButtonGroupStories.Reverse} />
+
+## Behaviour notes
+
+- Only projected `iris-button` elements are rendered inside the group.
+- The group writes its `size` value into every child button.
+- There is no group input for a small size.
+- The component does not add roving tabindex or arrow-key navigation.
+
+## Accessibility
+
+- The wrapper uses `role="group"`.
+- Each child button keeps its own native button semantics.
+- If the group needs an accessible name, provide it from surrounding content because the component does not expose a dedicated label input.
+
+## API
+
+<ArgTypes of={ButtonGroupStories} sort="alpha" />

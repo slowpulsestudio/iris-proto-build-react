@@ -1,0 +1,15 @@
+{
+  "$schema": "../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "dist",
+  "assets": [
+    ".npmrc",
+    "src/styles/iris-ui.css"
+  ],
+  "allowedNonPeerDependencies": [
+    "@fontsource/inter",
+    "@fontsource/ibm-plex-mono"
+  ],
+  "lib": {
+    "entryFile": "src/public-api.ts"
+  }
+}

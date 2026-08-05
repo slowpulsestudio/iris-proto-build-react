@@ -1,0 +1,17 @@
+:host {
+  display: inline-block;
+}
+
+.iris-button-group {
+  display: inline-flex;
+  justify-content: flex-end;
+  gap: var(--oi-button-gap-default);
+
+  &--lg {
+    gap: var(--oi-button-gap-l);
+  }
+
+  &--reverse {
+    flex-direction: row-reverse;
+  }
+}

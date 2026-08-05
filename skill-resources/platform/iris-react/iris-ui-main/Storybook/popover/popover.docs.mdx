@@ -1,0 +1,58 @@
+{/* Copyright © 2026 One Identity LLC. ALL RIGHTS RESERVED. */}
+import { Meta, Canvas, ArgTypes, Controls } from '@storybook/addon-docs/blocks';
+import * as PopoverStories from './popover.stories';
+
+<Meta of={PopoverStories} />
+
+# Popover
+
+`iris-popover` is the panel component used by `IrisPopoverDirective`. The directive anchors a floating panel to its host element, projects a consumer-supplied `TemplateRef` into the panel, and manages open and close state through an Angular CDK overlay.
+
+## Interactive Demo
+
+The directive does not attach its own click, hover, or focus listeners. In Storybook, the trigger button calls the directive API directly.
+
+<Canvas of={PopoverStories.Default} />
+<Controls of={PopoverStories.Default} />
+
+## Padding sizes
+
+The panel component accepts `padding="xs" | "sm" | "md" | "lg"`. `lg` is the default.
+
+<Canvas of={PopoverStories.Overview} />
+
+## Positions
+
+The directive's preferred position defaults to `bottom-center`. When that position cannot be used, the connected overlay falls back through this order: `bottom-center`, `bottom-start`, `bottom-end`, `top-center`, `top-start`, `top-end`.
+
+<Canvas of={PopoverStories.Positions} />
+
+## Open and close behaviour
+
+- Call `toggle()`, `open()`, or `close()` on the directive instance to control the popover.
+- Clicking the transparent backdrop closes the popover.
+- Pressing `Escape` anywhere in the document closes the popover.
+- Destroying the directive also closes and disposes the overlay.
+
+## Accessibility
+
+- The trigger element always gets `aria-haspopup="dialog"`.
+- `aria-expanded` reflects the current open state.
+- `aria-controls` is added only while the popover is open.
+- The popover panel uses `role="dialog"`. Supply an accessible name via `irisPopoverAriaLabel` on the directive; without it the dialog has no programmatic label.
+- The directive does not move focus into the panel, trap focus, or restore focus on close.
+
+## API
+
+<ArgTypes of={PopoverStories} sort="alpha" />
+
+### Popover positions
+
+| Value |
+|---|
+| `bottom-start` |
+| `bottom-center` |
+| `bottom-end` |
+| `top-start` |
+| `top-center` |
+| `top-end` |

@@ -1,0 +1,52 @@
+@if (visible) {
+  <div
+    class="iris-banner"
+    [class.iris-banner--info]="type() === 'info'"
+    [class.iris-banner--warning]="type() === 'warning'"
+    [class.iris-banner--error]="type() === 'error'"
+    [class.iris-banner--success]="type() === 'success'"
+    [class.iris-banner--colored]="colored()"
+    [attr.role]="type() === 'error' || type() === 'warning' ? 'alert' : 'status'"
+  >
+    <div class="iris-banner__icon">
+      @if (type() === 'info') {
+        <iris-icon name="Info" [size]="24" [decorative]="true" />
+      }
+      @if (type() === 'warning') {
+        <iris-icon name="WarningCircle" [size]="24" [decorative]="true" />
+      }
+      @if (type() === 'error') {
+        <iris-icon name="Warning" [size]="24" [decorative]="true" />
+      }
+      @if (type() === 'success') {
+        <iris-icon name="CheckCircle" [size]="24" [decorative]="true" />
+      }
+    </div>
+    <div class="iris-banner__content">
+      <div class="iris-banner__text">
+        <span class="iris-banner__title">
+          <span class="iris-screen-reader-only"> {{ typeLabel() }}: </span>
+          {{ title() }}
+        </span>
+        @if (supportingText()) {
+          <span class="iris-banner__supporting-text">{{ supportingText() }}</span>
+        }
+      </div>
+      @if (showActions()) {
+        <div class="iris-banner__actions">
+          <button class="iris-banner__action iris-banner__action--primary" (click)="primaryActionClick.emit()">
+            {{ primaryActionLabel() }}
+          </button>
+          <button class="iris-banner__action iris-banner__action--secondary" (click)="secondaryActionClick.emit()">
+            {{ secondaryActionLabel() }}
+          </button>
+        </div>
+      }
+    </div>
+    @if (dismissable()) {
+      <button class="iris-banner__dismiss" (click)="dismiss()" [attr.aria-label]="dismissAriaLabel()">
+        <iris-icon name="X" [size]="20" [decorative]="true" />
+      </button>
+    }
+  </div>
+}

@@ -1,0 +1,42 @@
+{/* Copyright © 2026 One Identity LLC. ALL RIGHTS RESERVED. */}
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as SubtextStories from './subtext.stories';
+
+<Meta of={SubtextStories} />
+
+# Subtext
+
+`iris-subtext` renders projected helper or error text below a field. `type` is required and only accepts `hint` or `error`.
+
+When projected into `iris-form-field`, visibility is managed by the form field rather than by the subtext itself: the first hint is shown until the associated control becomes both invalid and touched, then the first error is shown instead. Additional hints and errors stay hidden.
+
+## Hint
+
+<Canvas of={SubtextStories.HintStyle} />
+
+## Error (forced)
+
+Use `type="error"` when you need to show an error that is not driven by reactive-form validators, for example a server-side validation message.
+
+<Canvas of={SubtextStories.ErrorStyle} />
+
+## Multiple errors — one shown at a time
+
+Declare one `iris-subtext type="error"` per message and use structural conditionals so only relevant messages are in the DOM. `iris-form-field` still shows only the first projected error subtext.
+
+<Canvas of={SubtextStories.MultipleErrors} />
+
+## Standalone usage
+
+Outside `iris-form-field`, `iris-subtext` has no form awareness and stays visible unless a parent component calls `setVisible` programmatically.
+
+<Canvas of={SubtextStories.Standalone} />
+
+## Accessibility
+
+- The component renders plain text content inside spans and does not add `aria-live`, `role`, or form-control associations.
+- Error announcement behaviour depends on the surrounding form implementation, not on `iris-subtext` itself.
+
+## API
+
+<ArgTypes of={SubtextStories} sort="alpha" />

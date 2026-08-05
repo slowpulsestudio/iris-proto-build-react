@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": "./out-tsc/storybook",
+    "types": [
+      "node"
+    ],
+    "moduleResolution": "bundler"
+  },
+  "include": [
+    ".storybook/preview.ts",
+    "Storybook/**/*.ts",
+    "Components/src/**/*.ts"
+  ],
+  "exclude": [
+    "Components/src/**/*.spec.ts",
+    "Components/src/public-api.ts",
+    "Storybook/storybook-host/main.ts"
+  ]
+}

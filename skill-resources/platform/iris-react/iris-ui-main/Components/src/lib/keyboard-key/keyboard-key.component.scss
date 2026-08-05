@@ -1,0 +1,36 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+}
+
+.iris-keyboard-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--oi-spacing-xs);
+  border: var(--oi-border-width-default) solid var(--oi-border-color-default);
+  border-radius: var(--oi-border-radius-default);
+  background-color: var(--oi-background-color-primary);
+  box-shadow: 0 var(--oi-border-width-default) 0 var(--oi-border-color-default);
+  font-family: var(--oi-font-family-code);
+  font-size: var(--oi-font-size-s);
+  font-weight: var(--oi-font-weight-400);
+  color: var(--oi-content-color-secondary);
+  line-height: var(--oi-line-height-s);
+
+  &--combination {
+    white-space: nowrap;
+    gap: var(--oi-spacing-xs);
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+    padding: 0;
+  }
+}
+
+.iris-keyboard-key__separator {
+  font-size: var(--oi-font-size-s);
+  color: var(--oi-content-color-tertiary);
+  user-select: none;
+}

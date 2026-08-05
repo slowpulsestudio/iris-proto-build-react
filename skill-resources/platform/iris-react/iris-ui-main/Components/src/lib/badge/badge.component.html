@@ -1,0 +1,13 @@
+<span
+  class="iris-badge"
+  [class.iris-badge--info]="type() === 'info'"
+  [class.iris-badge--success]="type() === 'success'"
+  [class.iris-badge--error]="type() === 'error'"
+  [class.iris-badge--warning]="type() === 'warning'"
+  [class.iris-badge--strong]="strong()"
+>
+  @if (iconName()) {
+    <iris-icon class="iris-badge__icon" [name]="iconName()" [size]="16" [decorative]="true" />
+  }
+  {{ text() }}
+</span>

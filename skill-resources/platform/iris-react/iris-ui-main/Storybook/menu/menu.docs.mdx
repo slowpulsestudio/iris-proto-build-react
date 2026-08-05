@@ -1,0 +1,89 @@
+{/* Copyright © 2026 One Identity LLC. ALL RIGHTS RESERVED. */}
+import { Meta, Canvas, ArgTypes, Controls } from '@storybook/addon-docs/blocks';
+import * as MenuStories from './menu.stories';
+
+<Meta of={MenuStories} />
+
+# Menu
+
+A floating panel of actions or options anchored to a trigger element. The menu opens when the user clicks the trigger and closes on item selection, an outside click, Escape, or Tab. Each item carries a required `id`, an optional icon, and a label. An item with a `children` array opens a sub-menu panel to the side when hovered or activated via keyboard. Separators divide items into logical groups. Destructive items are highlighted in a danger colour to signal irreversible actions.
+
+## Interactive Demo
+
+Click the button to open the menu. Use the controls to change the items array or preferred position.
+
+<Canvas of={MenuStories.Overview} />
+<Controls of={MenuStories.Overview} />
+
+## Sub-menus
+
+Any `MenuActionItem` can carry a `children` array to open a nested menu panel to the side on hover or keyboard activation (ArrowRight, Enter, Space). When opened via keyboard, focus moves automatically to the first item in the sub-menu. Pressing ArrowLeft inside a sub-menu closes it and returns focus to the parent item. Each sub-menu is a full `IrisMenuComponent` instance, so nesting is **unbounded** — a child item can itself have children, and those children can have children, and so on.
+
+That said, keep real-world menus to **two levels** (root + one sub-menu). Three levels already strain discoverability and pointer precision; anything deeper becomes difficult to navigate.
+
+The example below shows three levels: the root menu → **Share** → **Export as**.
+
+<Canvas of={MenuStories.WithDeepNesting} />
+
+## Destructive items
+
+Mark an item with `destructive: true` to render it in the danger colour. Use this for actions that cannot be undone.
+
+<Canvas of={MenuStories.WithDestructiveItem} />
+
+## Disabled items
+
+Mark an item with `disabled: true` to prevent interaction. Disabled items are dimmed and excluded from the tab order.
+
+<Canvas of={MenuStories.WithDisabledItem} />
+
+## Positions
+
+The preferred position is `bottom-start` by default. When the preferred position does not fit in the viewport, the overlay falls back in order: `bottom-start → bottom-end → top-start → top-end`.
+
+<Canvas of={MenuStories.Positions} />
+
+## Accessibility
+
+- The trigger element carries `aria-haspopup="menu"` at all times.
+- When open, the trigger carries `aria-expanded="true"` and `aria-controls` referencing the menu panel.
+- The menu panel uses `role="menu"` and each interactive item uses `role="menuitem"`.
+- Items with children carry `aria-haspopup="menu"`.
+- Disabled items are excluded from keyboard navigation and marked with `aria-disabled`.
+- **ArrowDown / ArrowUp** move focus between items; **Home / End** jump to the first and last focusable item.
+- **Enter** or **Space** activates the focused item. On an item with children, this opens the sub-menu and moves focus to its first item.
+- **ArrowRight** on an item with children opens its sub-menu and moves focus to the first sub-menu item.
+- **ArrowLeft** in a sub-menu closes it and returns focus to the parent item.
+- **Escape** closes the menu and returns focus to the trigger.
+- **Tab** closes the menu.
+
+## API
+
+<ArgTypes of={MenuStories} sort="alpha" />
+
+### MenuItem types
+
+`MenuItem` is a discriminated union. Use the `type` field to distinguish between an actionable row and a visual separator.
+
+```ts
+type MenuItem = MenuActionItem | MenuSeparatorItem;
+```
+
+#### MenuActionItem
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `type` | `'item'` | ✓ | Identifies this entry as a clickable row. |
+| `id` | `string` | ✓ | Unique identifier used when emitting `irisMenuItemSelect`. |
+| `label` | `string` | — | Display text shown in the row. |
+| `icon` | `string` | — | Icon name (e.g. `'Pencil'`). Rendered to the left of the label. |
+| `children` | `MenuItem[]` | — | Sub-menu items. Hovering or pressing ArrowRight/Enter opens a sub-panel to the side. Arbitrarily nestable. |
+| `disabled` | `boolean` | — | When `true`, the item is non-interactive and visually dimmed. |
+| `destructive` | `boolean` | — | When `true`, the item is rendered in the danger colour to signal irreversible actions. |
+
+#### MenuSeparatorItem
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `type` | `'separator'` | ✓ | Renders a horizontal divider. No other fields are needed or expected. |
+

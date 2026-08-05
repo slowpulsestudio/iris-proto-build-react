@@ -1,0 +1,39 @@
+{
+  "name": "@oneidentity/iris-ui-icons",
+  "version": "0.1.0",
+  "description": "Raw exports of the Iris UI icon library.",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "registry": "https://pkgs.dev.azure.com/1id/_packaging/OneIdentity/npm/registry/",
+    "access": "restricted"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./manifest": "./dist/manifest.json",
+    "./icons": {
+      "types": "./dist/icons/index.d.ts",
+      "import": "./dist/icons/index.js",
+      "require": "./dist/icons/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsx scripts/build.ts",
+    "build:assets": "tsx scripts/build-assets.ts"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.5",
+    "svgo": "^4.0.1",
+    "tsx": "^4.19.4",
+    "typescript": "~5.8.3"
+  }
+}

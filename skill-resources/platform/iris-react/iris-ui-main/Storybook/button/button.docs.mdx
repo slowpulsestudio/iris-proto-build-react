@@ -1,0 +1,70 @@
+{/* Copyright © 2026 One Identity LLC. ALL RIGHTS RESERVED. */}
+import { Meta, Canvas, ArgTypes, Controls } from '@storybook/addon-docs/blocks';
+import * as ButtonStories from './button.stories';
+
+<Meta of={ButtonStories} />
+
+# Button
+
+Triggers an action with one of four visual variants and optional icon support.
+
+## When to use
+
+| Variant | Use when |
+|---|---|
+| **Primary** | Main call-to-action |
+| **Secondary** | Supporting action alongside a primary action |
+| **Ghost** | Low-emphasis or inline action |
+| **Danger** | Destructive or irreversible action |
+
+## Interactive Demo
+
+Each row is a variant. Toggle `disabled` to apply the disabled state across the example buttons.
+
+<Canvas of={ButtonStories.Overview} />
+<Controls of={ButtonStories.Overview} />
+
+## Sizes
+
+Three sizes are available: `sm`, `default`, and `lg`.
+
+<Canvas of={ButtonStories.Small} />
+<Canvas of={ButtonStories.Default} />
+<Canvas of={ButtonStories.Large} />
+
+## With icon and text
+
+Use `buttonType="icon-text"` together with `iconName` to show both icon and projected label text.
+
+<Canvas of={ButtonStories.IconAndText} />
+
+## Icon only
+
+Use `buttonType="icon-only"` together with `iconName` when space is constrained. Always project a meaningful text label as `ng-content` — it is hidden visually but announced by screen readers as the button's accessible name.
+
+<Canvas of={ButtonStories.IconOnly} />
+
+## Disabled state
+
+Apply `disabled` to forward the disabled state to the native `<button>`.
+
+<Canvas of={ButtonStories.Disabled} />
+
+## Behaviour notes
+
+- Button text is projected content, not a `label` input.
+- `buttonType="text-only"` renders label text only.
+- `buttonType="icon-text"` renders icon and label when `iconName` is provided.
+- `buttonType="icon-only"` hides the projected label visually but keeps it in the DOM for accessibility.
+- The component does not provide built-in loading, full-width, or menu-trigger states.
+
+## Accessibility
+
+- The component relies on native button semantics for focus and keyboard activation.
+- Project meaningful text content for all button types — it is always the accessible name.
+- For `icon-only` buttons the projected text is hidden visually but announced by screen readers.
+- `type` defaults to `"button"`; set `type="submit"` when the button should submit a form.
+
+## API
+
+<ArgTypes of={ButtonStories} sort="alpha" />

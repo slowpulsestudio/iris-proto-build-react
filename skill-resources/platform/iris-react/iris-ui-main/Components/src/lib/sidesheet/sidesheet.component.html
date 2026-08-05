@@ -1,0 +1,56 @@
+<aside
+  class="iris-sidesheet"
+  [class.iris-sidesheet--closing]="isClosing()"
+  [class.iris-sidesheet--maximized]="maximizedState()"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-label]="title() || null"
+  tabindex="-1"
+  (keydown)="onKeydown($event)"
+  #panelElement
+>
+  <header class="iris-sidesheet__header">
+    @if (titleIcon()) {
+      <iris-icon class="iris-sidesheet__title-icon" [name]="titleIcon()" [size]="20" [decorative]="true" />
+    }
+    <div class="iris-sidesheet__title-group">
+      <h2 class="iris-sidesheet__title">{{ title() }}</h2>
+      @if (subtitle()) {
+        <p class="iris-sidesheet__subtitle">{{ subtitle() }}</p>
+      }
+    </div>
+    <div class="iris-sidesheet__actions">
+      @if (enableMaximizeToggle()) {
+        <button
+          class="iris-sidesheet__action-button"
+          type="button"
+          [attr.aria-label]="maximizedState() ? restoreAriaLabel() : maximizeAriaLabel()"
+          [attr.aria-pressed]="maximizedState()"
+          (click)="onToggleMaximize()"
+        >
+          <iris-icon [name]="maximizedState() ? 'ArrowsInSimple' : 'ArrowsOutSimple'" [size]="20" [decorative]="true" />
+        </button>
+      }
+      @if (dismissable()) {
+        <button
+          class="iris-sidesheet__action-button"
+          type="button"
+          [attr.aria-label]="closeAriaLabel()"
+          (click)="onDismiss()"
+        >
+          <iris-icon name="X" [size]="20" [decorative]="true" />
+        </button>
+      }
+    </div>
+  </header>
+
+  <div class="iris-sidesheet__body">
+    <ng-template #bodyOutlet></ng-template>
+  </div>
+
+  <footer [class]="footerClass()">
+    <ng-content select="[irisSidesheetFooter]"></ng-content>
+    <ng-template #footerOutlet></ng-template>
+  </footer>
+</aside>
+

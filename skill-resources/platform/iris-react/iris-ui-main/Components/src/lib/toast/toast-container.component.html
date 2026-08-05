@@ -1,0 +1,19 @@
+@for (entry of toasts(); track entry.id) {
+  <iris-toast
+    [type]="entry.config.type ?? 'info'"
+    [title]="entry.config.title"
+    [supportingText]="entry.config.supportingText ?? ''"
+    [dismissible]="entry.config.dismissible ?? true"
+    [dismissAriaLabel]="entry.config.dismissAriaLabel ?? 'Dismiss'"
+    [infoAriaLabel]="entry.config.infoAriaLabel ?? 'Info'"
+    [warningAriaLabel]="entry.config.warningAriaLabel ?? 'Warning'"
+    [errorAriaLabel]="entry.config.errorAriaLabel ?? 'Error'"
+    [successAriaLabel]="entry.config.successAriaLabel ?? 'Success'"
+    [primaryActionLabel]="entry.config.primaryActionLabel ?? ''"
+    [secondaryActionLabel]="entry.config.secondaryActionLabel ?? ''"
+    [class.leaving]="entry.leaving"
+    (dismissed)="initiateRemoval(entry.id)"
+    (primaryAction)="primaryActionFired(entry.id)"
+    (secondaryAction)="secondaryActionFired(entry.id)"
+  />
+}

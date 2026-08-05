@@ -1,0 +1,82 @@
+{/* Copyright © 2026 One Identity LLC. ALL RIGHTS RESERVED. */}
+import { Meta, Canvas, ArgTypes, Controls } from '@storybook/addon-docs/blocks';
+import * as DropdownStories from './dropdown.stories';
+
+<Meta of={DropdownStories} />
+
+# Dropdown
+
+A trigger-and-panel pattern that lets users pick a single value from a vertically stacked list of options. Supports keyboard navigation, default and large sizes, disabled and error states, and an optional leading icon. Compose it inside `iris-form-field` together with `iris-label` and optionally `iris-subtext` for label and validation text.
+
+## Interactive Demo
+
+<Canvas of={DropdownStories.Overview} />
+<Controls of={DropdownStories.Overview} />
+
+## Sizes
+
+Two sizes are available: `default` and `lg`.
+
+<Canvas of={DropdownStories.Default} />
+<Canvas of={DropdownStories.Large} />
+
+## Using without Form Field
+
+`iris-dropdown` can be used standalone — without `iris-form-field`, `iris-label`, or `iris-subtext` — when
+label and feedback are handled externally or are not needed (e.g. inline filters, toolbar selectors,
+or custom layout compositions).
+
+<Canvas of={DropdownStories.WithoutFormField} />
+
+## Disabled state
+
+Apply the `disabled` input or call `formControl.disable()` to prevent interaction. Both sources are resolved together — the dropdown is disabled when either is true. Ensure there is always another way to reach the action.
+
+<Canvas of={DropdownStories.Disabled} />
+
+## Validation error
+
+Connect the dropdown to a reactive form control. Declare individual `iris-subtext type="error"` elements
+with `@if` conditions. When the control is invalid and touched, `iris-form-field` automatically
+shows only the first matching error and hides the hint.
+
+<Canvas of={DropdownStories.WithError} />
+
+## Help text
+
+Provide contextual guidance below the dropdown with `iris-subtext type="hint"`.
+
+<Canvas of={DropdownStories.WithHelpText} />
+
+## Leading icon
+
+An optional icon can be shown at the start of the trigger to provide additional visual context.
+
+<Canvas of={DropdownStories.WithLeadingIcon} />
+
+## Accessibility
+
+- The trigger has `role="combobox"` with `aria-expanded`, `aria-haspopup="listbox"`, and when the panel is open, `aria-controls` referencing the listbox.
+- When bound to a form control with `Validators.required`, `aria-required` is set on the trigger.
+- When the control is invalid and touched, `aria-invalid` is set on the trigger.
+- **ArrowDown** opens the panel when it is closed; when open, **ArrowDown / ArrowUp** move focus through options.
+- **Home / End** jump to the first and last focusable option.
+- **Enter** or **Space** selects the focused option and closes the panel.
+- **Escape** closes the panel and returns focus to the trigger.
+- Typing a printable character moves focus to the first option whose label starts with that character (typeahead).
+- **Tab** or clicking outside closes the panel and marks the control as touched.
+
+## API
+
+<ArgTypes of={DropdownStories} sort="alpha" />
+
+### DropdownOption fields
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `type` | `'item'` | ✓ | Identifies this entry as a selectable row. |
+| `label` | `string` | ✓ | Display text shown in the option row. |
+| `value` | `string` | ✓ | Value emitted on selection and stored as the current selection. |
+| `icon` | `string` | — | Icon name rendered to the left of the label. |
+| `disabled` | `boolean` | — | When `true`, the option is non-interactive and visually dimmed. |
+

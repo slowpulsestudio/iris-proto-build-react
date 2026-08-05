@@ -1,0 +1,104 @@
+{/* Copyright © 2026 One Identity LLC. ALL RIGHTS RESERVED. */}
+import { Meta, Canvas, ArgTypes, Controls } from '@storybook/addon-docs/blocks';
+import * as ButtonSplitStories from './button-split.stories';
+
+<Meta of={ButtonSplitStories} />
+
+# Button Split
+
+A two-part button with a primary action on the left and a menu trigger on the right.
+
+## When to use
+
+| Variant | Use when |
+|---|---|
+| **Primary** | The default action is high emphasis |
+| **Ghost** | The split action should stay low emphasis |
+
+## Interactive Demo
+
+Each row shows a variant. Toggle `disabled` to disable both halves of the control.
+
+<Canvas of={ButtonSplitStories.Overview} />
+<Controls of={ButtonSplitStories.Overview} />
+
+## Disabled state
+
+Apply `disabled` to disable both native buttons.
+
+<Canvas of={ButtonSplitStories.Disabled} />
+
+## With Menu
+
+Pass a `MenuItem[]` to `menu` to populate the dropdown.
+
+```typescript
+import { MenuActionItem, MenuItem } from '@iris-ui/lib/button-split/button-split.component';
+
+readonly menuItems: MenuItem[] = [
+  { id: 'save-keep-open', type: 'item', label: 'Save and keep open', icon: 'FloppyDisk' },
+  { id: 'save-draft', type: 'item', label: 'Save as draft', icon: 'Note' },
+];
+
+onMenuItemClick(item: MenuActionItem): void {
+  console.log('Selected:', item.label);
+}
+```
+
+```html
+<iris-button-split
+  label="Save"
+  [menu]="menuItems"
+  (menuItemClick)="onMenuItemClick($event)"
+/>
+```
+
+<Canvas of={ButtonSplitStories.WithMenu} />
+
+## No menu options given
+
+When `menu` is empty, opening the toggle still shows one disabled row: `No options available`.
+
+```html
+<iris-button-split label="Save" />
+```
+
+<Canvas of={ButtonSplitStories.EmptyMenu} />
+
+## Accessibility
+
+- The main and toggle controls are separate native buttons.
+- The toggle button label defaults to `"More options"`. Override `moreOptionsAriaLabel` to localise it.
+- Menu semantics and state come from the attached menu directive: it adds `aria-haspopup="menu"` and updates `aria-expanded`.
+- With the menu open, `Escape` and `Tab` close it, ArrowDown/Home focus the first enabled item, and ArrowUp/End focus the last enabled item.
+- Focus returns to the toggle button when the menu closes.
+
+## API
+
+<ArgTypes of={ButtonSplitStories} sort="alpha" />
+
+### MenuItem types
+
+`MenuItem` is a discriminated union. Use `type` to distinguish clickable items from separators.
+
+```ts
+type MenuItem = MenuActionItem | MenuSeparatorItem;
+```
+
+#### MenuActionItem
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `type` | `'item'` | ✓ | Identifies this entry as an actionable row. |
+| `id` | `string` | ✓ | Unique identifier for the item. |
+| `label` | `string` | — | Visible row label. |
+| `icon` | `string` | — | Optional leading icon name. |
+| `children` | `MenuItem[]` | — | Optional nested submenu items. |
+| `disabled` | `boolean` | — | Prevents selection when `true`. |
+| `destructive` | `boolean` | — | Applies destructive styling inside the menu. |
+
+#### MenuSeparatorItem
+
+| Property | Type | Required | Description |
+|---|---|---|---|
+| `type` | `'separator'` | ✓ | Renders a visual separator row. |

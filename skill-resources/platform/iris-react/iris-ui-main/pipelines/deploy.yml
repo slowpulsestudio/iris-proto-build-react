@@ -1,0 +1,209 @@
+pr: none
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - Agent/*
+      - infra/*
+      - pipelines/deploy.yml
+
+resources:
+  repositories:
+    - repository: pipelinetools
+      type: git
+      name: Starling/Pipeline-Tools
+
+parameters:
+  - name: allowDevDeployment
+    displayName: 'Allow deployment to DEV'
+    type: boolean
+    default: true
+
+variables:
+  - template: templates/variables.yml@pipelinetools
+  - name: deploymentName
+    value: 'irisui-dev'
+  - name: k8sNamespace
+    value: 'iris-ui'
+  - name: k8sClusterName
+    value: 'starling-westus-dev'
+  - name: k8sResourceGroup
+    value: 'Kube-Dev'
+
+extends:
+  template: templates/build-and-deploy.yml@pipelinetools
+  parameters:
+    allowDevDeployment: ${{ parameters.allowDevDeployment }}
+
+    # ──────────────────────────────────────────────────────
+    # Build stage — build + push implementor Docker image
+    # ──────────────────────────────────────────────────────
+    buildJobs:
+      - job: BuildAndPush
+        displayName: 'Build & push implementor image'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - checkout: self
+
+          - task: Docker@2
+            displayName: 'Build and push iris-implementor image'
+            inputs:
+              containerRegistry: $(starlingAcrServiceConnection)
+              repository: 'oneidentity/iris-implementor'
+              command: buildAndPush
+              Dockerfile: $(Build.SourcesDirectory)/Agent/Dockerfile
+              buildContext: $(Build.SourcesDirectory)
+              tags: |
+                $(Build.SourceVersion)
+                latest
+            env:
+              DOCKER_BUILDKIT: 1
+
+    # ──────────────────────────────────────────────────────
+    # Dev deployment — Provision Bicep + Deploy K8s manifests
+    # ──────────────────────────────────────────────────────
+    devJobs:
+      - deployment: ProvisionAndDeploy
+        displayName: 'Provision & Deploy — Dev (westus)'
+        environment: 'IrisUI-Dev'
+        pool:
+          vmImage: 'ubuntu-latest'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+
+                - task: AzureCLI@2
+                  displayName: 'Provision Azure infrastructure (Bicep)'
+                  inputs:
+                    azureSubscription: $(sboxSubscription)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      set -euo pipefail
+                      echo "Deploying Bicep templates to subscription..."
+                      echo "  Deployment name: $(deploymentName)"
+                      echo "  Location:        westus"
+                      echo "  Environment:     Dev"
+
+                      az deployment sub create \
+                        --name $(deploymentName) \
+                        --location westus \
+                        --template-file infra/main.bicep \
+                        --parameters prefix=$(deploymentName) location=westus
+
+                      echo ""
+                      echo "=== Deployment Outputs ==="
+                      az deployment sub show \
+                        --name $(deploymentName) \
+                        --query properties.outputs \
+                        --output table
+
+                - task: AzureCLI@2
+                  displayName: 'Resolve Key Vault name & MI client ID'
+                  inputs:
+                    azureSubscription: $(sboxSubscription)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    addSpnToEnvironment: true
+                    inlineScript: |
+                      set -euo pipefail
+
+                      DEPLOY_NAME="$(deploymentName)"
+                      RG_NAME="${DEPLOY_NAME}-rg"
+
+                      # Key Vault name from Bicep outputs
+                      KV_NAME=$(az deployment sub show \
+                        --name "$DEPLOY_NAME" \
+                        --query "properties.outputs.keyVaultName.value" -o tsv)
+                      echo "##vso[task.setvariable variable=keyVaultName]$KV_NAME"
+                      echo "Key Vault: $KV_NAME"
+
+                      # Managed Identity client ID for the implementor
+                      MI_CLIENT_ID=$(az identity show \
+                        --name "${DEPLOY_NAME}-implementor-mi" \
+                        --resource-group "$RG_NAME" \
+                        --query clientId -o tsv)
+                      echo "##vso[task.setvariable variable=implementorMiClientId]$MI_CLIENT_ID"
+                      echo "Implementor MI client ID: $MI_CLIENT_ID"
+
+                - task: AzureCLI@2
+                  displayName: 'Ensure federated identity credential'
+                  inputs:
+                    azureSubscription: $(sboxSubscription)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      set -euo pipefail
+
+                      DEPLOY_NAME="$(deploymentName)"
+                      RG_NAME="${DEPLOY_NAME}-rg"
+                      NAMESPACE="$(k8sNamespace)"
+
+                      # Get AKS OIDC issuer from shared Starling cluster
+                      OIDC_ISSUER=$(az aks show \
+                        --name "$(k8sClusterName)" \
+                        --resource-group "$(k8sResourceGroup)" \
+                        --query "oidcIssuerProfile.issuerUrl" -o tsv)
+
+                      # Create federated credential (idempotent)
+                      if ! az identity federated-credential show \
+                        --name "iris-implementor-${NAMESPACE}" \
+                        --identity-name "${DEPLOY_NAME}-implementor-mi" \
+                        --resource-group "$RG_NAME" \
+                        --only-show-errors -o none 2>/dev/null; then
+                        echo "Creating implementor federated credential..."
+                        az identity federated-credential create \
+                          --name "iris-implementor-${NAMESPACE}" \
+                          --identity-name "${DEPLOY_NAME}-implementor-mi" \
+                          --resource-group "$RG_NAME" \
+                          --issuer "$OIDC_ISSUER" \
+                          --audiences api://AzureADTokenExchange \
+                          --subject "system:serviceaccount:${NAMESPACE}:implementor" \
+                          --only-show-errors
+                      else
+                        echo "Federated credential already exists"
+                      fi
+
+                - task: AzureCLI@2
+                  displayName: 'Apply K8s manifests'
+                  inputs:
+                    azureSubscription: $(sboxSubscription)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      set -euo pipefail
+
+                      az aks install-cli 2>/dev/null || true
+                      az aks get-credentials \
+                        --name "$(k8sClusterName)" \
+                        --resource-group "$(k8sResourceGroup)" \
+                        --admin
+
+                      NAMESPACE="$(k8sNamespace)"
+                      echo "Deploying to namespace: $NAMESPACE"
+
+                      # Create namespace (idempotent)
+                      kubectl create namespace "$NAMESPACE" --dry-run=client -o yaml | kubectl apply -f -
+
+                      # Patch placeholders
+                      TENANT_ID=$(az account show --query tenantId -o tsv)
+                      sed -i "s/<implementor-wi-client-id>/$(implementorMiClientId)/g" \
+                        infra/k8s/base/implementor/serviceaccount.yaml \
+                        infra/k8s/base/implementor/secret-provider.yaml
+                      sed -i "s/<keyvault-name>/$(keyVaultName)/g" \
+                        infra/k8s/base/implementor/secret-provider.yaml
+                      sed -i "s/<tenant-id>/$TENANT_ID/g" \
+                        infra/k8s/base/implementor/secret-provider.yaml
+
+                      # Apply all implementor manifests
+                      kubectl apply -f infra/k8s/base/implementor/ -n "$NAMESPACE"
+
+                      echo ""
+                      echo "=== Deployed resources ==="
+                      kubectl get cronjob,serviceaccount,secret -n "$NAMESPACE" -l app=implementor 2>/dev/null || \
+                        kubectl get cronjob,serviceaccount -n "$NAMESPACE"

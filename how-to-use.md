@@ -27,26 +27,30 @@ Start the file with a `#`-prefixed comment header like this, so future readers (
 Then list the skills your project needs below the header, one per line. For example, an iOS project might look like:
 
 ```
-git
-figma-mcp
-project-type/ios
+action/git
+action/figma-mcp
+platform/ios
 ```
 
 **Which skills to include:**
-- `git` — baseline rules for source control
-- `figma-mcp` — if the project uses Figma for design
-- `vercel-prototype` — if the project deploys prototypes to Vercel
-- `architecture` — general code structure rules
-- `testing` — testing standards
-- `image-generation` — if the project calls an AI image-generation API
 
-**From `project-type/` — pick exactly one:**
-- `ios` — Swift iOS app
-- `chrome-extension` — Chrome browser extension
-- `python-mac` — Python desktop app for Mac (PyInstaller)
-- `python-website` — Python web app (FastAPI etc.)
-- `python-cli` — Python local script/CLI tool (no packaging or server)
-- `web-scraper` — Python scraping project
+*Platform — pick exactly one:*
+- `platform/ios` — Swift iOS app
+- `platform/chrome-extension` — Chrome browser extension
+- `platform/iris-react` — React + Vite app using the Iris-UI design system
+- `platform/python-mac` — Python desktop app for Mac (PyInstaller)
+- `platform/python-website` — Python web app (FastAPI etc.)
+- `platform/python-cli` — Python local script/CLI tool (no packaging or server)
+- `platform/web-scraper` — Python scraping project
+
+*Action — add as many as apply:*
+- `action/git` — source control rules
+- `action/architecture` — general code structure rules
+- `action/testing` — testing standards
+- `action/iris-react-migrate` — migrating an existing React + Vite app to the Iris-UI design system
+- `action/figma-mcp` — if the project uses Figma for design
+- `action/vercel-publish` — if the project deploys to Vercel
+- `action/image-generation` — if the project calls an AI image-generation API
 
 ---
 
@@ -73,7 +77,11 @@ Open the project in VS Code. In the Copilot chat panel, type:
 /skill-me-up
 ```
 
-The AI will fetch the latest version of each skill you listed, combine them into one file, and save it as `master-skills.md` in your project root. This always pulls the latest version from GitHub, so any improvements made to Up-Skill will be included.
+The AI will:
+1. Fetch the latest version of each skill and combine them into `master-skills.md`
+2. Check whether any of your skills include bundled files (e.g. a UI component library). If so, it copies those files into your project at the correct paths.
+
+This always pulls the latest versions from GitHub, so any improvements made to Up-Skill will be included.
 
 ---
 
@@ -91,4 +99,35 @@ Then add any project-specific rules below that line.
 
 ## Updating later
 
-Whenever Up-Skill is updated with new or improved skills, just run `/skill-me-up` again in Copilot chat. It will re-fetch everything and overwrite `master-skills.md` with the latest version.
+Whenever Up-Skill is updated with new or improved skills, just run `/skill-me-up` again in Copilot chat. It will re-fetch everything and overwrite `master-skills.md` with the latest version. Bundled files that already exist in your project will not be overwritten — you'll be warned about any conflicts so you can resolve them manually.
+
+---
+
+## For skill authors — bundling files with a skill
+
+Some skills need to copy actual files into the project (e.g. a UI component library). To bundle files with a skill:
+
+**1. Add the files** to `skill-resources/{skill-name}/` in this repo, in a named subfolder. The subfolder name becomes the source in the mapping. Mirror the `skills/` path — e.g. `skills/platform/iris-react.md` → `skill-resources/platform/iris-react/`.
+
+For example, the iris-react skill bundles the iris-ui library at:
+
+```
+skill-resources/
+└── platform/
+    └── iris-react/
+        └── iris-ui-main/       ← source folder
+            ├── Components/
+            ├── Icons/
+            └── Tokens/
+```
+
+**2. Add a `## Resources` section** to the skill's `.md` file, with one directory mapping per line:
+
+```
+## Resources
+iris-ui-main/ -> src/iris-ui/
+```
+
+The left side is relative to `skill-resources/{skill-name}/`. The right side is the destination in the project root.
+
+When `/skill-me-up` runs, it reads the `## Resources` section, looks up the files in the up-skill repo via the GitHub API, and copies them into the new project at the specified paths. Files that already exist and differ are skipped with a warning.

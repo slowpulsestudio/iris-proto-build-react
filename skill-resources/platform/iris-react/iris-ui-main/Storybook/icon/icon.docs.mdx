@@ -1,0 +1,36 @@
+{/* Copyright © 2026 One Identity LLC. ALL RIGHTS RESERVED. */}
+import { Meta, Canvas, ArgTypes, Controls } from '@storybook/addon-docs/blocks';
+import * as IconStories from './icon.stories';
+
+<Meta of={IconStories} />
+
+# Icon
+
+`iris-icon` renders a named icon from `@oneidentity/iris-ui-icons` by looking up the requested `name` and injecting the matching SVG markup inline. The `name` input is required. `size` defaults to `24`, and `label` defaults to an empty string.
+
+## Iconography
+
+<Canvas of={IconStories.Iconography} story={{ height: '768px', inline: false }} />
+
+## Sizes
+
+Supported sizes are `16`, `20`, and `24`. The component also sets `--iris-icon-stroke-width` to `1.5` for 16 px icons and `1` for 20 px and 24 px icons.
+
+<Canvas of={IconStories.Sizes} />
+
+## Missing icons
+
+If `name` does not match an icon in the icon registry, the wrapper still renders but no SVG markup is inserted.
+
+## Accessibility
+
+- The component always renders `role="img"`.
+- `aria-label` always receives an accessible name: `label` when provided, otherwise `name`.
+- Because an accessible name is always applied, the component is not decorative by default.
+- `iris-icon` does not add keyboard handlers or make itself focusable.
+
+<Canvas of={IconStories.WithAccessibleLabel} />
+
+## API
+
+<ArgTypes of={IconStories} sort="alpha" />

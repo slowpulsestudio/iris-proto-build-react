@@ -1,0 +1,69 @@
+{/* Copyright © 2026 One Identity LLC. ALL RIGHTS RESERVED. */}
+import { Meta, Canvas, ArgTypes, Controls } from '@storybook/addon-docs/blocks';
+import * as BadgeStories from './badge.stories';
+
+<Meta of={BadgeStories} />
+
+# Badge
+
+A compact, non-interactive label for status or category text, with optional leading icon.
+
+## When to use
+
+| Type | Use when |
+|---|---|
+| **Default** | Neutral information or general categorisation |
+| **Info** | Informational state |
+| **Success** | Positive or completed state |
+| **Error** | Failure or critical state |
+| **Warning** | Caution or attention-needed state |
+
+## Interactive Demo
+
+All five types are shown together. Toggle `strong` to switch between the base and stronger emphasis styles.
+
+<Canvas of={BadgeStories.Overview} />
+<Controls of={BadgeStories.Overview} />
+
+## Types
+
+### Default
+
+<Canvas of={BadgeStories.Default} />
+
+### Info
+
+<Canvas of={BadgeStories.Info} />
+
+### Success
+
+<Canvas of={BadgeStories.Success} />
+
+### Error
+
+<Canvas of={BadgeStories.Error} />
+
+### Warning
+
+<Canvas of={BadgeStories.Warning} />
+
+### Strong
+
+<Canvas of={BadgeStories.Strong} />
+
+## Behaviour notes
+
+- `text` is rendered inline inside the badge.
+- `iconName` adds a leading icon.
+- If `text` is empty, the badge can render as icon-only.
+- The component does not provide count formatting, `max`, or dot-only presentation.
+
+## Accessibility
+
+- The icon is decorative; it is rendered with an empty icon label.
+- Accessible text comes from `text`, so keep that value short and explicit.
+- Avoid icon-only badges when the meaning must be announced to assistive technology.
+
+## API
+
+<ArgTypes of={BadgeStories} sort="alpha" />

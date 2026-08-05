@@ -1,0 +1,8 @@
+<div class="iris-tooltip" role="tooltip">
+  <span class="iris-tooltip__text">{{ text() }}</span>
+  @if (shortcut().length) {
+    <span class="iris-tooltip__shortcut">
+      <iris-keyboard-key [key]="shortcut()" />
+    </span>
+  }
+</div>

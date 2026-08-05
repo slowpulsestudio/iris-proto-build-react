@@ -1,0 +1,67 @@
+<div class="iris-dropdown" [class.iris-dropdown--lg]="size() === 'lg'">
+  <div
+    class="iris-dropdown__trigger"
+    #trigger
+    [class.iris-dropdown__trigger--error]="effectiveHasError()"
+    [class.iris-dropdown__trigger--disabled]="effectiveDisabled()"
+    [class.iris-dropdown__trigger--open]="isOpen()"
+    [class.iris-dropdown__trigger--selected]="hasSelection()"
+    role="combobox"
+    [attr.aria-expanded]="isOpen()"
+    [attr.aria-haspopup]="'listbox'"
+    [attr.aria-controls]="isOpen() ? listboxId : null"
+    [attr.aria-disabled]="effectiveDisabled() || null"
+    [attr.aria-required]="ariaIsRequired() || null"
+    [attr.aria-labelledby]="formField?.labelId ?? null"
+    [attr.aria-invalid]="effectiveHasError() || null"
+    [attr.aria-describedby]="formField?.activeDescriptionId() || null"
+    [attr.tabindex]="effectiveDisabled() ? -1 : 0"
+    (click)="toggleDropdown()"
+    (keydown)="onKeydown($event)"
+  >
+    @if (leadingIcon()) {
+      <iris-icon
+        class="iris-dropdown__icon iris-dropdown__icon--lead"
+        [name]="leadingIcon()"
+        [size]="16"
+        [decorative]="true"
+      />
+    }
+    <span class="iris-dropdown__value" [class.iris-dropdown__value--placeholder]="!hasSelection()">
+      {{ displayText() }}
+    </span>
+    <iris-icon class="iris-dropdown__caret" name="CaretUpDown" [size]="16" [decorative]="true" />
+  </div>
+</div>
+
+<ng-template #listboxTemplate>
+  <ul
+    class="iris-dropdown__listbox"
+    role="listbox"
+    [id]="listboxId"
+    tabindex="-1"
+    #listbox
+    (keydown)="onListboxKeydown($event)"
+    (focusout)="onPanelFocusOut($event)"
+  >
+    @for (option of options(); track option.value) {
+      <li
+        class="iris-dropdown__option"
+        [class.iris-dropdown__option--selected]="option.value === valueState()"
+        [class.iris-dropdown__option--disabled]="option.disabled"
+        role="option"
+        [attr.aria-selected]="option.value === valueState()"
+        [attr.aria-disabled]="option.disabled || null"
+        [attr.tabindex]="option.disabled ? -1 : 0"
+        (click)="selectOption(option)"
+        (keydown.enter)="selectOption(option)"
+        (keydown.space)="selectOption(option); $event.preventDefault()"
+      >
+        @if (option.icon) {
+          <iris-icon class="iris-dropdown__option-icon" [name]="option.icon" [size]="20" [decorative]="true" />
+        }
+        <span class="iris-dropdown__option-label">{{ option.label }}</span>
+      </li>
+    }
+  </ul>
+</ng-template>

@@ -1,0 +1,109 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "cli": {
+    "packageManager": "npm",
+    "schematicCollections": [
+      "angular-eslint"
+    ],
+    "analytics": false
+  },
+  "newProjectRoot": "projects",
+  "projects": {
+    "iris-ui": {
+      "projectType": "library",
+      "root": "Components",
+      "sourceRoot": "Components/src",
+      "prefix": "iris",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "options": {},
+          "configurations": {
+            "production": {
+              "tsConfig": "Components/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "Components/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "runner": "vitest",
+            "buildTarget": "iris-ui:test-host",
+            "tsConfig": "Components/tsconfig.spec.json",
+            "include": ["Components/src/**/*.spec.ts"],
+            "setupFiles": ["setup-vitest.ts"]
+          }
+        },
+        "test-host": {
+          "builder": "@angular/build:application",
+          "options": {
+            "outputPath": "Components/dist/test-host",
+            "index": "Storybook/storybook-host/index.html",
+            "browser": "Storybook/storybook-host/main.ts",
+            "tsConfig": "Storybook/storybook-host/tsconfig.app.json",
+            "polyfills": ["zone.js"],
+            "assets": [],
+            "styles": [],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "Components/**/*.ts",
+              "Components/**/*.html",
+              "Storybook/**/*.ts"
+            ],
+            "eslintConfig": "eslint.config.js"
+          }
+        },
+        "storybook": {
+          "builder": "@storybook/angular:start-storybook",
+          "options": {
+            "configDir": ".storybook",
+            "browserTarget": "iris-ui:storybook-host",
+            "tsConfig": "tsconfig.storybook.json",
+            "styles": [
+              "Components/src/styles/iris-ui.css"
+            ],
+            "compodoc": false,
+            "port": 6006
+          }
+        },
+        "build-storybook": {
+          "builder": "@storybook/angular:build-storybook",
+          "options": {
+            "configDir": ".storybook",
+            "browserTarget": "iris-ui:storybook-host",
+            "tsConfig": "tsconfig.storybook.json",
+            "styles": [
+              "Components/src/styles/iris-ui.css"
+            ],
+            "compodoc": false,
+            "outputDir": "Storybook/dist"
+          }
+        },
+        "storybook-host": {
+          "options": {
+            "outputPath": "dist/storybook-host",
+            "styles": [
+              "Components/src/styles/iris-ui.css"
+            ],
+            "index": "Storybook/storybook-host/index.html",
+            "scripts": [],
+            "tsConfig": "Storybook/storybook-host/tsconfig.app.json",
+            "assets": [],
+            "browser": "Storybook/storybook-host/main.ts"
+          },
+          "builder": "@angular/build:application"
+        }
+      }
+    }
+  }
+}

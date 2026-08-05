@@ -1,0 +1,45 @@
+:host {
+  display: inline;
+}
+
+.iris-link {
+  color: var(--oi-content-color-link);
+  font-family: var(--oi-font-family-default);
+  font-size: var(--oi-font-size-s);
+  font-weight: var(--oi-font-weight-400);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color var(--oi-motion-duration-short);
+  border-radius: var(--oi-border-radius-s);
+
+  &:hover {
+    color: var(--oi-content-color-link-hover);
+    text-decoration: underline;
+  }
+
+  &:visited {
+    color: var(--oi-content-color-link-visited);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--oi-focus-ring);
+  }
+
+  &--lg {
+    font-size: var(--oi-font-size-m);
+  }
+
+  &--disabled {
+    color: var(--oi-content-color-tertiary);
+    opacity: 0.72;
+    cursor: not-allowed;
+    pointer-events: none;
+
+    &:visited,
+    &:hover {
+      color: var(--oi-content-color-tertiary);
+      text-decoration: none;
+    }
+  }
+}

@@ -1,0 +1,141 @@
+{/* Copyright © 2026 One Identity LLC. ALL RIGHTS RESERVED. */}
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Iris UI / Introduction" />
+
+# Iris UI
+
+One Identity's Angular component library — the single source of truth for building consistent, accessible, and scalable product experiences across all One Identity applications.
+
+Components marked **Stable** have been reviewed by engineering, validated by UX, and are conformant with **WCAG 2.2 Level AA** out of the box. High contrast themes go further, covering the full **WCAG 2.0 + 2.1 + 2.2** spectrum at all levels (A, AA, and AAA).
+
+The complete **design token system** is exposed as CSS custom properties (`--oi-*`), so your own styles stay in sync with the system without hardcoded values. Fonts and 1500+ icons ship with the package — nothing extra to configure.
+
+# How to set up
+
+Follow these steps to integrate Iris UI into your product application.
+
+## 0 — Configure the registry
+
+`@oneidentity/iris-ui` is published to the One Identity Azure Artifacts feed. Before installing, connect your project to the feed by following the setup instructions on the [OneIdentity Azure DevOps Artifacts page](https://dev.azure.com/1id/_artifacts/feed/OneIdentity/connect).
+
+## 1 - Install the package
+
+`@angular/cdk` is a required peer dependency used by overlay-based components (Popover, Menu, Tooltip). `@oneidentity/iris-ui-tokens` provides the design tokens compiled into the global stylesheet; both must be installed alongside the library.
+
+```bash
+npm install @oneidentity/iris-ui @oneidentity/iris-ui-tokens @angular/cdk
+# or
+pnpm add @oneidentity/iris-ui @oneidentity/iris-ui-tokens @angular/cdk
+```
+
+If you use the **Table** component, also install the AG Grid peer dependencies:
+
+```bash
+npm install ag-grid-angular ag-grid-community
+# or
+pnpm add ag-grid-angular ag-grid-community
+```
+
+## 2 — Use styles and tokens
+
+Add the library stylesheet to the `styles` array in your `angular.json`. This loads the fonts and registers all design tokens as CSS custom properties — no additional configuration required.
+
+```json
+// angular.json
+"styles": [
+  "node_modules/@oneidentity/iris-ui/iris-ui.css"
+]
+```
+
+Every `--oi-*` token is then available as a CSS custom property anywhere in your app:
+
+```css
+.my-element {
+  color: var(--oi-content-color-primary);
+  background: var(--oi-background-color-secondary);
+  border-radius: var(--oi-border-radius-default);
+}
+```
+
+### Specific token usage
+
+If you need to import raw token partials directly into your own SCSS — for example to use specific colors — use the SCSS source files from `@oneidentity/iris-ui-tokens`. Add `stylePreprocessorOptions` to your `angular.json` so the SCSS compiler can resolve the package, then import the partial you need:
+
+```json
+// angular.json
+"stylePreprocessorOptions": {
+  "includePaths": ["node_modules"]
+}
+```
+
+```scss
+@use '@oneidentity/iris-ui-tokens/dist/_tokens.primitives' as *;
+```
+
+> Note: when using token primitives, ensure the colours meet accessibility requirements across all themes.
+
+## 3 — Apply a theme
+
+Four themes are included and can be activated by a single class on your root element. All components adapt automatically.
+
+- Light: `theme-light`
+- Dark: `theme-dark`
+- High contrast light: `theme-hc-light`
+- High contrast dark: `theme-hc-dark`
+
+Add a theme class to your root element.
+
+```html
+<!-- index.html -->
+<body class="theme-light">...</body>
+```
+
+Use the **Theme** picker in the Storybook toolbar to preview all themes live.
+
+## 4 — Import components
+
+All components are standalone. Import them directly into your Angular component.
+
+```ts
+import { IrisButtonComponent } from '@oneidentity/iris-ui';
+```
+
+# Component status
+
+<style>{`
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    height: var(--oi-size-s);
+    padding: 0 var(--oi-spacing-xs);
+    border-radius: var(--oi-border-radius-default);
+    border: none;
+    font-family: var(--oi-font-family-default);
+    font-size: var(--oi-font-size-s);
+    font-weight: var(--oi-font-weight-400);
+    line-height: var(--oi-line-height-s);
+    color: var(--oi-content-color-constant);
+    white-space: nowrap;
+  }
+  .status-badge--stable    { background-color: var(--oi-base-color-success); }
+  .status-badge--preview   { background-color: var(--oi-base-color-warning); color: var(--oi-content-color-primary); }
+  .status-badge--untouched { background-color: var(--oi-base-color-error); }
+`}</style>
+
+<table>
+  <tbody>
+    <tr>
+      <td><span className="status-badge status-badge--untouched">Untouched</span></td>
+      <td>Automatically generated from the Figma design without developer review. Behaviour, accessibility, and API may be incomplete or incorrect. Not suitable for use in product applications.</td>
+    </tr>
+    <tr>
+      <td><span className="status-badge status-badge--preview">Preview</span></td>
+      <td>Functional requirements defined and incorporated into the implementation. Not yet validated by UX. API may still change; use with caution.</td>
+    </tr>
+    <tr>
+      <td><span className="status-badge status-badge--stable">Stable</span></td>
+      <td>Reviewed and approved by the development team; validated by the UX team. Safe to use in product applications.</td>
+    </tr>
+  </tbody>
+</table>

@@ -1,0 +1,76 @@
+<ul class="iris-tree" role="tree" [attr.aria-label]="ariaLabel() || null">
+  <ng-container
+    *ngTemplateOutlet="nodeList; context: { $implicit: nodes(), level: 0, indentGuideArray: [] }"
+  ></ng-container>
+</ul>
+
+<ng-template #nodeList let-nodes let-level="level" let-indentGuideArray="indentGuideArray">
+  @for (node of nodes; track node.id; let first = $first, last = $last) {
+    <li
+      class="iris-tree__node"
+      role="treeitem"
+      [attr.aria-selected]="node.id === activeNodeIdState()"
+      [attr.aria-expanded]="node.children?.length ? node.expanded : null"
+    >
+      <div
+        class="iris-tree__element"
+        [class.iris-tree__element--active]="node.id === activeNodeIdState()"
+        [attr.tabindex]="0"
+        (click)="onNodeClick(node)"
+        (keydown)="onNodeKeydown($event, node)"
+      >
+        @for (guide of indentGuides(level, indentGuideArray, last); track $index) {
+          <span class="iris-tree__trail" [class.iris-tree__trail__last]="guide.isLast"></span>
+        }
+        <span
+          class="iris-tree__leading"
+          [class.iris-tree__leading__first]="first && node.children?.length && node.expanded"
+        >
+          @if (node.children?.length) {
+            <button
+              class="iris-tree__caret"
+              type="button"
+              [class.iris-tree__caret--expanded]="node.expanded"
+              [attr.aria-label]="node.expanded ? collapseAriaLabel() : expandAriaLabel()"
+              (click)="onToggle($event, node)"
+            >
+              <iris-icon name="CaretRight" [size]="16" [decorative]="true" />
+            </button>
+          } @else {
+            <span class="iris-tree__caret-placeholder"></span>
+          }
+          <iris-icon
+            [name]="resolveNodeIcon(node)"
+            [size]="16"
+            [decorative]="true"
+            [class.iris-tree__icon--placeholder]="!node.icon && !node.children?.length"
+          />
+        </span>
+        <span class="iris-tree__label">{{ node.label }}</span>
+        @if (showTrailingIcons() && node.showTrailingIcons !== false) {
+          <span class="iris-tree__trailing">
+            <iris-icon name="DotsThreeVertical" [size]="16" [decorative]="true" />
+            @if (node.children?.length) {
+              <iris-icon name="CaretRight" [size]="16" [decorative]="true" />
+            }
+          </span>
+        }
+      </div>
+      @if (node.children?.length && node.expanded) {
+        <ul class="iris-tree__children" role="group">
+          <ng-container
+            *ngTemplateOutlet="
+              nodeList;
+              context: {
+                $implicit: node.children,
+                level: level + 1,
+                indentGuideArray: buildNestedIndentGuides(indentGuideArray, last, level),
+              }
+            "
+          >
+          </ng-container>
+        </ul>
+      }
+    </li>
+  }
+</ng-template>

@@ -1,0 +1,77 @@
+:host {
+  display: block;
+}
+
+.iris-breadcrumb {
+  font-family: var(--oi-font-family-default);
+  font-size: var(--oi-font-size-s);
+
+  &__list {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: var(--oi-spacing-s);
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: var(--oi-spacing-s);
+  }
+
+  &__link {
+    color: var(--oi-content-color-secondary);
+    text-decoration: none;
+    font-weight: var(--oi-font-weight-400);
+    border-radius: var(--oi-border-radius-s);
+
+    &:hover {
+      color: var(--oi-content-color-primary);
+      text-decoration: underline;
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--oi-focus-ring);
+    }
+  }
+
+  &__current {
+    color: var(--oi-content-color-primary);
+    font-weight: var(--oi-font-weight-400);
+  }
+
+  &__text {
+    color: var(--oi-content-color-secondary);
+  }
+
+  &__separator {
+    color: var(--oi-content-color-tertiary);
+  }
+
+  &__overflow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--oi-size-xs);
+    height: var(--oi-size-xs);
+    padding: 0;
+    border: none;
+    border-radius: var(--oi-border-radius-s);
+    background-color: transparent;
+    color: var(--oi-content-color-secondary);
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--oi-button-background-secondary-hover);
+      color: var(--oi-content-color-primary);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--oi-focus-ring);
+    }
+  }
+}

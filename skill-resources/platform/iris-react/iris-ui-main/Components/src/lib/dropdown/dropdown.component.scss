@@ -1,0 +1,180 @@
+@keyframes iris-dropdown-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+:host {
+  display: block;
+}
+
+.iris-dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-xs);
+
+  &__trigger {
+    display: flex;
+    align-items: center;
+    gap: var(--oi-spacing-xs);
+    height: var(--oi-button-size-height-default);
+    padding: 0 var(--oi-spacing-s);
+    border: var(--oi-border-width-default) solid var(--oi-border-color-default);
+    border-radius: var(--oi-border-radius-default);
+    background-color: var(--oi-background-color-secondary);
+    cursor: pointer;
+    transition: border-color var(--oi-motion-duration-short), background-color var(--oi-motion-duration-short);
+
+    &:hover {
+      background-color: var(--oi-background-color-tertiary);
+    }
+
+    &:focus-visible {
+      border-color: var(--oi-border-color-focus);
+      box-shadow: var(--oi-focus-ring);
+      background-color: var(--oi-background-color-primary);
+      outline: none;
+    }
+
+    &--open {
+      border-color: var(--oi-border-color-focus);
+      background-color: var(--oi-background-color-primary);
+    }
+
+    &--selected {
+      border-color: var(--oi-border-color-focus);
+      background-color: var(--oi-background-color-primary);
+    }
+
+    &--error {
+      border-color: var(--oi-base-color-error);
+    }
+
+    &--disabled {
+      background-color: var(--oi-background-color-secondary);
+      cursor: not-allowed;
+      opacity: var(--oi-opacity-content-disabled);
+    }
+  }
+
+  &__value {
+    flex: 1;
+    font-family: var(--oi-font-family-default);
+    font-size: var(--oi-font-size-s);
+    font-weight: var(--oi-font-weight-400);
+    line-height: var(--oi-line-height-m);
+    color: var(--oi-content-color-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &--placeholder {
+      color: var(--oi-content-color-tertiary);
+    }
+  }
+
+  &__icon {
+    color: var(--oi-content-color-secondary);
+  }
+
+  &__caret {
+    color: var(--oi-content-color-primary);
+    flex-shrink: 0;
+  }
+
+  &__listbox {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    margin: 0;
+    width: 100%;
+    padding: var(--oi-spacing-xs);
+    list-style: none;
+    border-radius: var(--oi-border-radius-l);
+    background-color: var(--oi-background-color-primary);
+    box-shadow: var(--oi-shadow-mid);
+    max-height: 240px;
+    overflow-y: auto;
+    transform-origin: top center;
+    animation: iris-dropdown-in var(--oi-motion-duration-120) var(--oi-motion-ease-out) forwards;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
+
+    body.theme-dark & {
+      background-color: var(--oi-background-color-secondary);
+    }
+  }
+
+  &__option {
+    display: flex;
+    align-items: center;
+    gap: var(--oi-button-gap-s);
+    padding: var(--oi-spacing-xs);
+    border-radius: var(--oi-border-radius-default);
+    font-family: var(--oi-font-family-default);
+    font-size: var(--oi-font-size-s);
+    font-weight: var(--oi-font-weight-400);
+    line-height: var(--oi-line-height-m);
+    color: var(--oi-content-color-secondary);
+    cursor: pointer;
+    transition: background-color var(--oi-motion-duration-short);
+
+    &:hover {
+      background-color: var(--oi-background-color-tertiary);
+      color: var(--oi-content-color-primary);
+    }
+
+    &:focus-visible {
+      position: relative;
+      z-index: 1;
+      box-shadow: var(--oi-focus-ring);
+      color: var(--oi-content-color-primary);
+      outline: none;
+    }
+
+    &--selected {
+      font-weight: var(--oi-font-weight-600);
+      background-color: var(--oi-background-color-secondary);
+      color: var(--oi-content-color-primary);
+    }
+
+    &--disabled {
+      color: var(--oi-content-color-disabled);
+      cursor: not-allowed;
+      opacity: var(--oi-opacity-content-disabled);
+
+      &:hover {
+        background-color: transparent;
+        color: var(--oi-content-color-disabled);
+      }
+    }
+  }
+
+  &__option-icon {
+    flex-shrink: 0;
+    color: var(--oi-content-color-secondary);
+  }
+
+  &__option-label {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &--lg &__trigger {
+    height: var(--oi-button-size-height-l);
+    padding: 0 var(--oi-spacing-m);
+  }
+
+  &--lg &__value {
+    font-size: var(--oi-font-size-m);
+  }
+}

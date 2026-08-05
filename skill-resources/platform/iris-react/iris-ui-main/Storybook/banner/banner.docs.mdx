@@ -1,0 +1,68 @@
+{/* Copyright © 2026 One Identity LLC. ALL RIGHTS RESERVED. */}
+import { Meta, Canvas, ArgTypes, Controls } from '@storybook/addon-docs/blocks';
+import * as BannerStories from './banner.stories';
+
+<Meta of={BannerStories} />
+
+# Banner
+
+A page-level alert banner for important status, warning, error, or success messaging.
+
+## When to use
+
+| Type | Use when |
+|---|---|
+| **Info** | Providing neutral information or context |
+| **Warning** | Alerting the user to a potential issue |
+| **Error** | Communicating a failure or blocking issue |
+| **Success** | Confirming a completed action or positive outcome |
+
+## Interactive Demo
+
+<Canvas of={BannerStories.Overview} />
+<Controls of={BannerStories.Overview} />
+
+## Types
+
+### Info
+
+<Canvas of={BannerStories.Default} />
+
+### Warning
+
+<Canvas of={BannerStories.Warning} />
+
+### Error
+
+<Canvas of={BannerStories.Error} />
+
+### Success
+
+<Canvas of={BannerStories.Success} />
+
+## With actions
+
+Set `showActions` to render both inline action buttons. Labels come from `primaryActionLabel` and `secondaryActionLabel`.
+
+<Canvas of={BannerStories.WithActions} />
+
+## Behaviour notes
+
+- The banner always renders with `role="alert"`.
+- Error and warning banners use `role="alert"`. Info and success banners use `role="status"`.
+- `supportingText` renders only when it is non-empty.
+- `dismissable` controls whether the dismiss button is shown.
+- Clicking dismiss hides the banner and emits `dismissed`.
+- Once dismissed, the component stays hidden until it is recreated.
+
+## Accessibility
+
+- Provide meaningful text in `title`; it is always rendered and forms the main alert message.
+- Error and warning banners use `role="alert"` (assertive live region). Info and success banners use `role="status"` (polite).
+- The dismiss button label defaults to `"Dismiss"`. Override `dismissAriaLabel` when a localised or more specific label is needed.
+- Primary and secondary actions are native buttons, so Enter and Space activate them without extra setup.
+- Do not rely on colour alone to communicate banner type.
+
+## API
+
+<ArgTypes of={BannerStories} sort="alpha" />

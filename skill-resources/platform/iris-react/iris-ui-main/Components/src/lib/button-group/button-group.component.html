@@ -1,0 +1,7 @@
+<div class="iris-button-group"
+  [class.iris-button-group--lg]="size() === 'lg'"
+  [class.iris-button-group--reverse]="direction() === 'reverse'"
+  [attr.aria-label]="ariaLabel() || null"
+  role="group">
+  <ng-content select="iris-button"></ng-content>
+</div>

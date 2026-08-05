@@ -1,0 +1,176 @@
+{
+  "text": {
+    "heading-01": {
+      "--oi-text-heading-01-font-size": {
+        "$type": "string",
+        "$value": "var(--oi-font-size-xxxl)"
+      },
+      "--oi-text-heading-01-line-height": {
+        "$type": "string",
+        "$value": "var(--oi-line-height-xxxl)"
+      },
+      "--oi-text-heading-01-font-weight": {
+        "$type": "string",
+        "$value": "var(--oi-font-weight-600)"
+      }
+    },
+    "heading-02": {
+      "--oi-text-heading-02-font-size": {
+        "$type": "string",
+        "$value": "var(--oi-font-size-xxl)"
+      },
+      "--oi-text-heading-02-line-height": {
+        "$type": "string",
+        "$value": "var(--oi-line-height-xxl)"
+      },
+      "--oi-text-heading-02-font-weight": {
+        "$type": "string",
+        "$value": "var(--oi-font-weight-600)"
+      }
+    },
+    "heading-03": {
+      "--oi-text-heading-03-font-size": {
+        "$type": "string",
+        "$value": "var(--oi-font-size-xl)"
+      },
+      "--oi-text-heading-03-line-height": {
+        "$type": "string",
+        "$value": "var(--oi-line-height-xl)"
+      },
+      "--oi-text-heading-03-font-weight": {
+        "$type": "string",
+        "$value": "var(--oi-font-weight-600)"
+      }
+    },
+    "heading-04": {
+      "--oi-text-heading-04-font-size": {
+        "$type": "string",
+        "$value": "var(--oi-font-size-l)"
+      },
+      "--oi-text-heading-04-line-height": {
+        "$type": "string",
+        "$value": "var(--oi-line-height-l)"
+      },
+      "--oi-text-heading-04-font-weight": {
+        "$type": "string",
+        "$value": "var(--oi-font-weight-600)"
+      }
+    },
+    "heading-05": {
+      "--oi-text-heading-05-font-size": {
+        "$type": "string",
+        "$value": "var(--oi-font-size-m)"
+      },
+      "--oi-text-heading-05-line-height": {
+        "$type": "string",
+        "$value": "var(--oi-line-height-m)"
+      },
+      "--oi-text-heading-05-font-weight": {
+        "$type": "string",
+        "$value": "var(--oi-font-weight-600)"
+      }
+    },
+    "body": {
+      "--oi-text-body-font-size": {
+        "$type": "string",
+        "$value": "var(--oi-font-size-m)"
+      },
+      "--oi-text-body-line-height": {
+        "$type": "string",
+        "$value": "var(--oi-line-height-m)"
+      },
+      "--oi-text-body-font-weight": {
+        "$type": "string",
+        "$value": "var(--oi-font-weight-400)"
+      }
+    },
+    "body-strong": {
+      "--oi-text-body-strong-font-size": {
+        "$type": "string",
+        "$value": "var(--oi-font-size-m)"
+      },
+      "--oi-text-body-strong-line-height": {
+        "$type": "string",
+        "$value": "var(--oi-line-height-m)"
+      },
+      "--oi-text-body-strong-font-weight": {
+        "$type": "string",
+        "$value": "var(--oi-font-weight-600)"
+      }
+    },
+    "body-s": {
+      "--oi-text-body-s-font-size": {
+        "$type": "string",
+        "$value": "var(--oi-font-size-s)"
+      },
+      "--oi-text-body-s-line-height": {
+        "$type": "string",
+        "$value": "var(--oi-line-height-s)"
+      },
+      "--oi-text-body-s-font-weight": {
+        "$type": "string",
+        "$value": "var(--oi-font-weight-400)"
+      }
+    },
+    "body-s-strong": {
+      "--oi-text-body-s-strong-font-size": {
+        "$type": "string",
+        "$value": "var(--oi-font-size-s)"
+      },
+      "--oi-text-body-s-strong-line-height": {
+        "$type": "string",
+        "$value": "var(--oi-line-height-s)"
+      },
+      "--oi-text-body-s-strong-font-weight": {
+        "$type": "string",
+        "$value": "var(--oi-font-weight-600)"
+      }
+    },
+    "caption": {
+      "--oi-text-caption-font-size": {
+        "$type": "string",
+        "$value": "var(--oi-font-size-xs)"
+      },
+      "--oi-text-caption-line-height": {
+        "$type": "string",
+        "$value": "var(--oi-line-height-xs)"
+      },
+      "--oi-text-caption-font-weight": {
+        "$type": "string",
+        "$value": "var(--oi-font-weight-400)"
+      }
+    },
+    "caption-strong": {
+      "--oi-text-caption-strong-font-size": {
+        "$type": "string",
+        "$value": "var(--oi-font-size-xs)"
+      },
+      "--oi-text-caption-strong-line-height": {
+        "$type": "string",
+        "$value": "var(--oi-line-height-xs)"
+      },
+      "--oi-text-caption-strong-font-weight": {
+        "$type": "string",
+        "$value": "var(--oi-font-weight-600)"
+      }
+    },
+    "code": {
+      "--oi-text-code-font-family": {
+        "$type": "string",
+        "$value": "var(--oi-font-family-code)"
+      },
+      "--oi-text-code-font-size": {
+        "$type": "string",
+        "$value": "var(--oi-font-size-s)"
+      },
+      "--oi-text-code-line-height": {
+        "$type": "string",
+        "$value": "var(--oi-line-height-xs)"
+      },
+      "--oi-text-code-font-weight": {
+        "$type": "string",
+        "$value": "var(--oi-font-weight-400)"
+      }
+    }
+  }
+}

@@ -1,0 +1,199 @@
+:host {
+  display: contents;
+}
+
+@keyframes iris-modal-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-1rem) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes iris-modal-panel-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-1rem) scale(0.95);
+  }
+}
+
+@keyframes iris-modal-backdrop-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes iris-modal-backdrop-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.iris-modal-dialog {
+  padding: 0;
+  border: none;
+  color: inherit;
+  background: transparent;
+
+  &[open] {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+}
+
+.iris-modal-dialog--backdrop[open] {
+  background-color: var(--oi-background-color-modal-backdrop);
+  backdrop-filter: blur(8px);
+  animation: iris-modal-backdrop-in var(--oi-motion-duration-200) ease-out;
+}
+
+.iris-modal-dialog--backdrop[open]:has(.iris-modal--closing) {
+  animation: iris-modal-backdrop-out var(--oi-motion-duration-120) ease-in forwards;
+}
+
+.iris-modal {
+  background-color: var(--oi-background-color-primary);
+  border-radius: var(--oi-border-radius-l);
+  box-shadow: var(--oi-shadow-high);
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  overflow: hidden;
+  animation: iris-modal-panel-in var(--oi-motion-duration-200) ease-out;
+
+  &--closing {
+    animation: iris-modal-panel-out var(--oi-motion-duration-120) ease-in forwards;
+  }
+
+  &--sm {
+    width: 380px;
+    max-width: calc(100vw - 2 * var(--oi-spacing-l));
+  }
+
+  &--md {
+    width: 620px;
+    max-width: calc(100vw - 2 * var(--oi-spacing-l));
+  }
+
+  &--lg {
+    width: 980px;
+    max-width: calc(100vw - 2 * var(--oi-spacing-l));
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--oi-spacing-m);
+    padding: var(--oi-spacing-l);
+    border-bottom: var(--oi-border-width-default) solid var(--oi-border-color-default);
+  }
+
+  &__title-icon {
+    flex-shrink: 0;
+    color: var(--oi-content-color-primary);
+  }
+
+  &__title-group {
+    flex: 1;
+    min-width: 0;
+    padding-right: var(--oi-spacing-l);
+  }
+
+  &__title {
+    margin: 0;
+    font-family: var(--oi-font-family-default);
+    font-size: var(--oi-font-size-l);
+    font-weight: var(--oi-font-weight-600);
+    line-height: var(--oi-line-height-s);
+    color: var(--oi-content-color-primary);
+  }
+
+  &__subtitle {
+    margin: var(--oi-spacing-xs) 0 0;
+    font-family: var(--oi-font-family-default);
+    font-size: var(--oi-font-size-s);
+    font-weight: var(--oi-font-weight-400);
+    line-height: var(--oi-line-height-m);
+    color: var(--oi-content-color-secondary);
+  }
+
+  &__dismiss {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--oi-size-s);
+    height: var(--oi-size-s);
+    padding: 0;
+    border: none;
+    border-radius: var(--oi-border-radius-s);
+    background: transparent;
+    color: var(--oi-content-color-secondary);
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--oi-background-color-secondary);
+    }
+
+    &:focus-visible {
+      box-shadow: var(--oi-focus-ring);
+      outline: none;
+    }
+  }
+
+  &__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--oi-spacing-l);
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    gap: var(--oi-spacing-m);
+    padding: var(--oi-spacing-l);
+    border-top: var(--oi-border-width-default) solid var(--oi-border-color-default);
+
+    /* Hide empty footer — :has() is supported in all modern browsers (Chrome 105+, Safari 15.4+, Firefox 121+). */
+    &:not(:has(*)) {
+      display: none;
+    }
+
+    &--start {
+      justify-content: flex-start;
+    }
+
+    &--center {
+      justify-content: center;
+    }
+
+    &--end {
+      justify-content: flex-end;
+    }
+  }
+}

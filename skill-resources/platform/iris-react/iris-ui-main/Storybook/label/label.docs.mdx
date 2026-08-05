@@ -1,0 +1,48 @@
+{/* Copyright © 2026 One Identity LLC. ALL RIGHTS RESERVED. */}
+import { Meta, Canvas, ArgTypes, Controls } from '@storybook/addon-docs/blocks';
+import * as LabelStories from './label.stories';
+
+<Meta of={LabelStories} />
+
+# Label
+
+`iris-label` renders the visible label row used with form fields. Its text comes from projected content, and it can optionally show required text, an info icon, and a count. The component itself renders spans rather than a native `<label>` element.
+
+## Interactive Demo
+
+<Canvas of={LabelStories.Overview} />
+<Controls of={LabelStories.Overview} />
+
+## Required text
+
+The required marker is driven by `IRIS_FORM_FIELD` context. When `iris-label` sits inside `iris-form-field` and the projected control reports `isRequired() === true`, the label renders `requiredText` after the main label text. `requiredText` defaults to `(Required)`.
+
+`iris-label` does not expose a separate boolean input for required state.
+
+<Canvas of={LabelStories.Required} />
+
+## With info icon
+
+Setting `infoText` renders an `Info` icon after the label text. The icon receives the same string as its accessible label. Use `infoTooltipPosition` to control the preferred tooltip direction; it defaults to `top`.
+
+<Canvas of={LabelStories.WithInfoIcon} />
+
+## With character count
+
+The count appears only when the effective `countMax` is greater than `0`.
+
+- Inside `iris-form-field`, the count comes from the injected form-field context.
+- Outside `iris-form-field`, the count comes from `countValue` and `countMax` inputs.
+
+<Canvas of={LabelStories.WithCount} />
+
+## Accessibility
+
+- The component does not render a native `<label>` element and does not set a `for` attribute.
+- It does not create a programmatic label-to-control association on its own.
+- The info icon is rendered with `tabindex="0"`, so keyboard users can focus it and reveal the tooltip.
+- `iris-label` does not add keyboard handlers.
+
+## API
+
+<ArgTypes of={LabelStories} sort="alpha" />

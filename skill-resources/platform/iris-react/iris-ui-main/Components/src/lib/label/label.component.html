@@ -1,0 +1,20 @@
+<span class="iris-label">
+  <span class="iris-label__text" [attr.id]="labelId()"><ng-content /></span>
+  @if (effectiveRequired()) {
+    <span class="iris-label__required">{{ requiredText() }}</span>
+  }
+  @if (showInfoIcon()) {
+    <iris-icon
+      class="iris-label__info-icon"
+      name="Info"
+      [size]="20"
+      [label]="infoText()"
+      tabindex="0"
+      [irisTooltip]="infoText()"
+      [irisTooltipPosition]="infoTooltipPosition()"
+    />
+  }
+  @if (showCount()) {
+    <span class="iris-label__count">{{ countLabel() }}</span>
+  }
+</span>
