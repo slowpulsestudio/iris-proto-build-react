@@ -24,12 +24,23 @@ Start the file with a `#`-prefixed comment header like this, so future readers (
 # the skill names listed below.
 ```
 
-Then list the skills your project needs below the header, one per line. For example, an iOS project might look like:
+Then list the skills your project needs below the header, one per line. Start from the full list below and remove what you don't need:
 
 ```
-action/git
-action/figma-mcp
 platform/ios
+platform/chrome-extension
+platform/iris-react
+platform/python-mac
+platform/python-website
+platform/python-cli
+platform/web-scraper
+workflow/git
+workflow/architecture
+workflow/testing
+workflow/iris-react-migrate
+workflow/figma-mcp
+workflow/vercel-publish
+workflow/image-generation
 ```
 
 **Which skills to include:**
@@ -43,14 +54,14 @@ platform/ios
 - `platform/python-cli` — Python local script/CLI tool (no packaging or server)
 - `platform/web-scraper` — Python scraping project
 
-*Action — add as many as apply:*
-- `action/git` — source control rules
-- `action/architecture` — general code structure rules
-- `action/testing` — testing standards
-- `action/iris-react-migrate` — migrating an existing React + Vite app to the Iris-UI design system
-- `action/figma-mcp` — if the project uses Figma for design
-- `action/vercel-publish` — if the project deploys to Vercel
-- `action/image-generation` — if the project calls an AI image-generation API
+*Workflow — add as many as apply:*
+- `workflow/git` — source control rules
+- `workflow/architecture` — general code structure rules
+- `workflow/testing` — testing standards
+- `workflow/iris-react-migrate` — migrating an existing React + Vite app to the Iris-UI design system
+- `workflow/figma-mcp` — if the project uses Figma for design
+- `workflow/vercel-publish` — if the project deploys to Vercel
+- `workflow/image-generation` — if the project calls an AI image-generation API
 
 ---
 

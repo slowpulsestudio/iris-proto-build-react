@@ -6,8 +6,8 @@ description: Rebuild master-skills.md by fetching the latest skill files from th
 Read the `.skills` file in the root of this project. It contains a list of skill names, one per line — for example:
 
 ```
-action/git
-action/figma-mcp
+workflow/git
+workflow/figma-mcp
 platform/ios
 ```
 
