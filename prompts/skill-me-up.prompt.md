@@ -36,16 +36,14 @@ source-folder/ -> dest-folder/
 - `source-folder/` is a path relative to `skill-resources/{skill-name}/` in the up-skill repo
 - `dest-folder/` is the destination path relative to this project's root
 
-For each mapping:
-1. Fetch the full file tree of the up-skill repo from the GitHub API:
-   `https://api.github.com/repos/slowpulsestudio/up-skill/git/trees/main?recursive=1`
-2. Filter the tree for all file entries whose path starts with `skill-resources/{skill-name}/{source-folder}/`
-3. For each matching file, fetch it via raw GitHub:
-   `https://raw.githubusercontent.com/slowpulsestudio/up-skill/main/{full-path}`
-4. Write it to `{project-root}/{dest-folder}/{relative-path}`, where `relative-path` is the portion after `skill-resources/{skill-name}/{source-folder}/`. Create any necessary directories.
-5. If a file already exists at the destination and its content differs, warn the user and skip it — do not overwrite.
+For each mapping, use the zip download approach:
+1. Download the up-skill repo as a zip:
+   `https://github.com/slowpulsestudio/up-skill/archive/refs/heads/main.zip`
+2. Extract only the files whose path within the zip starts with `up-skill-main/skill-resources/{skill-name}/{source-folder}/`
+3. Write each extracted file to `{project-root}/{dest-folder}/{relative-path}`, where `relative-path` is the portion after `up-skill-main/skill-resources/{skill-name}/{source-folder}/`. Create any necessary directories.
+4. If a file already exists at the destination and its content differs, warn the user and skip it — do not overwrite.
 
-Fetch the tree once and reuse it for all skills. Fetch and write all files in parallel.
+Download the zip once and reuse it for all resource mappings across all skills.
 
 ## Step 3 — Report
 
