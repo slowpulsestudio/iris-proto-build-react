@@ -3,6 +3,21 @@ mode: agent
 description: Rebuild master-skills.md by fetching the latest skill files from the up-skill repo on GitHub, and copy any skill-bundled files into this project.
 ---
 
+## Step -1 — Self-update check
+
+Before doing anything else, fetch the latest version of this prompt from the up-skill repo:
+
+```
+https://raw.githubusercontent.com/slowpulsestudio/up-skill/main/.github/prompts/skill-me-up.prompt.md
+```
+
+Compare it to the current contents of `.github/prompts/skill-me-up.prompt.md` in this project.
+
+- **If they are identical:** continue to Step 0.
+- **If they differ:** tell the user: *"There are updates available for the skill-me-up prompt. Would you like me to update it now? You'll need to run `/skill-me-up` again after."*
+  - If yes: overwrite `.github/prompts/skill-me-up.prompt.md` with the fetched version and stop. Do not continue setup.
+  - If no: continue to Step 0 with the current version.
+
 ## Step 0 — Skills setup
 
 Check whether a `.skills` file exists in the root of this project.
@@ -135,3 +150,24 @@ When done, report:
 - Any skills that failed to fetch (404 or network error)
 - Which bundled files were copied (grouped by skill), and any that were skipped due to conflicts
 - Whether `.github/copilot-instructions.md` and `CLAUDE.md` were created or already existed
+
+## Step 5 — Post-setup actions (ask in order, only if applicable)
+
+Ask the following questions one at a time, only for the skills that are active. Skip any that aren't.
+
+**If `workflow/git` is active:**
+*"Would you like me to commit and push this initial setup to GitHub?"*
+- If yes: stage all files, commit with the message `Initial project setup`, and push to origin.
+- If no: skip.
+
+**If `workflow/vercel-publish` is active** (ask after the git question is resolved):
+*"Would you like me to walk you through setting up auto-publish from your GitHub repo to Vercel?"*
+- If yes: walk the user through the following steps one at a time, waiting for confirmation after each:
+  1. Go to [vercel.com](https://vercel.com) and sign in (or create an account).
+  2. Click **Add New → Project**.
+  3. Select **Import Git Repository** and connect your GitHub account if not already connected.
+  4. Find and select this repo from the list, then click **Import**.
+  5. Review the build settings (framework, build command, output directory) — confirm they look correct or adjust as needed.
+  6. Click **Deploy**. Vercel will build and deploy. Every future push to `main` will trigger a new production deployment automatically.
+  7. To add environment variables: go to Project Settings → Environment Variables and add them there. Never add secrets to the codebase.
+- If no: skip.
