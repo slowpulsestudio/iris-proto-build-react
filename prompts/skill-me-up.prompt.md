@@ -13,6 +13,18 @@ platform/ios
 
 The file may also start with a `#`-prefixed comment header explaining what the file is. Skip blank lines and any line starting with `#` — they are comments, not skill names, and must not be fetched.
 
+## Step 0 — Git setup (if applicable)
+
+If `workflow/git` is in the skills list, check whether a git remote is already configured by running `git remote get-url origin`.
+
+- If a remote **is already set**, skip this step entirely.
+- If **no remote is set**, ask the user: *"What is the GitHub repo URL for this project?"* Then:
+  1. Run `git init` if the folder is not already a git repository
+  2. Run `git remote add origin {url}`
+  3. Confirm the remote was set successfully before continuing
+
+Do not proceed to the next step until this is resolved.
+
 ## Step 1 — Rebuild master-skills.md
 
 For each skill name, fetch the corresponding skill file from GitHub using this URL pattern:
