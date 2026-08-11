@@ -35,6 +35,7 @@ platform/python-mac
 platform/python-website
 platform/python-cli
 platform/web-scraper
+workflow/general
 workflow/git
 workflow/architecture
 workflow/testing
@@ -57,7 +58,8 @@ workflow/image-generation
 - `platform/python-cli` — Python local script/CLI tool (no packaging or server)
 - `platform/web-scraper` — Python scraping project
 
-*Workflow — add as many as apply:*
+*Workflow — `workflow/general` is always included. Add as many others as apply:*
+- `workflow/general` — core execution rules, communication standards, and package manager rules (always include)
 - `workflow/git` — source control rules
 - `workflow/architecture` — general code structure rules
 - `workflow/testing` — testing standards
@@ -73,20 +75,7 @@ workflow/image-generation
 
 Copy the entire `.github/` folder from this repo into the root of your new project. It contains all the prompt files already in the right place:
 
-```
-your-project/
-└── .github/
-    └── prompts/
-        ├── skill-me-up.prompt.md
-        └── migrate-to-iris-react.prompt.md
-```
-
-Only include `migrate-to-iris-react.prompt.md` if you need it — otherwise delete it after copying.
-
-| Prompt file | Slash command | When to include |
-|---|---|
-| `skill-me-up.prompt.md` | `/skill-me-up` | Always — required to build `master-skills.md` |
-| `migrate-to-iris-react.prompt.md` | `/migrate-to-iris-react` | If migrating an existing app to Iris-UI |
+Only include `migrate-to-iris-react.prompt.md` if you need to move from one platform to iris-react — otherwise delete it after copying.
 
 ---
 
