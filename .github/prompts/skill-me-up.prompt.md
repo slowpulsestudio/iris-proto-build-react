@@ -3,25 +3,60 @@ mode: agent
 description: Rebuild master-skills.md by fetching the latest skill files from the up-skill repo on GitHub, and copy any skill-bundled files into this project.
 ---
 
-Read the `.skills` file in the root of this project. It contains a list of skill names, one per line — for example:
+## Step 0 — Skills setup
 
-```
-workflow/git
-workflow/figma-mcp
-platform/ios
-```
+Check whether a `.skills` file exists in the root of this project.
 
-The file may also start with a `#`-prefixed comment header explaining what the file is. Skip blank lines and any line starting with `#` — they are comments, not skill names, and must not be fetched.
+**If `.skills` exists:** read it. It contains a list of skill names, one per line. Skip blank lines and any line starting with `#`.
 
-## Step 0 — Git setup (if applicable)
+**If `.skills` does not exist:** ask the user the following questions one at a time, waiting for an answer before asking the next:
+
+1. *"What is the GitHub repo URL for this project?"* (used for git setup below — skip if they say they don't need it)
+
+2. *"Which platform does this project use? Pick one:"*
+   - `platform/ios` — Swift iOS app
+   - `platform/chrome-extension` — Chrome browser extension
+   - `platform/iris-react` — React + Vite app using the Iris-UI design system
+   - `platform/iris-shell` — multi-product shell app built on Iris UI
+   - `platform/python-mac` — Python desktop app for Mac
+   - `platform/python-website` — Python web app (FastAPI etc.)
+   - `platform/python-cli` — Python local script/CLI tool
+   - `platform/web-scraper` — Python scraping project
+
+3. *"`workflow/general` is always included. Which of these workflow skills also apply? Pick as many as needed:"*
+   - `workflow/git` — source control rules
+   - `workflow/architecture` — general code structure rules
+   - `workflow/testing` — testing standards
+   - `workflow/iris-react-migrate` — migrating an existing app to Iris-UI
+   - `workflow/figma-mcp` — if the project uses Figma
+   - `workflow/vercel-publish` — if the project deploys to Vercel
+   - `workflow/vercel-password` — password gate for Vercel preview deployments
+   - `workflow/image-generation` — if the project calls an AI image-generation API
+
+   Once all three questions are answered, write the `.skills` file with the standard comment header followed by the chosen skills, one per line. Always include `workflow/general` as the first workflow entry:
+
+   ```
+   # This file is only a pseudo-import list for the Up-Skill mechanism — like a
+   # requirements.txt for skills. It just names reusable skill files to fetch.
+   # It carries NO information about what this project actually is or does.
+   # The project's real identity, purpose, and requirements come from the
+   # original build/meta-prompt used to create it — not from this file, and
+   # not from the generated master-skills.md. Never infer project intent from
+   # the skill names listed below.
+   ```
+
+Do not proceed to Step 1 until the `.skills` file exists and the skill list is confirmed.
+
+## Step 0b — Git setup (if applicable)
 
 If `workflow/git` is in the skills list, check whether a git remote is already configured by running `git remote get-url origin`.
 
 - If a remote **is already set**, skip this step entirely.
-- If **no remote is set**, ask the user: *"What is the GitHub repo URL for this project?"* Then:
+- If **no remote is set** and a repo URL was provided in Step 0, then:
   1. Run `git init` if the folder is not already a git repository
   2. Run `git remote add origin {url}`
   3. Confirm the remote was set successfully before continuing
+- If **no remote is set** and no URL was provided, ask: *"What is the GitHub repo URL for this project?"* then follow the steps above.
 
 Do not proceed to the next step until this is resolved.
 
@@ -57,10 +92,27 @@ For each mapping, use the zip download approach:
 
 Download the zip once and reuse it for all resource mappings across all skills.
 
-## Step 3 — Report
+## Step 3 — Create AI instruction files
+
+Check for the following two files and create them if they don't already exist:
+
+**`.github/copilot-instructions.md`**
+```
+Read master-skills.md for your operating instructions.
+```
+
+**`CLAUDE.md`**
+```
+Read master-skills.md for your operating instructions.
+```
+
+If either file already exists, leave it untouched — do not overwrite or append.
+
+## Step 4 — Report
 
 When done, report:
 - Which skills were fetched successfully
 - The total line count of the new `master-skills.md`
 - Any skills that failed to fetch (404 or network error)
 - Which bundled files were copied (grouped by skill), and any that were skipped due to conflicts
+- Whether `.github/copilot-instructions.md` and `CLAUDE.md` were created or already existed
