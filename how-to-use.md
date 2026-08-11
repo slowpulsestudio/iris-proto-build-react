@@ -49,6 +49,7 @@ workflow/image-generation
 - `platform/ios` — Swift iOS app
 - `platform/chrome-extension` — Chrome browser extension
 - `platform/iris-react` — React + Vite app using the Iris-UI design system
+- `platform/iris-shell` — multi-product shell app (app header, global sidebar, AI panel) built on Iris UI
 - `platform/python-mac` — Python desktop app for Mac (PyInstaller)
 - `platform/python-website` — Python web app (FastAPI etc.)
 - `platform/python-cli` — Python local script/CLI tool (no packaging or server)
@@ -59,7 +60,6 @@ workflow/image-generation
 - `workflow/architecture` — general code structure rules
 - `workflow/testing` — testing standards
 - `workflow/iris-react-migrate` — migrating an existing React + Vite app to the Iris-UI design system
-- `workflow/iris-shell` — adding the Iris multi-product navigation shell (app header, global sidebar, AI panel)
 - `workflow/figma-mcp` — if the project uses Figma for design
 - `workflow/vercel-publish` — if the project deploys to Vercel
 - `workflow/image-generation` — if the project calls an AI image-generation API
