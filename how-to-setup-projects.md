@@ -30,10 +30,14 @@ This always pulls the latest versions from GitHub, so any improvements made to U
 
 ## Step 3 — Question time
 
-The AI will ask you these questions:
-1. Ask for the GitHub repo URL and configure the git remote (if using `workflow/git`)
-2. Ask you what platform the prohect will be
-3. Ask what skills to include
+The AI will ask you these questions in order:
+1. Which platform this project uses
+2. Which workflow skills apply
+3. Follow-up questions for specific skills:
+   - **`platform/iris-shell`** — which product loads by default (Active Roles, On-Demand Services, Identity Manager, or Safeguard)
+   - **`workflow/git`** — GitHub repo URL
+   - **`workflow/figma-mcp`** — Figma file URL
+   - **`workflow/image-generation`** — which image generation provider
 
 **Platform — pick one:**
 

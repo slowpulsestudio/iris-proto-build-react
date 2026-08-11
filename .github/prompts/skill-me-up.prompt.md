@@ -11,9 +11,7 @@ Check whether a `.skills` file exists in the root of this project.
 
 **If `.skills` does not exist:** ask the user the following questions one at a time, waiting for an answer before asking the next:
 
-1. *"What is the GitHub repo URL for this project?"* (used for git setup below — skip if they say they don't need it)
-
-2. *"Which platform does this project use? Pick one:"*
+1. *"Which platform does this project use? Pick one:"*
    - `platform/ios` — Swift iOS app
    - `platform/chrome-extension` — Chrome browser extension
    - `platform/iris-react` — React + Vite app using the Iris-UI design system
@@ -23,7 +21,7 @@ Check whether a `.skills` file exists in the root of this project.
    - `platform/python-cli` — Python local script/CLI tool
    - `platform/web-scraper` — Python scraping project
 
-3. *"`workflow/general` is always included. Which of these workflow skills also apply? Pick as many as needed:"*
+2. *"`workflow/general` is always included. Which of these workflow skills also apply? Pick as many as needed:"*
    - `workflow/git` — source control rules
    - `workflow/architecture` — general code structure rules
    - `workflow/testing` — testing standards
@@ -33,7 +31,26 @@ Check whether a `.skills` file exists in the root of this project.
    - `workflow/vercel-password` — password gate for Vercel preview deployments
    - `workflow/image-generation` — if the project calls an AI image-generation API
 
-   Once all three questions are answered, write the `.skills` file with the standard comment header followed by the chosen skills, one per line. Always include `workflow/general` as the first workflow entry:
+3. For each of the following selected skills, ask a follow-up question:
+
+   - **`platform/iris-shell`** — *"Which product should load by default when the app opens? Pick one:"*
+     - Active Roles
+     - On-Demand Services
+     - Identity Manager
+     - Safeguard
+
+     Once confirmed, update the following three files in `src/iris-shell/` to reflect the chosen default:
+     - `src/lib/router.ts` — set `const DEFAULT` to the correct hash (`#/insights` for Active Roles, `#/services` for On-Demand Services, `#/identity` for Identity Manager, `#/safeguard` for Safeguard)
+     - `src/lib/verticals.ts` — set `defaultRoute` on the matching vertical record to the same hash
+     - `src/lib/productMenu.tsx` — ensure the matching product entry is first in the list and its `route` matches
+
+   - **`workflow/git`** — *"What is the GitHub repo URL for this project?"*
+   - **`workflow/figma-mcp`** — *"What is the Figma file URL for this project?"* Store this in `.figma-url` in the project root.
+   - **`workflow/image-generation`** — *"Which image generation provider does this project use?"* (e.g. OpenAI / DALL·E, Replicate, Stability AI)
+
+   Only ask follow-up questions for skills that were selected. Skip any that weren't.
+
+   Once all questions are answered, write the `.skills` file with the standard comment header followed by the chosen skills, one per line. Always include `workflow/general` as the first workflow entry:
 
    ```
    # This file is only a pseudo-import list for the Up-Skill mechanism — like a
