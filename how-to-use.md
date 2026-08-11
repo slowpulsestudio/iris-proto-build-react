@@ -69,24 +69,24 @@ workflow/image-generation
 
 ---
 
-## Step 2 — Copy the prompt files into your project
+## Step 2 — Copy the `.github/` folder into your project
 
-In your new project, create a folder called `.github`, then inside it create another folder called `prompts`.
-
-Copy the relevant prompt files from this repo's `prompts/` folder into that folder:
-
-| Prompt file | Slash command | When to include |
-|---|---|---|
-| `skill-me-up.prompt.md` | `/skill-me-up` | Always — required to build `master-skills.md` |
-| `migrate-to-iris-react.prompt.md` | `/migrate-to-iris-react` | If migrating an existing app to Iris-UI |
+Copy the entire `.github/` folder from this repo into the root of your new project. It contains all the prompt files already in the right place:
 
 ```
 your-project/
 └── .github/
     └── prompts/
         ├── skill-me-up.prompt.md
-        └── migrate-to-iris-react.prompt.md   ← only if needed
+        └── migrate-to-iris-react.prompt.md
 ```
+
+Only include `migrate-to-iris-react.prompt.md` if you need it — otherwise delete it after copying.
+
+| Prompt file | Slash command | When to include |
+|---|---|
+| `skill-me-up.prompt.md` | `/skill-me-up` | Always — required to build `master-skills.md` |
+| `migrate-to-iris-react.prompt.md` | `/migrate-to-iris-react` | If migrating an existing app to Iris-UI |
 
 ---
 
