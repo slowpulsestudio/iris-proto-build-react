@@ -30,6 +30,7 @@ Then list the skills your project needs below the header, one per line. Start fr
 platform/ios
 platform/chrome-extension
 platform/iris-react
+platform/iris-shell
 platform/python-mac
 platform/python-website
 platform/python-cli
