@@ -45,7 +45,9 @@ Check whether a `.skills` file exists in the root of this project.
      - `src/lib/productMenu.tsx` — ensure the matching product entry is first in the list and its `route` matches
 
    - **`workflow/git`** — *"What is the GitHub repo URL for this project?"*
-   - **`workflow/figma-mcp`** — *"What is the Figma file URL for this project?"* Store this in `.figma-url` in the project root.
+   - **`workflow/figma-mcp`** — *"What is the Figma file URL for this project?"* Give the user two options:
+     - Paste the URL now — save it to `.figma-url` in the project root
+     - *"I'll paste it in this chat when I have it"* — reply: *"No problem — paste the Figma URL in this chat whenever you're ready and I'll save it to `.figma-url`."* then continue setup. When the user later pastes a URL starting with `https://www.figma.com/`, write it to `.figma-url`.
    - **`workflow/image-generation`** — *"Which image generation provider does this project use?"* (e.g. OpenAI / DALL·E, Replicate, Stability AI)
 
    Only ask follow-up questions for skills that were selected. Skip any that weren't.
