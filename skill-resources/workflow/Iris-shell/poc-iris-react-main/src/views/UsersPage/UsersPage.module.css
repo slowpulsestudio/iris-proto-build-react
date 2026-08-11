@@ -1,0 +1,175 @@
+.toolbarSeparator {
+  align-self: center;
+  width: 1px;
+  height: 20px;
+  background: var(--oi-border-color-default);
+  flex-shrink: 0;
+}
+
+.addBtn {
+  gap: var(--oi-button-gap-s);
+}
+
+.addBtn > span:last-child {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.tableWrap {
+  flex: 1 1 auto;
+  min-height: 0;
+  /* The DataTable owns its own scroll region; keep this a plain bounded box
+     so we don't get a second (nested) scrollbar. */
+  overflow: hidden;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  padding: var(--oi-spacing-m) var(--oi-spacing-xl);
+  /* Establish a size-query context so Pagination's internal layout can adapt
+     to the available width (it stretches to fill this wrapper). */
+  container-type: inline-size;
+  border-top: 1px solid var(--oi-border-color-muted);
+}
+
+.pagination > * {
+  flex: 1;
+}
+
+.mono {
+  font-family: var(--oi-font-family-code);
+  color: var(--oi-content-color-secondary);
+}
+
+/* Name link in the table — slightly heavier weight to anchor the row's
+   identity. Inherits Link's brand color and hover treatment otherwise. */
+.nameCell {
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+}
+
+/* Email column — kept clickable (mailto:) but with default primary content
+   color so it sits at the same visual weight as the rest of the row. Brand
+   color reasserts on hover so the affordance stays discoverable. */
+.emailCell {
+  color: var(--oi-content-color-primary);
+}
+
+.emailCell:hover {
+  color: var(--oi-base-color-brand);
+}
+
+/* Object ID cell — text fills the cell and truncates with an ellipsis. The
+   copy IconButton overlays the right edge on hover/focus only, so it never
+   shifts the ID text or eats horizontal space at rest.
+
+   Implementation notes:
+   - The wrapper is `position: relative` and fills the cell width.
+   - `.objectIdValue` is a block-level truncating element with right padding
+     reserved for the button, so the ellipsis never lands under the icon.
+   - `.copyBtn` is absolutely positioned over that reserved gutter; it gets
+     a solid bg so any text behind it (in rare overflow cases) is masked.
+   - Visibility is opacity-based, not display-toggled, so focus is reachable
+     by keyboard and the layout never reflows. */
+.objectIdCell {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+.objectIdValue {
+  display: block;
+  width: 100%;
+  /* Reserve room on the right so the ellipsis never collides with the icon. */
+  padding-right: 28px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.copyBtn {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 1;
+  /* Solid bg so the icon never blends into the text when overlap occurs. */
+  background-color: var(--oi-background-color-primary);
+  border-radius: var(--oi-border-radius-default);
+  opacity: 0;
+  transition: opacity var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+/* Reveal the button when the user is over the cell or keyboard-focuses
+   anything inside it (the button itself, or a future tabbable element). */
+.objectIdCell:hover .copyBtn,
+.objectIdCell:focus-within .copyBtn {
+  opacity: 1;
+}
+
+/* Touch devices have no hover, so keep the copy affordance always visible. */
+@media (hover: none) {
+  .copyBtn {
+    opacity: 1;
+  }
+}
+
+/* Keep the button visible while the copied confirmation shows, even if the
+   pointer leaves and the button isn't focused (e.g. Safari doesn't focus
+   buttons on click). Success color tints the check. */
+.copyBtnDone {
+  opacity: 1;
+  color: var(--oi-content-color-success);
+}
+
+/* Copy → Check icon swap: two icons in one slot that cross-fade with a blur
+   + scale on copy confirm (matches the reset-password / AI-panel affordance). */
+.copySwap {
+  position: relative;
+  display: inline-flex;
+  width: 16px;
+  height: 16px;
+}
+
+.copySwapLayer {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    opacity var(--oi-motion-duration-default) var(--oi-motion-ease-default),
+    transform var(--oi-motion-duration-default) var(--oi-motion-ease-default),
+    filter var(--oi-motion-duration-default) var(--oi-motion-ease-default);
+}
+
+.copySwapCopy {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+
+.copySwapCheck {
+  opacity: 0;
+  transform: scale(0.8);
+  filter: blur(2px);
+}
+
+.copySwap[data-copied='true'] .copySwapCopy {
+  opacity: 0;
+  transform: scale(0.8);
+  filter: blur(2px);
+}
+
+.copySwap[data-copied='true'] .copySwapCheck {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .copySwapLayer {
+    transition: none;
+  }
+}

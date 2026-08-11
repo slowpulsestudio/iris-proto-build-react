@@ -1,0 +1,79 @@
+/* ============================================================
+   Scroll styling — thin, theme-aware scrollbars + affordances.
+
+   Loaded after the token layer so it can reference theme vars, and so
+   its per-theme scroll tokens override cleanly. Mirrors how polished
+   B2B apps (Linear, Notion, Attio) treat scroll: quiet native chrome
+   that matches the theme, slim rounded thumbs, and no layout jitter.
+   ============================================================ */
+
+/* 1. Native color-scheme per theme. Themes the native scrollbars, form
+      controls and canvas to match the active theme. The app defaults to
+      the dark theme, so :root defaults to dark to avoid a light-chrome
+      flash before the body theme class is applied. */
+:root {
+  color-scheme: dark;
+}
+
+body.theme-light,
+body.theme-hc-light {
+  color-scheme: light;
+}
+
+body.theme-dark,
+body.theme-hc-dark,
+body.theme-night-owl,
+body.theme-ayu,
+body.theme-one-dark-pro,
+body.theme-tokyo-night,
+body.theme-catppuccin,
+body.theme-monokai,
+body.theme-dracula {
+  color-scheme: dark;
+}
+
+/* 2. Global thin scrollbar styling — hidden at rest, revealed only while the
+      scroll area is hovered or focused (Notion/Linear style). Colors come from
+      the semantic tokens so the thumb tracks every theme automatically.
+      Firefox / standards: */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+:hover,
+:focus-within {
+  scrollbar-color: var(--oi-border-color-muted) transparent;
+}
+
+/* Chromium / WebKit: transparent track + a slim rounded thumb that only paints
+   while the scroll container is hovered or focused. The transparent border +
+   padding-box clip give the thumb breathing room within the track. */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: var(--oi-border-radius-max);
+  border: var(--oi-border-width-default) solid transparent;
+  background-clip: padding-box;
+}
+
+:hover::-webkit-scrollbar-thumb,
+:focus-within::-webkit-scrollbar-thumb {
+  background-color: var(--oi-border-color-muted);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--oi-border-color-strong);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}

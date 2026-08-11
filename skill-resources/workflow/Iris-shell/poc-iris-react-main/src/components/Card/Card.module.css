@@ -1,0 +1,54 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-l);
+  padding: var(--oi-spacing-m);
+  background-color: var(--oi-background-color-primary);
+  border: 0.5px var(--oi-border-style-solid) var(--oi-border-color-default);
+  border-radius: var(--oi-border-radius-l);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--oi-spacing-m);
+}
+
+.headerContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-xs);
+  flex: 1 1 auto;
+  min-width: 0;
+  word-break: break-word;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--oi-text-heading-05-font-size);
+  line-height: var(--oi-text-heading-05-line-height);
+  font-weight: var(--oi-text-heading-05-font-weight);
+  color: var(--oi-content-color-primary);
+}
+
+.helper {
+  margin: 0;
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  font-weight: var(--oi-text-caption-font-weight);
+  color: var(--oi-content-color-tertiary);
+}
+
+.actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+  flex-shrink: 0;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-xs);
+}

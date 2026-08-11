@@ -1,0 +1,511 @@
+/* =================================================================
+ * Service Catalogue page
+ *
+ * Token-strict — every spacing, color, radius, typography, and shadow
+ * comes from `--oi-*` design system tokens. Structure mirrors the
+ * Figma "Services cards" frame (node 2721:32624): a grey outer wrap
+ * with a tinted header strip over an inset white card-body that owns
+ * its own border + shadow.
+ * ================================================================= */
+
+.page {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-xl);
+  padding: var(--oi-spacing-xl);
+  min-width: 0;
+}
+
+/* ── Page header ─────────────────────────────────────────── */
+
+.pageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--oi-spacing-l);
+  flex-wrap: wrap;
+}
+
+.pageHeading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-xs);
+  min-width: 0;
+}
+
+.pageTitle {
+  margin: 0;
+  font-size: var(--oi-text-heading-04-font-size);
+  line-height: var(--oi-text-heading-04-line-height);
+  font-weight: var(--oi-text-heading-04-font-weight);
+  letter-spacing: -0.3px;
+  color: var(--oi-content-color-primary);
+}
+
+.pageSubtitle {
+  margin: 0;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  color: var(--oi-content-color-secondary);
+}
+
+.uptimeMetric {
+  color: var(--oi-content-color-link);
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+}
+
+.pageActions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  flex-shrink: 0;
+}
+
+/* ── Service cards grid ──────────────────────────────────── */
+
+.serviceGrid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--oi-spacing-xl);
+}
+
+.serviceCell {
+  display: flex;
+  min-width: 0;
+}
+
+.serviceCell > * {
+  flex: 1 1 auto;
+}
+
+/* ── Card shell (grey outer + inset white body) ──────────── */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background-color: var(--oi-background-color-secondary);
+  border-radius: var(--oi-border-radius-l);
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--oi-spacing-s);
+  height: 40px;
+  padding: var(--oi-spacing-s);
+  background-color: var(--oi-background-color-secondary);
+  border-top-left-radius: var(--oi-border-radius-l);
+  border-top-right-radius: var(--oi-border-radius-l);
+}
+
+.cardHeadProduct {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  min-width: 0;
+  color: var(--oi-content-color-primary);
+}
+
+.cardHeadTitle {
+  font-size: var(--oi-text-body-s-strong-font-size);
+  line-height: var(--oi-text-body-s-strong-line-height);
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+  color: var(--oi-content-color-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.headerCaretBtn {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--oi-button-size-height-s);
+  width: var(--oi-button-size-height-s);
+  padding-inline: var(--oi-spacing-xs);
+  background-color: var(--oi-background-color-primary);
+  color: var(--oi-content-color-secondary);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-default);
+  border-radius: var(--oi-border-radius-default);
+  box-shadow: var(--oi-shadow-low);
+  cursor: pointer;
+  transition: background-color var(--oi-motion-duration-short)
+    var(--oi-motion-ease-default);
+}
+
+.headerCaretBtn:hover {
+  background-color: var(--oi-background-color-primary);
+}
+
+.headerCaretBtn:focus-visible {
+  outline: 2px solid var(--oi-content-color-brand);
+  outline-offset: 1px;
+}
+
+/* Inset white card-body — its own border/shadow per Figma. */
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  background-color: var(--oi-background-color-primary);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  border-radius: var(--oi-border-radius-l);
+  box-shadow: var(--oi-shadow-low);
+  overflow: hidden;
+}
+
+/* ── Subscribed: meta row ────────────────────────────────── */
+
+.metaRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+}
+
+.metaCell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-s);
+  padding: var(--oi-spacing-m);
+  min-width: 0;
+}
+
+.metaCell + .metaCell {
+  border-left: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+}
+
+.metaLabel {
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  color: var(--oi-content-color-secondary);
+}
+
+.metaContent {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--oi-spacing-xs);
+  color: var(--oi-content-color-primary);
+}
+
+.metaValue {
+  font-size: var(--oi-text-heading-04-font-size);
+  line-height: var(--oi-text-heading-04-line-height);
+  font-weight: var(--oi-text-heading-04-font-weight);
+  color: var(--oi-content-color-primary);
+}
+
+.metaUnit {
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  color: var(--oi-content-color-secondary);
+}
+
+/* ── Subscribed: instances ───────────────────────────────── */
+
+.instances {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-xs);
+  padding: var(--oi-spacing-s);
+  flex: 1 1 auto;
+}
+
+.instancesLabel {
+  margin: 0;
+  padding: var(--oi-spacing-xs) var(--oi-spacing-s);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  color: var(--oi-content-color-secondary);
+}
+
+.instanceList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Operational rows: bottom-divider stacking. */
+.instanceRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--oi-spacing-s);
+  padding: var(--oi-spacing-s) var(--oi-spacing-s) 10px;
+  border-bottom: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+}
+
+/* Last operational row in the list has no trailing divider. */
+.instanceList > li:last-child .instanceRow:not(.instanceRowError) {
+  border-bottom: none;
+}
+
+/* Error row: pink tinted chip, no border, slightly more vertical padding. */
+.instanceRowError {
+  background-color: var(--oi-background-color-error);
+  border: none;
+  border-radius: var(--oi-border-radius-default);
+  padding: var(--oi-spacing-m) var(--oi-spacing-s);
+}
+
+.instanceStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  min-width: 0;
+}
+
+.instanceText {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-xs);
+  min-width: 0;
+}
+
+.instanceName {
+  font-size: var(--oi-text-body-s-strong-font-size);
+  line-height: var(--oi-text-body-s-strong-line-height);
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+  color: var(--oi-content-color-primary);
+}
+
+.instanceStatusSuccess {
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  font-weight: var(--oi-text-caption-font-weight);
+  color: var(--oi-content-color-success);
+}
+
+.instanceStatusError {
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  font-weight: var(--oi-text-caption-font-weight);
+  color: var(--oi-content-color-error);
+}
+
+.successGlyph {
+  color: var(--oi-content-color-success);
+  flex-shrink: 0;
+}
+
+.errorGlyph {
+  color: var(--oi-content-color-error);
+  flex-shrink: 0;
+}
+
+.infoGlyph {
+  color: var(--oi-content-color-tertiary);
+  flex-shrink: 0;
+}
+
+/* Sliders / Speedometer mini action buttons next to an instance row. */
+.instanceActions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  flex-shrink: 0;
+}
+
+.instanceActionBtn {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--oi-button-size-height-s);
+  width: var(--oi-button-size-height-s);
+  padding-inline: var(--oi-spacing-xs);
+  background-color: var(--oi-button-background-secondary);
+  color: var(--oi-content-color-secondary);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-default);
+  border-radius: var(--oi-border-radius-default);
+  box-shadow: var(--oi-shadow-low);
+  cursor: pointer;
+  transition:
+    background-color var(--oi-motion-duration-short) var(--oi-motion-ease-default),
+    color var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.instanceActionBtn:hover {
+  background-color: var(--oi-button-background-secondary-hover);
+  color: var(--oi-content-color-primary);
+}
+
+.instanceActionBtn:focus-visible {
+  outline: 2px solid var(--oi-content-color-brand);
+  outline-offset: 1px;
+}
+
+/* ── Subscribed: footer ──────────────────────────────────── */
+
+.cardFooter {
+  margin: 0;
+  padding: var(--oi-spacing-s) var(--oi-spacing-m) var(--oi-spacing-m);
+  text-align: center;
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  font-weight: var(--oi-text-caption-font-weight);
+  color: var(--oi-content-color-secondary);
+}
+
+/* ── Promo card body ─────────────────────────────────────── */
+
+.promoBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-m);
+  padding: var(--oi-spacing-m);
+  flex: 1 1 auto;
+}
+
+.promoCopy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-xs);
+}
+
+.promoDescription {
+  margin: 0;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  color: var(--oi-content-color-secondary);
+}
+
+.cardDivider {
+  border: 0;
+  border-top: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  margin: 0;
+  width: 100%;
+}
+
+.featureList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-s);
+}
+
+.featureRow {
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  color: var(--oi-content-color-primary);
+}
+
+.featureLabel {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.promoCta {
+  width: 100%;
+  margin-top: auto;
+}
+
+/* ── Service extensions ──────────────────────────────────── */
+
+.extensions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-m);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: var(--oi-text-heading-04-font-size);
+  line-height: var(--oi-text-heading-04-line-height);
+  font-weight: var(--oi-text-heading-04-font-weight);
+  color: var(--oi-content-color-primary);
+}
+
+.extensionGrid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--oi-spacing-l);
+}
+
+.extensionCard {
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-m);
+  padding: var(--oi-spacing-m);
+  background-color: var(--oi-background-color-primary);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  border-radius: var(--oi-border-radius-l);
+}
+
+.extensionIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--oi-content-color-secondary);
+  flex-shrink: 0;
+}
+
+.extensionBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-xs);
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.extensionTitleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+  min-width: 0;
+}
+
+.extensionTitle {
+  margin: 0;
+  font-size: var(--oi-text-body-s-strong-font-size);
+  line-height: var(--oi-text-body-s-strong-line-height);
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+  color: var(--oi-content-color-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.extensionStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  font-weight: var(--oi-text-caption-font-weight);
+  color: var(--oi-content-color-success);
+}

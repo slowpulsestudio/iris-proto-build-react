@@ -1,0 +1,117 @@
+.tree {
+  display: flex;
+  flex-direction: column;
+  padding: var(--oi-spacing-s) var(--oi-spacing-m);
+  margin: 0;
+  list-style: none;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  font-weight: var(--oi-text-caption-font-weight);
+  color: var(--oi-content-color-primary);
+  gap: var(--oi-spacing-2);
+}
+
+.row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+  height: 24px;
+  padding-right: var(--oi-spacing-xs);
+  border-radius: var(--oi-border-radius-default);
+}
+
+.row:hover {
+  background-color: var(--oi-button-background-secondary-hover);
+}
+
+.rowSelected {
+  background-color: var(--oi-button-background-secondary-hover);
+}
+
+.separator {
+  height: 0;
+  margin: var(--oi-spacing-s) 0;
+  border-top: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+}
+
+.caret {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 24px;
+  padding: 0;
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  color: var(--oi-content-color-tertiary);
+}
+
+button.caret {
+  cursor: pointer;
+}
+
+button.caret:hover {
+  color: var(--oi-content-color-primary);
+}
+
+.folderIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 24px;
+  flex-shrink: 0;
+  color: var(--oi-content-color-tertiary);
+}
+
+.nodeButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 24px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+
+.label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trailing {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+  flex-shrink: 0;
+  color: var(--oi-content-color-tertiary);
+}
+
+/*
+ * Nested level: left padding via `padding-left` on the row gives indentation;
+ * the vertical guide line is drawn here via a border on the group so it
+ * lines up with the parent's caret column.
+ */
+.children {
+  position: relative;
+  margin: 0 0 0 8px;
+  padding: 0;
+  list-style: none;
+  border-left: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+}

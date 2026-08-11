@@ -1,0 +1,283 @@
+/* ------------------------------------------------------------------ */
+/*  Collapse/expand wrapper                                            */
+/*  - Pinned: width drives push-content effect                          */
+/*  - Peek:   absolute overlay above the content column                 */
+/* ------------------------------------------------------------------ */
+
+.root {
+  --global-sidebar-width: 216px;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--oi-background-color-secondary);
+}
+
+.rootDragging {}
+
+/* ─ Pinned ─ */
+.rootPinned {
+  width: 0;
+  transition: width var(--oi-motion-duration-default) var(--oi-motion-ease-default);
+}
+.rootPinned.rootDragging {
+  transition: none;
+}
+.rootPinned.rootOpen {
+  width: var(--global-sidebar-width);
+}
+
+/* ─ Peek (absolute overlay over content column) ─ */
+.rootPeek {
+  position: absolute;
+  top: 44px; /* directly under header */
+  left: 8px;
+  bottom: 8px;
+  width: var(--global-sidebar-width);
+  z-index: 40;
+  border-radius: var(--oi-border-radius-l);
+  box-shadow: var(--oi-shadow-mid);
+  transform: translateX(calc(-100% - 8px));
+  transition: transform var(--oi-motion-duration-default) var(--oi-motion-ease-default);
+  pointer-events: none;
+}
+.rootPeek.rootOpen {
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Fixed-width inner panel (never wraps during animation)            */
+/* ------------------------------------------------------------------ */
+
+.inner {
+  width: var(--global-sidebar-width);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-s);
+  background-color: var(--oi-background-color-secondary);
+  padding: 0 0 0 var(--oi-spacing-s);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+}
+
+/* Peek mode has no internal header — add top padding so nav doesn't kiss the edge. */
+.rootPeek .inner {
+  padding-top: var(--oi-spacing-s);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Header                                                             */
+/* ------------------------------------------------------------------ */
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  height: 44px;
+  padding: 10px var(--oi-spacing-xs);
+  border-bottom: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  flex-shrink: 0;
+}
+
+.logoMark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  color: var(--oi-content-color-brand);
+}
+
+.productBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  color: var(--oi-content-color-primary);
+  font-family: inherit;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  min-width: 0;
+  flex: 1 1 0;
+  white-space: nowrap;
+}
+
+.productBtn:focus-visible {
+  outline: none;
+  box-shadow: var(--oi-focus-ring);
+  border-radius: var(--oi-border-radius-default);
+}
+
+.productLabel {
+  flex: 1 1 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Navigation                                                         */
+/* ------------------------------------------------------------------ */
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding-bottom: var(--oi-spacing-s);
+}
+
+.group {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.group > li {
+  width: 100%;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Nav items                                                          */
+/* ------------------------------------------------------------------ */
+
+.item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  height: 32px;
+  width: 100%;
+  min-width: 0;
+  padding: var(--oi-spacing-xs);
+  border-radius: var(--oi-border-radius-default);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  color: var(--oi-content-color-secondary);
+  text-align: left;
+  transition: background-color var(--oi-motion-duration-short) var(--oi-motion-ease-default),
+    color var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.item:hover {
+  background-color: var(--oi-background-color-tertiary);
+  color: var(--oi-content-color-primary);
+}
+
+.item:focus-visible {
+  outline: none;
+  box-shadow: var(--oi-focus-ring);
+}
+
+/* Active state */
+.itemActive {
+  background-color: var(--oi-background-color-tertiary);
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+  color: var(--oi-content-color-primary);
+}
+
+/* Disabled state — visible but not interactive */
+.itemDisabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.itemDisabled:hover {
+  background-color: transparent;
+  color: var(--oi-content-color-secondary);
+}
+
+/* Brand indicator bar — left edge of sidebar padding */
+.itemActive::before {
+  content: '';
+  position: absolute;
+  left: calc(-1 * var(--oi-spacing-xs));
+  top: var(--oi-spacing-xs);
+  bottom: var(--oi-spacing-xs);
+  width: 2px;
+  background-color: var(--oi-base-color-brand);
+  border-radius: 0 var(--oi-border-radius-s) var(--oi-border-radius-s) 0;
+}
+
+.itemIconBound {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.itemLabel {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Section header ("Other")                                           */
+
+.sectionHeader {
+  padding: var(--oi-spacing-m) var(--oi-spacing-s) var(--oi-spacing-xs);
+}
+
+.sectionLabel {
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  color: var(--oi-content-color-tertiary);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Footer help text                                                  */
+
+.footer {
+  flex-shrink: 0;
+  padding: var(--oi-spacing-s) var(--oi-spacing-s) var(--oi-spacing-m);
+  border-top: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+}
+
+.footerHint {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  color: var(--oi-content-color-tertiary);
+}
+
+.footerKbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: var(--oi-border-radius-s);
+  background-color: var(--oi-background-color-tertiary);
+  color: var(--oi-content-color-tertiary);
+  font-family: inherit;
+  font-size: var(--oi-text-caption-font-size);
+  line-height: 1;
+}

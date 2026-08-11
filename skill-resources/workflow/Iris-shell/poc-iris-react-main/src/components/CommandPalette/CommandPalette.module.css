@@ -1,0 +1,262 @@
+/* CommandPalette — global search / ⌘K overlay. Token-driven, modeled on
+   Modal (scrim + top-anchored panel). */
+
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 12vh var(--oi-spacing-l) var(--oi-spacing-l);
+  background-color: rgba(2, 6, 24, 0);
+  transition: background-color var(--oi-motion-duration-short)
+    var(--oi-motion-ease-default);
+}
+
+.rootOpen {
+  background-color: rgba(2, 6, 24, 0.4);
+  transition: background-color var(--oi-motion-duration-long)
+    var(--oi-motion-ease-default);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 640px;
+  max-height: calc(100vh - 12vh - var(--oi-spacing-l) * 2);
+  background-color: var(--oi-background-color-primary);
+  border-radius: var(--oi-border-radius-l);
+  box-shadow: var(--oi-shadow-high);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-8px) scale(0.96);
+  /* Closing is quicker + quieter than opening: resting (closed) state uses
+     the fast close clock, the open state below uses the slower open clock. */
+  transition:
+    opacity var(--oi-motion-duration-short) var(--oi-motion-ease-default),
+    transform var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.panelOpen {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition:
+    opacity var(--oi-motion-duration-long) var(--oi-motion-ease-default),
+    transform var(--oi-motion-duration-long) var(--oi-motion-ease-default);
+}
+
+/* ---------- search input ---------- */
+
+.searchRow {
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  padding: var(--oi-spacing-m) var(--oi-spacing-l);
+  border-bottom: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  flex-shrink: 0;
+}
+
+.searchIcon {
+  color: var(--oi-content-color-tertiary);
+  flex-shrink: 0;
+}
+
+.input {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  color: var(--oi-content-color-primary);
+  font-family: inherit;
+  font-size: var(--oi-font-size-m);
+  line-height: var(--oi-line-height-m);
+  font-weight: var(--oi-font-weight-400);
+}
+
+.input::placeholder {
+  color: var(--oi-content-color-tertiary);
+}
+
+/* Suppress the global :focus-visible ring (box-shadow) — focus context is
+   conveyed by the panel/input placement, not a ring. */
+.input:focus,
+.input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+/* ---------- scope chips ---------- */
+
+.scopeRow {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--oi-spacing-l);
+  padding-top: var(--oi-spacing-s);
+  border-bottom: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  flex-shrink: 0;
+}
+
+/* Drop the Tabs' own underline track — the .scopeRow already provides the
+   divider under the scope area. */
+.scopeTabs {
+  border-bottom: none;
+}
+
+/* ---------- results list ---------- */
+
+.list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--oi-spacing-xs);
+}
+
+.group {
+  padding-bottom: var(--oi-spacing-xs);
+}
+
+.groupTitle {
+  padding: var(--oi-spacing-s) var(--oi-spacing-s) var(--oi-spacing-xs);
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  font-weight: var(--oi-text-caption-font-weight);
+  color: var(--oi-content-color-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  padding: var(--oi-spacing-s);
+  border-radius: var(--oi-border-radius-default);
+  cursor: pointer;
+}
+
+.rowActive {
+  background-color: var(--oi-background-color-brand);
+}
+
+.rowIcon {
+  color: var(--oi-content-color-secondary);
+  flex-shrink: 0;
+}
+
+.rowText {
+  display: flex;
+  align-items: baseline;
+  gap: var(--oi-spacing-s);
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.rowLabel {
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  color: var(--oi-content-color-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rowSecondary {
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  color: var(--oi-content-color-tertiary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.rowRemove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--oi-spacing-xs);
+  border: none;
+  border-radius: var(--oi-border-radius-default);
+  background-color: transparent;
+  color: var(--oi-content-color-tertiary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.rowRemove:hover {
+  background-color: var(--oi-background-color-primary);
+  color: var(--oi-content-color-primary);
+}
+
+.rowEnter {
+  flex-shrink: 0;
+}
+
+.empty {
+  padding: var(--oi-spacing-xl) var(--oi-spacing-l);
+  text-align: center;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  color: var(--oi-content-color-tertiary);
+}
+
+/* ---------- footer key hints ---------- */
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-l);
+  padding: var(--oi-spacing-s) var(--oi-spacing-l);
+  border-top: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  background: var(--oi-background-color-secondary);
+  flex-shrink: 0;
+}
+
+.footerHint,
+.kbdHint {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  color: var(--oi-content-color-tertiary);
+}
+
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  padding: 0 var(--oi-spacing-xs);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-default);
+  border-radius: var(--oi-border-radius-s);
+  background-color: var(--oi-background-color-primary);
+  color: var(--oi-content-color-secondary);
+  font-family: inherit;
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root,
+  .rootOpen,
+  .panel,
+  .panelOpen {
+    transition: none;
+  }
+
+  .panel {
+    transform: none;
+  }
+}

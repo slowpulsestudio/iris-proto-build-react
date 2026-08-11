@@ -1,0 +1,55 @@
+/* Chart categorical series tokens — CORE themes.
+ *
+ * Kept deliberately separate from the semantic theme token files
+ * (tokens.light/dark/hc-*.css) so chart theming can evolve independently and
+ * these files stay auto-generatable.
+ *
+ * The sequence is fixed and index-ordered (the approach used by IBM Carbon /
+ * D3 `scaleOrdinal`): a chart assigns color N to series N, strictly in order.
+ * Order matches what the "more themes" already ship so series colors stay
+ * consistent when switching between a core theme and a more-theme:
+ *
+ *   1 blue · 2 purple · 3 orange · 4 green · 5 pink · 6 teal
+ *
+ * Colors are derived from the app's own primitive scales. The shade level
+ * shifts per mode so marks keep AA contrast against each theme's background
+ * (darker tones on light backgrounds, brighter tints on dark):
+ *   light 500 · dark 400 · hc-light 600 · hc-dark 200
+ */
+
+:root,
+body.theme-light {
+  --oi-chart-color-1: var(--oi-color-blue-500);
+  --oi-chart-color-2: var(--oi-color-purple-500);
+  --oi-chart-color-3: var(--oi-color-orange-500);
+  --oi-chart-color-4: var(--oi-color-green-500);
+  --oi-chart-color-5: var(--oi-color-pink-500);
+  --oi-chart-color-6: var(--oi-color-teal-500);
+}
+
+body.theme-dark {
+  --oi-chart-color-1: var(--oi-color-blue-400);
+  --oi-chart-color-2: var(--oi-color-purple-400);
+  --oi-chart-color-3: var(--oi-color-orange-400);
+  --oi-chart-color-4: var(--oi-color-green-400);
+  --oi-chart-color-5: var(--oi-color-pink-400);
+  --oi-chart-color-6: var(--oi-color-teal-400);
+}
+
+body.theme-hc-light {
+  --oi-chart-color-1: var(--oi-color-blue-600);
+  --oi-chart-color-2: var(--oi-color-purple-600);
+  --oi-chart-color-3: var(--oi-color-orange-600);
+  --oi-chart-color-4: var(--oi-color-green-600);
+  --oi-chart-color-5: var(--oi-color-pink-600);
+  --oi-chart-color-6: var(--oi-color-teal-600);
+}
+
+body.theme-hc-dark {
+  --oi-chart-color-1: var(--oi-color-blue-400);
+  --oi-chart-color-2: var(--oi-color-purple-400);
+  --oi-chart-color-3: var(--oi-color-orange-400);
+  --oi-chart-color-4: var(--oi-color-green-400);
+  --oi-chart-color-5: var(--oi-color-pink-400);
+  --oi-chart-color-6: var(--oi-color-teal-400);
+}

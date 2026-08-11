@@ -59,6 +59,7 @@ workflow/image-generation
 - `workflow/architecture` — general code structure rules
 - `workflow/testing` — testing standards
 - `workflow/iris-react-migrate` — migrating an existing React + Vite app to the Iris-UI design system
+- `workflow/iris-shell` — adding the Iris multi-product navigation shell (app header, global sidebar, AI panel)
 - `workflow/figma-mcp` — if the project uses Figma for design
 - `workflow/vercel-publish` — if the project deploys to Vercel
 - `workflow/image-generation` — if the project calls an AI image-generation API

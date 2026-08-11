@@ -1,0 +1,61 @@
+/* Ayu (Dark) — source: https://github.com/ayu-theme/vscode-ayu (ayu-dark.json)
+   Partial color override (structural tokens inherited from :root). */
+body.theme-ayu {
+  /* backgrounds */
+  --oi-background-color-primary: #0D1017;
+  --oi-background-color-secondary: #10141C;
+  --oi-background-color-tertiary: #141821;
+  --oi-background-color-brand: rgba(230, 180, 80, 0.16);
+  --oi-background-color-info: rgba(57, 186, 230, 0.14);
+  --oi-background-color-success: rgba(170, 217, 76, 0.14);
+  --oi-background-color-warning: rgba(255, 180, 84, 0.14);
+  --oi-background-color-error: rgba(217, 87, 87, 0.16);
+  /* base accents */
+  --oi-base-color-brand: #E6B450;
+  --oi-base-color-info: #39BAE6;
+  --oi-base-color-success: #AAD94C;
+  --oi-base-color-warning: #FFB454;
+  --oi-base-color-error: #D95757;
+  /* borders */
+  --oi-border-color-strong: #5C6773;
+  --oi-border-color-default: #2A2F3B;
+  --oi-border-color-muted: #20242F;
+  --oi-border-color-focus: #E6B450;
+  --oi-border-color-badge-info: #39BAE6;
+  --oi-border-color-badge-success: #AAD94C;
+  --oi-border-color-badge-error: #D95757;
+  --oi-border-color-badge-warning: #FFB454;
+  /* content */
+  --oi-content-color-primary: #BFBDB6;
+  --oi-content-color-secondary: #8A9199;
+  --oi-content-color-tertiary: #828F9E;
+  --oi-content-color-brand: #E6B450;
+  --oi-content-color-info: #59C2FF;
+  --oi-content-color-success: #AAD94C;
+  --oi-content-color-warning: #FFB454;
+  --oi-content-color-error: #F26D78;
+  --oi-content-color-link: #E6B450;
+  --oi-content-color-link-hover: #F0C674;
+  --oi-content-color-link-visited: #D2A6FF;
+  --oi-content-color-inked: #FFFFFF;
+  --oi-content-color-disabled: rgba(191, 189, 182, 0.38);
+  /* buttons (primary darkened from gold so white label keeps contrast) */
+  --oi-button-background-primary: #8A6220;
+  --oi-button-background-primary-hover: #7A561C;
+  --oi-button-background-primary-active: #7A561C;
+  --oi-button-background-secondary: #0D1017;
+  --oi-button-background-secondary-hover: #141821;
+  --oi-button-background-secondary-active: #1B1F29;
+  --oi-button-background-disabled: #1B1F29;
+  /* charts (categorical series) */
+  --oi-chart-color-1: #77CEFF;
+  --oi-chart-color-2: #E0BBFF;
+  --oi-chart-color-3: #FFC26E;
+  --oi-chart-color-4: #BCE766;
+  /* shadows (match default dark theme) */
+  --oi-shadow-none: none;
+  --oi-shadow-low: inset 0px 0.5px 0px rgba(255, 255, 255, 0.12), inset 0px 0px 0px 0.5px rgba(255, 255, 255, 0.11);
+  --oi-shadow-mid: 0px 0px 0px 1px rgba(255, 255, 255, 0.16), 0px 2px 12px rgba(59, 51, 69, 0.16);
+  --oi-shadow-high: 0px 12px 56px rgba(255, 255, 255, 0.07), inset 0px 0px 0px 1px rgba(255, 255, 255, 0.16);
+  --oi-focus-ring: 0 0 0 1.5px var(--oi-background-color-primary), 0 0 0 3px var(--oi-border-color-focus);
+}

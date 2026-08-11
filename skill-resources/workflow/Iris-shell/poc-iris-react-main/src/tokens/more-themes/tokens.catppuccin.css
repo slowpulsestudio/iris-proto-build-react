@@ -1,0 +1,61 @@
+/* Catppuccin (Mocha) — source: https://github.com/catppuccin/palette (palette.json, mocha)
+   Partial color override (structural tokens inherited from :root). */
+body.theme-catppuccin {
+  /* backgrounds */
+  --oi-background-color-primary: #1E1E2E;
+  --oi-background-color-secondary: #313244;
+  --oi-background-color-tertiary: #45475A;
+  --oi-background-color-brand: rgba(137, 180, 250, 0.16);
+  --oi-background-color-info: rgba(116, 199, 236, 0.14);
+  --oi-background-color-success: rgba(166, 227, 161, 0.14);
+  --oi-background-color-warning: rgba(249, 226, 175, 0.14);
+  --oi-background-color-error: rgba(243, 139, 168, 0.16);
+  /* base accents */
+  --oi-base-color-brand: #89B4FA;
+  --oi-base-color-info: #74C7EC;
+  --oi-base-color-success: #A6E3A1;
+  --oi-base-color-warning: #F9E2AF;
+  --oi-base-color-error: #F38BA8;
+  /* borders */
+  --oi-border-color-strong: #6C6F86;
+  --oi-border-color-default: #45475A;
+  --oi-border-color-muted: #3C3D52;
+  --oi-border-color-focus: #89B4FA;
+  --oi-border-color-badge-info: #74C7EC;
+  --oi-border-color-badge-success: #A6E3A1;
+  --oi-border-color-badge-error: #F38BA8;
+  --oi-border-color-badge-warning: #F9E2AF;
+  /* content */
+  --oi-content-color-primary: #CDD6F4;
+  --oi-content-color-secondary: #BAC2DE;
+  --oi-content-color-tertiary: #9399B0;
+  --oi-content-color-brand: #89B4FA;
+  --oi-content-color-info: #89DCEB;
+  --oi-content-color-success: #A6E3A1;
+  --oi-content-color-warning: #F9E2AF;
+  --oi-content-color-error: #F38BA8;
+  --oi-content-color-link: #89B4FA;
+  --oi-content-color-link-hover: #B4BEFE;
+  --oi-content-color-link-visited: #CBA6F7;
+  --oi-content-color-inked: #FFFFFF;
+  --oi-content-color-disabled: rgba(205, 214, 244, 0.38);
+  /* buttons (primary darkened from blue so white label keeps contrast) */
+  --oi-button-background-primary: #4372C4;
+  --oi-button-background-primary-hover: #3D66B0;
+  --oi-button-background-primary-active: #3D66B0;
+  --oi-button-background-secondary: #1E1E2E;
+  --oi-button-background-secondary-hover: #313244;
+  --oi-button-background-secondary-active: #45475A;
+  --oi-button-background-disabled: #45475A;
+  /* charts (categorical series) */
+  --oi-chart-color-1: #9EC5FF;
+  --oi-chart-color-2: #DBBBFF;
+  --oi-chart-color-3: #FFC59E;
+  --oi-chart-color-4: #BAEFB6;
+  /* shadows (match default dark theme) */
+  --oi-shadow-none: none;
+  --oi-shadow-low: inset 0px 0.5px 0px rgba(255, 255, 255, 0.12), inset 0px 0px 0px 0.5px rgba(255, 255, 255, 0.11);
+  --oi-shadow-mid: 0px 0px 0px 1px rgba(255, 255, 255, 0.16), 0px 2px 12px rgba(59, 51, 69, 0.16);
+  --oi-shadow-high: 0px 12px 56px rgba(255, 255, 255, 0.07), inset 0px 0px 0px 1px rgba(255, 255, 255, 0.16);
+  --oi-focus-ring: 0 0 0 1.5px var(--oi-background-color-primary), 0 0 0 3px var(--oi-border-color-focus);
+}

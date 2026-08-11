@@ -1,0 +1,61 @@
+/* One Dark Pro — source: https://github.com/Binaryify/OneDark-Pro (themes/OneDark-Pro.json)
+   Partial color override (structural tokens inherited from :root). */
+body.theme-one-dark-pro {
+  /* backgrounds */
+  --oi-background-color-primary: #282C34;
+  --oi-background-color-secondary: #2C313A;
+  --oi-background-color-tertiary: #353B45;
+  --oi-background-color-brand: rgba(97, 175, 239, 0.16);
+  --oi-background-color-info: rgba(86, 182, 194, 0.14);
+  --oi-background-color-success: rgba(152, 195, 121, 0.14);
+  --oi-background-color-warning: rgba(229, 192, 123, 0.14);
+  --oi-background-color-error: rgba(224, 108, 117, 0.16);
+  /* base accents */
+  --oi-base-color-brand: #61AFEF;
+  --oi-base-color-info: #56B6C2;
+  --oi-base-color-success: #98C379;
+  --oi-base-color-warning: #E5C07B;
+  --oi-base-color-error: #E06C75;
+  /* borders */
+  --oi-border-color-strong: #727B8F;
+  --oi-border-color-default: #3E4451;
+  --oi-border-color-muted: #363C47;
+  --oi-border-color-focus: #61AFEF;
+  --oi-border-color-badge-info: #56B6C2;
+  --oi-border-color-badge-success: #98C379;
+  --oi-border-color-badge-error: #E06C75;
+  --oi-border-color-badge-warning: #E5C07B;
+  /* content */
+  --oi-content-color-primary: #ABB2BF;
+  --oi-content-color-secondary: #9199A5;
+  --oi-content-color-tertiary: #8D96A5;
+  --oi-content-color-brand: #61AFEF;
+  --oi-content-color-info: #56B6C2;
+  --oi-content-color-success: #98C379;
+  --oi-content-color-warning: #E5C07B;
+  --oi-content-color-error: #E98C93;
+  --oi-content-color-link: #61AFEF;
+  --oi-content-color-link-hover: #7CC0F5;
+  --oi-content-color-link-visited: #C678DD;
+  --oi-content-color-inked: #FFFFFF;
+  --oi-content-color-disabled: rgba(171, 178, 191, 0.38);
+  /* buttons (primary darkened from blue so white label keeps contrast) */
+  --oi-button-background-primary: #2F79B8;
+  --oi-button-background-primary-hover: #2A6DA6;
+  --oi-button-background-primary-active: #2A6DA6;
+  --oi-button-background-secondary: #282C34;
+  --oi-button-background-secondary-hover: #353B45;
+  --oi-button-background-secondary-active: #3E4451;
+  --oi-button-background-disabled: #3E4451;
+  /* charts (categorical series) */
+  --oi-chart-color-1: #7CC3F7;
+  --oi-chart-color-2: #D68FEB;
+  --oi-chart-color-3: #E9B074;
+  --oi-chart-color-4: #AFD98D;
+  /* shadows (match default dark theme) */
+  --oi-shadow-none: none;
+  --oi-shadow-low: inset 0px 0.5px 0px rgba(255, 255, 255, 0.12), inset 0px 0px 0px 0.5px rgba(255, 255, 255, 0.11);
+  --oi-shadow-mid: 0px 0px 0px 1px rgba(255, 255, 255, 0.16), 0px 2px 12px rgba(59, 51, 69, 0.16);
+  --oi-shadow-high: 0px 12px 56px rgba(255, 255, 255, 0.07), inset 0px 0px 0px 1px rgba(255, 255, 255, 0.16);
+  --oi-focus-ring: 0 0 0 1.5px var(--oi-background-color-primary), 0 0 0 3px var(--oi-border-color-focus);
+}

@@ -1,0 +1,100 @@
+.shell {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  background-color: var(--oi-background-color-secondary);
+  overflow: hidden;
+  position: relative;
+}
+
+.contentCol {
+  --sidebar-resize-line-x: var(--oi-spacing-s);
+  --sidebar-resize-hit-width: 10px;
+  --sidebar-resize-line-width: 1.5px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.sidebarResizeHandle {
+  position: absolute;
+  top: 0;
+  left: calc(var(--sidebar-resize-line-x) - (var(--sidebar-resize-hit-width) / 2));
+  bottom: 0;
+  z-index: 41;
+  width: var(--sidebar-resize-hit-width);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  cursor: col-resize;
+  touch-action: none;
+  outline: none;
+}
+
+.sidebarResizeHandleGrip {
+  width: var(--sidebar-resize-line-width);
+  height: calc(100% - 16px);
+  background-color: transparent;
+  transition: background-color var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.sidebarResizeHandle:hover .sidebarResizeHandleGrip,
+.sidebarResizeHandle:focus-visible .sidebarResizeHandleGrip {
+  background-color: var(--oi-border-color-strong);
+}
+
+/* Combined selector matches :hover/:focus-visible specificity (0,3,0) and appears later, so it overrides during active drag */
+.sidebarResizeHandle.sidebarResizeHandleDragging .sidebarResizeHandleGrip {
+  background-color: var(--oi-button-background-primary, var(--oi-base-color-brand));
+  transition: none;
+}
+
+.body {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0 var(--oi-spacing-s) var(--oi-spacing-s) var(--oi-spacing-s);
+  gap: var(--oi-spacing-xs);
+}
+
+.main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--oi-background-color-primary);
+  border-radius: var(--oi-border-radius-l);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  overflow: hidden;
+}
+
+/* Full-screen backdrop shown while the sidebar is in peek (overlay) mode.
+   Sits below the sidebar's z-index (40) and above everything else.
+   Pointer-events stay off so it never blocks hover/click resolution —
+   peek closes on mouse-leave. */
+.peekBlanket {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  background-color: rgba(2, 6, 24, 0);
+  pointer-events: none;
+  transition: background-color var(--oi-motion-duration-default)
+    var(--oi-motion-ease-default);
+}
+.peekBlanketOpen {
+  background-color: rgba(2, 6, 24, 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebarResizeHandle,
+  .sidebarResizeHandleGrip {
+    transition: none;
+  }
+}

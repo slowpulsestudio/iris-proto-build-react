@@ -1,0 +1,76 @@
+.wrap {
+  position: relative;
+  display: inline-flex;
+  width: var(--oi-size-xs);
+  height: var(--oi-size-xs);
+  flex-shrink: 0;
+}
+
+.input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.box {
+  width: var(--oi-size-xs);
+  height: var(--oi-size-xs);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--oi-background-color-primary);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid) var(--oi-border-color-strong);
+  border-radius: var(--oi-border-radius-default);
+  color: var(--oi-content-color-constant);
+  box-shadow: var(--oi-shadow-low);
+  transition:
+    background-color var(--oi-motion-duration-short) var(--oi-motion-ease-default),
+    border-color var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.input:hover + .box {
+  border-color: var(--oi-content-color-secondary);
+}
+
+.input:focus-visible + .box {
+  box-shadow: var(--oi-focus-ring);
+}
+
+.checked,
+.indeterminate {
+  background-color: var(--oi-base-color-brand);
+  border-color: var(--oi-base-color-brand);
+}
+
+.mark {
+  width: 100%;
+  height: 100%;
+}
+
+/* The check draws itself in: the box fills first (background/border on
+   `.box`), then after a short beat the checkmark strokes on via
+   stroke-dashoffset. Unchecking reverses quickly with no draw delay.
+   --oi-checkbox-check-len is the path's getTotalLength() rounded up. */
+.checkPath {
+  stroke-dasharray: var(--oi-checkbox-check-len, 13);
+  stroke-dashoffset: var(--oi-checkbox-check-len, 13);
+  transition: stroke-dashoffset var(--oi-motion-duration-short)
+    var(--oi-motion-ease-default);
+}
+
+.checked .checkPath {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset var(--oi-motion-duration-long)
+    var(--oi-motion-ease-default) 80ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .box,
+  .checkPath {
+    transition: none !important;
+  }
+}

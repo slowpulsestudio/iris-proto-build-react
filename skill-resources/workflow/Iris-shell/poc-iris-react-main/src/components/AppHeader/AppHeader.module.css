@@ -1,0 +1,227 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 44px;
+  padding-inline: var(--oi-spacing-m);
+  background-color: var(--oi-background-color-secondary);
+  flex-shrink: 0;
+  container-type: inline-size;
+  container-name: appheader;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  min-width: 0;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+  margin-right: var(--oi-spacing-s);
+  flex-shrink: 0;
+}
+
+.toggleSlot {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Sidebar-toggle icon defaults to tertiary at rest; IconButton's
+   :hover/:active rules (higher specificity) still take over on interaction. */
+.toggleSlot .toggleBtn {
+  color: var(--oi-content-color-tertiary);
+}
+
+.productChooser {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+  height: var(--oi-size-default);
+  padding-inline: var(--oi-spacing-xs);
+  border-radius: var(--oi-border-radius-default);
+  color: var(--oi-content-color-secondary);
+  transition: background-color var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.productChooser:hover {
+  background-color: var(--oi-background-color-tertiary);
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+/* Collapsed breadcrumb (… overflow menu + current page). Hidden until the
+   header container gets tight; only rendered when there is more than one
+   crumb, so single-crumb pages never lose their label. */
+.crumbsCollapsed {
+  display: none;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  min-width: 0;
+}
+
+.crumbOverflow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  padding-inline: var(--oi-spacing-xs);
+  background: none;
+  border: 0;
+  border-radius: var(--oi-border-radius-s);
+  color: var(--oi-content-color-secondary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.crumbOverflow:hover {
+  color: var(--oi-content-color-primary);
+}
+
+.crumbOverflow:focus-visible {
+  box-shadow: var(--oi-focus-ring);
+  outline: none;
+}
+
+.crumbTruncate {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.crumbs {
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+}
+
+.crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+}
+
+.crumbLabel {
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  color: var(--oi-content-color-secondary);
+}
+
+.crumbLink {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: var(--oi-border-radius-s);
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.crumbLink:hover {
+  color: var(--oi-content-color-primary);
+}
+
+.crumbLink:focus-visible {
+  box-shadow: var(--oi-focus-ring);
+  outline: none;
+}
+
+.crumbCurrent {
+  color: var(--oi-content-color-primary);
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+}
+
+.separator {
+  color: var(--oi-content-color-tertiary);
+}
+
+.askAi {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+  height: var(--oi-size-default);
+  padding-inline: var(--oi-spacing-m);
+  border-radius: var(--oi-border-radius-max);
+  background-color: var(--oi-background-color-primary);
+  color: var(--oi-content-color-primary);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+  transition: background-color var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.askAi:hover {
+  background-color: var(--oi-background-color-secondary);
+}
+
+.askAiIcon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--oi-content-color-brand);
+}
+
+.askAiLabel {
+  display: inline-flex;
+}
+
+.userTrigger {
+  display: inline-flex;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: var(--oi-border-radius-max);
+  cursor: pointer;
+}
+
+.userTrigger:focus-visible {
+  box-shadow: var(--oi-focus-ring);
+}
+
+/* ── Responsive tiers (driven by the header's own width) ──────────
+   Degrade in order: breadcrumb collapses first, then Ask AI drops its
+   label, then notifications are hidden — keeping the most useful
+   affordances the longest. */
+
+/* Medium: collapse the breadcrumb to an overflow menu + current page. */
+@container appheader (max-width: 720px) {
+  .breadcrumbCollapsible .crumbs {
+    display: none;
+  }
+
+  .breadcrumbCollapsible .crumbsCollapsed {
+    display: inline-flex;
+  }
+}
+
+/* Compact: Ask AI becomes an icon-only button. */
+@container appheader (max-width: 520px) {
+  .askAiLabel {
+    display: none;
+  }
+
+  .askAi {
+    width: var(--oi-size-default);
+    padding-inline: 0;
+    gap: 0;
+    justify-content: center;
+  }
+}
+
+/* Tight: drop notifications to save room. */
+@container appheader (max-width: 420px) {
+  .bell {
+    display: none;
+  }
+}

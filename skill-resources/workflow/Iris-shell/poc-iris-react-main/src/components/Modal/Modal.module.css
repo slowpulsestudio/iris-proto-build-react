@@ -1,0 +1,168 @@
+/* ------------------------------------------------------------------ */
+/*  Modal — centered dialog                                            */
+/* ------------------------------------------------------------------ */
+
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--oi-spacing-l);
+  background-color: rgba(2, 6, 24, 0);
+  transition: background-color var(--oi-motion-duration-short)
+    var(--oi-motion-ease-default);
+}
+
+.rootOpen {
+  background-color: rgba(2, 6, 24, 0.4);
+  transition: background-color var(--oi-motion-duration-long)
+    var(--oi-motion-ease-default);
+}
+
+.dialog {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: calc(100vh - var(--oi-spacing-xl) * 2);
+  background-color: var(--oi-background-color-primary);
+  border-radius: var(--oi-border-radius-l);
+  box-shadow: var(--oi-shadow-high);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(8px) scale(0.96);
+  /* Closing is quicker + quieter than opening: the resting (closed) state
+     carries the fast close clock; the open state below carries the slower
+     open clock, so removing `.dialogOpen` animates back on the fast clock. */
+  transition:
+    opacity var(--oi-motion-duration-short) var(--oi-motion-ease-default),
+    transform var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.dialogOpen {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition:
+    opacity var(--oi-motion-duration-long) var(--oi-motion-ease-default),
+    transform var(--oi-motion-duration-long) var(--oi-motion-ease-default);
+}
+
+.size_s {
+  max-width: 420px;
+}
+.size_m {
+  max-width: 620px;
+}
+.size_l {
+  max-width: 820px;
+}
+
+/* ---------- header ---------- */
+
+.header {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--oi-spacing-m);
+  padding: var(--oi-spacing-l);
+  border-bottom: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-default);
+  flex-shrink: 0;
+}
+
+/* Stacked header: leading icon sits on its own row above the title. */
+.headerStacked {
+  flex-direction: column;
+}
+
+.headerStacked .headerText {
+  padding-right: 0;
+}
+
+.headerIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--oi-content-color-secondary);
+  flex-shrink: 0;
+}
+
+.headerText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-xs);
+  flex: 1 1 auto;
+  min-width: 0;
+  /* leave room for the absolute close button */
+  padding-right: var(--oi-spacing-l);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--oi-text-heading-05-font-size);
+  line-height: var(--oi-text-heading-05-line-height);
+  font-weight: var(--oi-text-heading-05-font-weight);
+  color: var(--oi-content-color-primary);
+  word-break: break-word;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  color: var(--oi-content-color-secondary);
+  word-break: break-word;
+}
+
+.closeBtn {
+  position: absolute;
+  top: var(--oi-spacing-s);
+  right: var(--oi-spacing-s);
+}
+
+/* ---------- body ---------- */
+
+.body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  padding: var(--oi-spacing-l);
+}
+
+/* ---------- footer ---------- */
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--oi-spacing-s);
+  padding: var(--oi-spacing-l);
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root,
+  .rootOpen,
+  .dialog,
+  .dialogOpen {
+    transition: none;
+  }
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 480px) {
+  .root {
+    padding: 0;
+    align-items: stretch;
+  }
+  .dialog {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 0;
+  }
+}

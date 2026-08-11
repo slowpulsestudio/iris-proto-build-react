@@ -1,0 +1,61 @@
+/* Tokyo Night — source: https://github.com/enkia/tokyo-night-vscode-theme
+   Partial color override (structural tokens inherited from :root). */
+body.theme-tokyo-night {
+  /* backgrounds */
+  --oi-background-color-primary: #1A1B26;
+  --oi-background-color-secondary: #1F2335;
+  --oi-background-color-tertiary: #292E42;
+  --oi-background-color-brand: rgba(122, 162, 247, 0.16);
+  --oi-background-color-info: rgba(125, 207, 255, 0.14);
+  --oi-background-color-success: rgba(158, 206, 106, 0.14);
+  --oi-background-color-warning: rgba(224, 175, 104, 0.14);
+  --oi-background-color-error: rgba(247, 118, 142, 0.16);
+  /* base accents */
+  --oi-base-color-brand: #7AA2F7;
+  --oi-base-color-info: #7DCFFF;
+  --oi-base-color-success: #9ECE6A;
+  --oi-base-color-warning: #E0AF68;
+  --oi-base-color-error: #F7768E;
+  /* borders */
+  --oi-border-color-strong: #656D92;
+  --oi-border-color-default: #353B54;
+  --oi-border-color-muted: #2A2F45;
+  --oi-border-color-focus: #7AA2F7;
+  --oi-border-color-badge-info: #7DCFFF;
+  --oi-border-color-badge-success: #9ECE6A;
+  --oi-border-color-badge-error: #F7768E;
+  --oi-border-color-badge-warning: #E0AF68;
+  /* content */
+  --oi-content-color-primary: #A9B1D6;
+  --oi-content-color-secondary: #898EB0;
+  --oi-content-color-tertiary: #8188AE;
+  --oi-content-color-brand: #7AA2F7;
+  --oi-content-color-info: #7DCFFF;
+  --oi-content-color-success: #9ECE6A;
+  --oi-content-color-warning: #E0AF68;
+  --oi-content-color-error: #F7768E;
+  --oi-content-color-link: #7AA2F7;
+  --oi-content-color-link-hover: #9DB4F9;
+  --oi-content-color-link-visited: #BB9AF7;
+  --oi-content-color-inked: #FFFFFF;
+  --oi-content-color-disabled: rgba(169, 177, 214, 0.38);
+  /* buttons (primary uses the theme's own deep blue with white label) */
+  --oi-button-background-primary: #3D59A1;
+  --oi-button-background-primary-hover: #34497F;
+  --oi-button-background-primary-active: #34497F;
+  --oi-button-background-secondary: #1A1B26;
+  --oi-button-background-secondary-hover: #292E42;
+  --oi-button-background-secondary-active: #3B4261;
+  --oi-button-background-disabled: #292E42;
+  /* charts (categorical series) */
+  --oi-chart-color-1: #93B6FF;
+  --oi-chart-color-2: #CDB0FF;
+  --oi-chart-color-3: #FFB07E;
+  --oi-chart-color-4: #B4E081;
+  /* shadows (match default dark theme) */
+  --oi-shadow-none: none;
+  --oi-shadow-low: inset 0px 0.5px 0px rgba(255, 255, 255, 0.12), inset 0px 0px 0px 0.5px rgba(255, 255, 255, 0.11);
+  --oi-shadow-mid: 0px 0px 0px 1px rgba(255, 255, 255, 0.16), 0px 2px 12px rgba(59, 51, 69, 0.16);
+  --oi-shadow-high: 0px 12px 56px rgba(255, 255, 255, 0.07), inset 0px 0px 0px 1px rgba(255, 255, 255, 0.16);
+  --oi-focus-ring: 0 0 0 1.5px var(--oi-background-color-primary), 0 0 0 3px var(--oi-border-color-focus);
+}

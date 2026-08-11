@@ -1,0 +1,220 @@
+/* ------------------------------------------------------------------ */
+/*  ActionBar — constant dark floating toolbar                        */
+/*                                                                    */
+/*  Uses raw color primitives (--oi-color-*) intentionally: this      */
+/*  surface is always dark regardless of the active theme.            */
+/* ------------------------------------------------------------------ */
+
+.bar {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-m);
+  height: 48px;
+  padding-inline: var(--oi-spacing-m);
+  background-color: var(--oi-color-black);
+  border-radius: 14px;
+  box-shadow: var(--oi-shadow-mid);
+
+  /* Enter/exit: slide + fade. Positioning (and the axis of the slide) is set
+     by the layout modifier below so floating and inline can differ. */
+  opacity: 0;
+  transition:
+    transform var(--oi-motion-duration-default) var(--oi-motion-ease-default),
+    opacity var(--oi-motion-duration-default) var(--oi-motion-ease-default);
+}
+
+.barOpen {
+  opacity: 1;
+}
+
+/* ---------- floating: fixed pill overlaying the viewport bottom ---------- */
+
+.floating {
+  position: fixed;
+  bottom: var(--oi-spacing-xl);
+  left: 50%;
+  z-index: 50;
+  transform: translate(-50%, var(--oi-spacing-m));
+}
+
+.floating.barOpen {
+  transform: translate(-50%, 0);
+}
+
+/* ---------- inline: overlay the pagination footer without reflowing it ---------- */
+
+/* The wrapper consumes no flow space (height 0) so the pagination/table above
+   never move. The bar is positioned absolutely, overlapping the pagination row
+   directly above, and fades in on a raised z-index. */
+.inlineWrap {
+  flex: 0 0 auto;
+  position: relative;
+  height: 0;
+  z-index: 50;
+}
+
+.inlineInner {
+  position: absolute;
+  left: 0;
+  right: 0;
+  /* Lift the bar up so it sits over the pagination row directly above. */
+  bottom: var(--oi-spacing-m);
+  display: flex;
+  justify-content: center;
+  /* Let clicks fall through everywhere except the bar itself. */
+  pointer-events: none;
+}
+
+.inline {
+  position: relative;
+  pointer-events: auto;
+}
+
+/* Respect reduced-motion: no fade. */
+@media (prefers-reduced-motion: reduce) {
+  .bar {
+    transition: none;
+  }
+}
+
+/* ---------- dismiss ---------- */
+
+.dismiss {
+  display: inline-flex;
+  align-items: center;
+}
+
+.dismissBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: transparent;
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-color-grey-700);
+  border-radius: var(--oi-border-radius-default);
+  color: var(--oi-color-grey-300);
+  cursor: pointer;
+  transition: background-color var(--oi-motion-duration-short)
+    var(--oi-motion-ease-default);
+}
+
+.dismissBtn:hover {
+  background-color: var(--oi-color-grey-800);
+}
+
+.dismissBtn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--oi-color-blue-500);
+}
+
+/* ---------- selection count ---------- */
+
+.count {
+  margin: 0;
+  padding-inline: var(--oi-spacing-xs);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  white-space: nowrap;
+}
+
+.countStrong {
+  color: var(--oi-color-grey-100);
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+}
+
+.countMuted {
+  color: var(--oi-color-grey-400);
+  font-weight: var(--oi-text-body-s-font-weight);
+}
+
+/* ---------- groups ---------- */
+
+.group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+}
+
+.separator {
+  display: inline-block;
+  width: 1px;
+  height: 16px;
+  margin-right: var(--oi-spacing-xs);
+  background-color: var(--oi-color-grey-700);
+}
+
+/* ---------- action buttons ---------- */
+
+.actionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-button-gap-s);
+  height: 24px;
+  padding-inline: var(--oi-spacing-xs) var(--oi-spacing-s);
+  background: transparent;
+  border: 0;
+  border-radius: var(--oi-border-radius-default);
+  font-family: var(--oi-font-family-default);
+  font-size: var(--oi-text-body-s-strong-font-size);
+  line-height: var(--oi-text-body-s-strong-line-height);
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--oi-motion-duration-short)
+    var(--oi-motion-ease-default);
+}
+
+.actionBtn:hover:not(:disabled) {
+  background-color: var(--oi-color-grey-800);
+  color: var(--oi-content-color-constant);
+}
+
+.actionBtn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--oi-color-blue-500);
+}
+
+.actionBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Icon-only variant — square, tightened, label preserved via aria-label
+   and a Tooltip wrapper. */
+.actionBtnIconOnly {
+  width: 24px;
+  padding-inline: 0;
+  justify-content: center;
+}
+
+/* Transparent shield used to wrap a disabled icon-only button so the
+   Tooltip still receives hover/focus events (disabled <button> elements
+   swallow them in most browsers). The shield matches the button's flow
+   and adds no visual chrome. */
+.tooltipShield {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tone_default {
+  color: var(--oi-color-grey-300);
+}
+
+.tone_brand {
+  color: var(--oi-content-color-brand);
+}
+
+.tone_danger {
+  color: var(--oi-color-red-400);
+}
+
+/* Wrapper for the border-beam around a beam-enabled action (e.g. Ask AI).
+   Keeps the wrapped button aligned as a normal inline flex item. */
+.beamWrap {
+  display: inline-flex;
+  align-items: center;
+}

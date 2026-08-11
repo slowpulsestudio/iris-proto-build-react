@@ -1,0 +1,224 @@
+/* Filters — filter bar shown below the toolbar on the Users page.
+   Strictly token-driven: no raw color/size/spacing literals. */
+
+.filters {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--oi-spacing-m);
+  width: 100%;
+  padding: var(--oi-spacing-xl);
+  animation: filters-in var(--oi-motion-duration-default) var(--oi-motion-ease-default);
+  padding-block: var(--oi-spacing-s);
+  border-top: 1px solid var(--oi-border-color-muted);
+  background: var(--oi-background-color-primary);
+}
+
+@keyframes filters-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* The bar receives programmatic focus (tabIndex=-1) when it first appears so
+   the focus landmark moves here; suppress the outline since it isn't a
+   keyboard-tabbable control. */
+.filters:focus {
+  outline: none;
+}
+
+.left {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  min-width: 0;
+}
+
+/* --- Filter chip -------------------------------------------------------- */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  /* Each chip is keyed by filter id, so only newly-added chips animate. */
+  animation: filters-chip-in var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+  border-radius: var(--oi-border-radius-l);
+  box-shadow: var(--oi-shadow-low);
+}
+
+@keyframes filters-chip-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filters,
+  .chip {
+    animation: none;
+  }
+}
+
+.chipRemove,
+.chipBody {
+  display: inline-flex;
+  align-items: center;
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-default);
+  background-color: var(--oi-background-color-primary);
+  color: var(--oi-content-color-primary);
+  cursor: pointer;
+}
+
+/* Left segment: removes the filter. Rounded on the left only so it butts up
+   against the body segment. */
+.chipRemove {
+  padding: var(--oi-spacing-xs);
+  border-right: none;
+  border-top-left-radius: var(--oi-border-radius-l);
+  border-bottom-left-radius: var(--oi-border-radius-l);
+}
+
+.chipRemove:hover {
+  background-color: var(--oi-background-color-secondary);
+}
+
+/* Right segment: opens the value menu. Rounded on the right only. */
+.chipBody {
+  gap: var(--oi-spacing-s);
+  padding-block: var(--oi-border-width-l);
+  padding-left: var(--oi-spacing-xs);
+  padding-right: var(--oi-spacing-s);
+  border-top-right-radius: var(--oi-border-radius-l);
+  border-bottom-right-radius: var(--oi-border-radius-l);
+  font: inherit;
+  text-align: left;
+}
+
+.chipBody:hover {
+  background-color: var(--oi-background-color-secondary);
+}
+
+.chipRemove:focus-visible,
+.chipBody:focus-visible {
+  outline: var(--oi-border-width-l) var(--oi-border-style-solid)
+    var(--oi-border-color-focus);
+  outline-offset: var(--oi-border-width-l);
+}
+
+.fieldLabel {
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  color: var(--oi-content-color-primary);
+  white-space: nowrap;
+}
+
+/* The "is" pill between field and value. */
+.rulePill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: var(--oi-spacing-xs);
+  border-radius: var(--oi-border-radius-s);
+  background-color: var(--oi-background-color-tertiary);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  color: var(--oi-content-color-primary);
+  white-space: nowrap;
+}
+
+.value {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+}
+
+.valueLabel {
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  color: var(--oi-content-color-primary);
+  white-space: nowrap;
+}
+
+.valuePlaceholder {
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  font-style: italic;
+  color: var(--oi-content-color-tertiary);
+  white-space: nowrap;
+}
+
+/* Native date picker embedded in a date-filter chip. Borderless/transparent
+   so it blends into the chip body; the empty state shows the browser's own
+   muted placeholder (e.g. mm/dd/yyyy). */
+.dateInput {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  color: var(--oi-content-color-primary);
+  font-family: inherit;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  cursor: pointer;
+}
+
+/* Hide the browser's native calendar glyph (not from the Iris icon library).
+   The whole field still opens the picker on click. */
+.dateInput::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.dateInput:focus-visible {
+  outline: var(--oi-border-width-l) var(--oi-border-style-solid)
+    var(--oi-border-color-focus);
+  outline-offset: var(--oi-border-width-l);
+  border-radius: var(--oi-border-radius-s);
+}
+
+/* --- Ghost buttons (Add Filter / Clear selection) ---------------------- */
+
+.ghostBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-button-gap-s);
+  flex-shrink: 0;
+  padding-block: var(--oi-spacing-xs);
+  padding-inline: var(--oi-spacing-s);
+  border: none;
+  border-radius: var(--oi-border-radius-default);
+  background-color: transparent;
+  color: var(--oi-content-color-secondary);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.ghostBtn:hover {
+  background-color: var(--oi-background-color-primary);
+}
+
+.ghostBtn:focus-visible {
+  outline: var(--oi-border-width-l) var(--oi-border-style-solid)
+    var(--oi-border-color-focus);
+  outline-offset: var(--oi-border-width-l);
+}

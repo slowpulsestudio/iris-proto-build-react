@@ -1,0 +1,62 @@
+/* Monokai (free/official) — source: https://github.com/microsoft/vscode
+   (extensions/theme-monokai/themes/monokai-color-theme.json)
+   Partial color override (structural tokens inherited from :root). */
+body.theme-monokai {
+  /* backgrounds */
+  --oi-background-color-primary: #272822;
+  --oi-background-color-secondary: #34352D;
+  --oi-background-color-tertiary: #414339;
+  --oi-background-color-brand: rgba(249, 38, 114, 0.16);
+  --oi-background-color-info: rgba(102, 217, 239, 0.14);
+  --oi-background-color-success: rgba(166, 226, 46, 0.14);
+  --oi-background-color-warning: rgba(253, 151, 31, 0.14);
+  --oi-background-color-error: rgba(244, 71, 71, 0.16);
+  /* base accents */
+  --oi-base-color-brand: #F92672;
+  --oi-base-color-info: #66D9EF;
+  --oi-base-color-success: #A6E22E;
+  --oi-base-color-warning: #FD971F;
+  --oi-base-color-error: #F44747;
+  /* borders */
+  --oi-border-color-strong: #75715E;
+  --oi-border-color-default: #49483E;
+  --oi-border-color-muted: #3E3F35;
+  --oi-border-color-focus: #F92672;
+  --oi-border-color-badge-info: #66D9EF;
+  --oi-border-color-badge-success: #A6E22E;
+  --oi-border-color-badge-error: #F44747;
+  --oi-border-color-badge-warning: #FD971F;
+  /* content */
+  --oi-content-color-primary: #F8F8F2;
+  --oi-content-color-secondary: #C9C9C0;
+  --oi-content-color-tertiary: #9D9A83;
+  --oi-content-color-brand: #FF4B85;
+  --oi-content-color-info: #66D9EF;
+  --oi-content-color-success: #A6E22E;
+  --oi-content-color-warning: #FD971F;
+  --oi-content-color-error: #FA5E5E;
+  --oi-content-color-link: #66D9EF;
+  --oi-content-color-link-hover: #8DE6F5;
+  --oi-content-color-link-visited: #AE81FF;
+  --oi-content-color-inked: #FFFFFF;
+  --oi-content-color-disabled: rgba(248, 248, 242, 0.38);
+  /* buttons */
+  --oi-button-background-primary: #D81B5E;
+  --oi-button-background-primary-hover: #C11852;
+  --oi-button-background-primary-active: #C11852;
+  --oi-button-background-secondary: #272822;
+  --oi-button-background-secondary-hover: #414339;
+  --oi-button-background-secondary-active: #49483E;
+  --oi-button-background-disabled: #414339;
+  /* charts (categorical series) */
+  --oi-chart-color-1: #84E6F7;
+  --oi-chart-color-2: #C29CFF;
+  --oi-chart-color-3: #FFAB45;
+  --oi-chart-color-4: #BCF24C;
+  /* shadows (match default dark theme) */
+  --oi-shadow-none: none;
+  --oi-shadow-low: inset 0px 0.5px 0px rgba(255, 255, 255, 0.12), inset 0px 0px 0px 0.5px rgba(255, 255, 255, 0.11);
+  --oi-shadow-mid: 0px 0px 0px 1px rgba(255, 255, 255, 0.16), 0px 2px 12px rgba(59, 51, 69, 0.16);
+  --oi-shadow-high: 0px 12px 56px rgba(255, 255, 255, 0.07), inset 0px 0px 0px 1px rgba(255, 255, 255, 0.16);
+  --oi-focus-ring: 0 0 0 1.5px var(--oi-background-color-primary), 0 0 0 3px var(--oi-border-color-focus);
+}

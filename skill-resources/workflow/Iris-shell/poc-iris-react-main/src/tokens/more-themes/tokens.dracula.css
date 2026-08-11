@@ -1,0 +1,61 @@
+/* Dracula — source: https://github.com/dracula/visual-studio-code (src/dracula.yml)
+   Partial color override (structural tokens inherited from :root). */
+body.theme-dracula {
+  /* backgrounds */
+  --oi-background-color-primary: #282A36;
+  --oi-background-color-secondary: #343746;
+  --oi-background-color-tertiary: #424450;
+  --oi-background-color-brand: rgba(189, 147, 249, 0.16);
+  --oi-background-color-info: rgba(139, 233, 253, 0.14);
+  --oi-background-color-success: rgba(80, 250, 123, 0.14);
+  --oi-background-color-warning: rgba(241, 250, 140, 0.14);
+  --oi-background-color-error: rgba(255, 85, 85, 0.16);
+  /* base accents (tokens.dark.css omits these — must be set for non-blue themes) */
+  --oi-base-color-brand: #BD93F9;
+  --oi-base-color-info: #8BE9FD;
+  --oi-base-color-success: #50FA7B;
+  --oi-base-color-warning: #F1FA8C;
+  --oi-base-color-error: #FF5555;
+  /* borders */
+  --oi-border-color-strong: #6272A4;
+  --oi-border-color-default: #424450;
+  --oi-border-color-muted: #3C3F50;
+  --oi-border-color-focus: #BD93F9;
+  --oi-border-color-badge-info: #8BE9FD;
+  --oi-border-color-badge-success: #50FA7B;
+  --oi-border-color-badge-error: #FF5555;
+  --oi-border-color-badge-warning: #F1FA8C;
+  /* content */
+  --oi-content-color-primary: #F8F8F2;
+  --oi-content-color-secondary: #C7CAD9;
+  --oi-content-color-tertiary: #828FC0;
+  --oi-content-color-brand: #BD93F9;
+  --oi-content-color-info: #8BE9FD;
+  --oi-content-color-success: #50FA7B;
+  --oi-content-color-warning: #F1FA8C;
+  --oi-content-color-error: #FF6E6E;
+  --oi-content-color-link: #8BE9FD;
+  --oi-content-color-link-hover: #A4EFFF;
+  --oi-content-color-link-visited: #FF79C6;
+  --oi-content-color-inked: #FFFFFF;
+  --oi-content-color-disabled: rgba(248, 248, 242, 0.38);
+  /* buttons (primary darkened from purple so white label keeps contrast) */
+  --oi-button-background-primary: #6C4FBF;
+  --oi-button-background-primary-hover: #5E43AD;
+  --oi-button-background-primary-active: #5E43AD;
+  --oi-button-background-secondary: #282A36;
+  --oi-button-background-secondary-hover: #343746;
+  --oi-button-background-secondary-active: #424450;
+  --oi-button-background-disabled: #424450;
+  /* charts (categorical series) */
+  --oi-chart-color-1: #A6EEFF;
+  --oi-chart-color-2: #CBA6FF;
+  --oi-chart-color-3: #FFC880;
+  --oi-chart-color-4: #6BFF92;
+  /* shadows (match default dark theme) */
+  --oi-shadow-none: none;
+  --oi-shadow-low: inset 0px 0.5px 0px rgba(255, 255, 255, 0.12), inset 0px 0px 0px 0.5px rgba(255, 255, 255, 0.11);
+  --oi-shadow-mid: 0px 0px 0px 1px rgba(255, 255, 255, 0.16), 0px 2px 12px rgba(59, 51, 69, 0.16);
+  --oi-shadow-high: 0px 12px 56px rgba(255, 255, 255, 0.07), inset 0px 0px 0px 1px rgba(255, 255, 255, 0.16);
+  --oi-focus-ring: 0 0 0 1.5px var(--oi-background-color-primary), 0 0 0 3px var(--oi-border-color-focus);
+}

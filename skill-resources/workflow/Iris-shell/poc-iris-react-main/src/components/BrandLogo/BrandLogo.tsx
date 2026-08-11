@@ -1,0 +1,49 @@
+import type { CSSProperties } from 'react';
+
+export interface BrandLogoProps {
+  /** CSS length applied to width/height. Defaults to 24px. */
+  size?: string;
+  title?: string;
+  className?: string;
+  style?: CSSProperties;
+}
+
+/**
+ * BrandLogo — the product wordmark/logomark.
+ *
+ * Carries its own brand color baked into the SVG (so it stays on-brand
+ * regardless of the surrounding text color or theme). Use this — not the
+ * generic <Icon> component — anywhere the product mark should appear.
+ */
+export function BrandLogo({ size = '24px', title, className, style }: BrandLogoProps) {
+  return (
+    <span
+      className={className}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: size,
+        height: size,
+        ...style,
+      }}
+      aria-hidden={title ? undefined : true}
+      role={title ? 'img' : undefined}
+      aria-label={title}
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="100%"
+        height="100%"
+        fill="none"
+        viewBox="0 0 24 24"
+        focusable="false"
+      >
+        <path
+          fill="#00a6f4"
+          d="M22 16.747q-1.317 2.226-3.623 3.577a10.1 10.1 0 0 1-4.942 1.272q-2.635 0-5.023-1.272-2.306-1.35-3.624-3.577a9.2 9.2 0 0 1-1.317-4.769q0-2.543 1.317-4.769l1.07.557q-1.152 1.987-1.152 4.212 0 2.226 1.153 4.213 1.152 1.908 3.212 3.1a9.05 9.05 0 0 0 4.364 1.112 9.86 9.86 0 0 0 4.283-1.112 8.07 8.07 0 0 0 3.211-3.1zM13.435 2.361q2.635 0 4.942 1.351A9.4 9.4 0 0 1 22 7.209l-1.07.557q-1.154-1.908-3.212-3.02a8.14 8.14 0 0 0-4.283-1.193zm6.177 20.03q-3.87 2.145-8.318 1.43-4.447-.795-7.412-4.133Q1 16.351 1 11.978q0-4.371 2.882-7.71Q6.847.93 11.294.215q4.447-.795 8.318 1.351l-.577 1.033Q15.495.692 11.46 1.407q-3.953.636-6.588 3.656t-2.636 6.915 2.636 6.915 6.588 3.736q4.035.636 7.576-1.272zM13.435 4.744q3.048 0 5.188 2.146 2.224 2.147 2.224 5.087t-2.224 5.087q-2.14 2.067-5.27 2.067-3.047 0-5.27-2.067Q5.94 14.92 5.94 11.978q0-2.94 2.141-5.087 2.224-2.145 5.353-2.146m-4.364 7.233q0 1.75 1.235 3.02 1.318 1.193 3.13 1.193t3.046-1.192q1.318-1.272 1.318-3.02 0-1.75-1.318-2.942-1.235-1.27-3.047-1.271-1.811 0-3.13 1.271-1.234 1.192-1.234 2.941"
+        />
+      </svg>
+    </span>
+  );
+}

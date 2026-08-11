@@ -1,0 +1,77 @@
+/* Tooltip surface. Constant-dark across all themes (matches Figma
+   `.Tooltip` component), so the inner keyboard-key chips use the grey
+   primitives directly rather than semantic tokens that would invert in
+   the light theme. Pointer-events disabled so the tooltip never blocks
+   clicks against the trigger or anything beneath it. */
+.tooltip {
+  position: fixed;
+  z-index: 1100;
+  pointer-events: none;
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--oi-spacing-s);
+  max-width: 240px;
+  padding: var(--oi-spacing-xs) var(--oi-spacing-s);
+  background-color: var(--oi-color-black);
+  border-radius: var(--oi-border-radius-default);
+  box-shadow: var(--oi-shadow-mid);
+  animation: oi-tooltip-in var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.label {
+  flex: 1 0 0;
+  min-width: 0;
+  color: var(--oi-content-color-constant);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  white-space: pre-line;
+  word-break: break-word;
+}
+
+.shortcut {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+  flex-shrink: 0;
+}
+
+/* Inline keyboard-key chip. Tokens are pinned to the dark-context grey
+   primitives because the parent tooltip is always dark — using
+   `--oi-background-color-primary` etc. would invert these chips to a
+   white-on-black look in the light theme. */
+.key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--oi-spacing-xs);
+  background-color: var(--oi-color-grey-950);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-color-grey-700);
+  border-radius: var(--oi-border-radius-default);
+  color: var(--oi-color-grey-300);
+  font-family: var(
+    --oi-font-family-code,
+    'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace
+  );
+  font-size: 14px;
+  line-height: 18px;
+  white-space: nowrap;
+}
+
+@keyframes oi-tooltip-in {
+  from {
+    opacity: 0;
+    transform: translateY(2px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tooltip {
+    animation: none;
+  }
+}

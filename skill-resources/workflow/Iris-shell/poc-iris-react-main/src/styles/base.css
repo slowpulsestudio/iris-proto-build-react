@@ -1,0 +1,24 @@
+/* Base typography + page surface. All values come from design tokens. */
+html {
+  font-family: var(--oi-font-family-default);
+  font-size: var(--oi-font-size-s);
+  line-height: var(--oi-line-height-s);
+  font-weight: var(--oi-font-weight-400);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--oi-content-color-primary);
+}
+
+body {
+  background-color: var(--oi-background-color-secondary);
+  color: var(--oi-content-color-primary);
+}
+
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--oi-font-family-code);
+}

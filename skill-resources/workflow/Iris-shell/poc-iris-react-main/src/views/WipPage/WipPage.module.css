@@ -1,0 +1,16 @@
+.wip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 16rem;
+  padding: var(--oi-spacing-xl);
+}
+
+.wipCode {
+  font-family: var(--oi-font-family-code, 'IBM Plex Mono', monospace);
+  font-size: var(--oi-text-body-m-font-size);
+  line-height: var(--oi-text-body-m-line-height);
+  letter-spacing: 0.08em;
+  color: var(--oi-content-color-secondary);
+  background-color: var(--oi-background-color-secondary);
+}

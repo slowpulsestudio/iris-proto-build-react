@@ -1,0 +1,179 @@
+.root {
+  position: relative;
+  min-width: 0;
+}
+
+.tablist {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--oi-spacing-s);
+  border-bottom: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+}
+
+/* Off-screen full render of every tab, used to measure natural widths so we
+   can decide how many fit before moving the rest into the overflow menu. */
+.measure {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  gap: var(--oi-spacing-s);
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* Single underline that slides between tabs. JS writes the active tab's
+   offsetLeft / offsetWidth inline; CSS owns the tween. Sits on the tablist
+   border-bottom so it reads as the active indicator. */
+.indicator {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  border-radius: 1px;
+  background-color: var(--oi-border-color-focus);
+  transform: translateX(0);
+  transition:
+    transform var(--oi-motion-duration-default) cubic-bezier(0.22, 1, 0.36, 1),
+    width var(--oi-motion-duration-default) cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, width;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .indicator {
+    transition: none;
+  }
+}
+
+.tab {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--oi-spacing-s);
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--oi-content-color-tertiary);
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: var(--oi-border-radius-default);
+  transition: color var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.tab:hover .tabContent {
+  background-color: var(--oi-background-color-primary);
+  border-color: var(--oi-border-color-muted);
+}
+
+.tab:hover,
+.tab:hover .label {
+  color: var(--oi-content-color-primary);
+}
+
+.tab:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--oi-color-blue-500);
+  border-radius: var(--oi-border-radius-default);
+}
+
+.tabContent {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+  height: 28px;
+  padding: var(--oi-spacing-xs) var(--oi-spacing-s);
+  border-radius: var(--oi-border-radius-l);
+  color: inherit;
+  border: var(--oi-border-width-default) var(--oi-border-style-solid) transparent;
+  transition: background-color var(--oi-motion-duration-short)
+    var(--oi-motion-ease-default),
+    border-color var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.tabContentSelected {
+  background-color: var(--oi-background-color-primary);
+  border-color: var(--oi-border-color-muted);
+}
+
+.label {
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  color: var(--oi-content-color-tertiary);
+}
+
+/* Reserve the bold (selected) width at all times so activating a tab doesn't
+   widen its label and shift sibling tabs. The pseudo renders the same text at
+   the strong weight but collapsed to zero height, so it only contributes width. */
+.label::after {
+  content: attr(data-label);
+  display: block;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+  user-select: none;
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+}
+
+.labelSelected {
+  font-size: var(--oi-text-body-s-strong-font-size);
+  line-height: var(--oi-text-body-s-strong-line-height);
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+  color: var(--oi-content-color-primary);
+}
+
+.stroke {
+  display: block;
+  height: 1px;
+  width: 100%;
+  background-color: transparent;
+}
+
+/* The active underline is now the sliding `.indicator`; the per-tab stroke
+   stays a transparent layout spacer so tab heights don't shift. */
+.strokeSelected {
+  background-color: transparent;
+}
+
+.icon {
+  display: inline-flex;
+}
+
+/* Overflow "…" ghost button — holds tabs that don't fit the viewport. */
+.overflowTrigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  padding: 0 var(--oi-spacing-xs);
+  background: none;
+  border: 0;
+  border-radius: var(--oi-border-radius-default);
+  color: var(--oi-content-color-tertiary);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.overflowTrigger:hover {
+  background-color: var(--oi-background-color-tertiary);
+  color: var(--oi-content-color-primary);
+}
+
+.overflowTrigger:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--oi-color-blue-500);
+}
+
+/* Active tab currently lives inside the overflow menu. */
+.overflowTriggerActive {
+  color: var(--oi-content-color-primary);
+}

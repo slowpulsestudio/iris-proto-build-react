@@ -1,0 +1,187 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+}
+
+/* Simplified variant spreads Previous / Next to the edges. */
+.simplified {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+/* ---------- page action (shared base) ---------- */
+.item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--oi-size-s);
+  height: var(--oi-size-s);
+  padding-inline: var(--oi-spacing-xs);
+  border: none;
+  border-radius: var(--oi-border-radius-default);
+  background-color: transparent;
+  color: var(--oi-content-color-secondary);
+  font-family: var(--oi-font-family-code);
+  font-size: var(--oi-font-size-s);
+  line-height: 18px;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color var(--oi-motion-duration-short) var(--oi-motion-ease-default),
+    color var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.item:hover:not(:disabled):not(.current) {
+  background-color: var(--oi-background-color-tertiary);
+  color: var(--oi-content-color-primary);
+}
+
+.item:focus-visible {
+  outline: 1.5px solid var(--oi-border-color-focus);
+  outline-offset: -1.5px;
+}
+
+.item:disabled {
+  color: var(--oi-content-color-disabled);
+  cursor: not-allowed;
+}
+
+/* Selected page. */
+.current {
+  background-color: var(--oi-background-color-brand);
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+  color: var(--oi-content-color-primary);
+  /* Pops when a page button gains the current state (i.e. on page change). */
+  animation: pagination-pop var(--oi-motion-duration-default) var(--oi-motion-ease-default);
+}
+
+@keyframes pagination-pop {
+  0% {
+    transform: scale(0.8);
+  }
+  60% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .current {
+    animation: none;
+  }
+}
+
+/* ---------- ellipsis ---------- */
+.ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--oi-size-s);
+  height: var(--oi-size-s);
+  padding-inline: var(--oi-spacing-xs);
+  color: var(--oi-content-color-secondary);
+  font-family: var(--oi-font-family-code);
+  font-size: var(--oi-font-size-s);
+  line-height: 18px;
+  user-select: none;
+}
+
+/* ---------- simplified text buttons ---------- */
+.textBtn {
+  gap: var(--oi-spacing-6);
+  min-width: 0;
+}
+
+/* ---------- container (with items-per-page control) ----------
+   Three tracks keep the numbered nav optically centered while the per-page
+   menu sits at the far right; the empty left track balances the menu's width. */
+.container {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  width: 100%;
+}
+
+.container > .root {
+  grid-column: 2;
+  justify-self: center;
+}
+
+/* Simplified variant already spreads prev/next; drop the centered middle track
+   and let the nav group left with the menu on the right. */
+.containerSimplified {
+  grid-template-columns: auto 1fr;
+}
+
+.containerSimplified > .root {
+  grid-column: 1;
+  justify-self: start;
+  width: auto;
+}
+
+/* Narrow containers can't afford the balancing track — collapse to two tracks
+   so pages sit left and the menu stays right without overlapping. */
+@container (max-width: 480px) {
+  .container {
+    grid-template-columns: auto 1fr;
+  }
+  .container > .root {
+    grid-column: 1;
+    justify-self: start;
+  }
+}
+
+/* ---------- items-per-page control ---------- */
+.perPage {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-6);
+  grid-column: -2;
+  justify-self: end;
+}
+
+.perPageHint {
+  color: var(--oi-content-color-secondary);
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  font-weight: var(--oi-text-caption-font-weight);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.perPageTrigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-6);
+  height: var(--oi-size-s);
+  padding-inline: var(--oi-spacing-xs);
+  border: none;
+  border-radius: var(--oi-border-radius-default);
+  background-color: transparent;
+  color: var(--oi-content-color-secondary);
+  font-family: var(--oi-font-family-code);
+  font-size: var(--oi-font-size-s);
+  line-height: 18px;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color var(--oi-motion-duration-short) var(--oi-motion-ease-default),
+    color var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.perPageTrigger:hover {
+  background-color: var(--oi-background-color-tertiary);
+  color: var(--oi-content-color-primary);
+}
+
+.perPageTrigger:focus-visible {
+  outline: 1.5px solid var(--oi-border-color-focus);
+  outline-offset: -1.5px;
+}
+

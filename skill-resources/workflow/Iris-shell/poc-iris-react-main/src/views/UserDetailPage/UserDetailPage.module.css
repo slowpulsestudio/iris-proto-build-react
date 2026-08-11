@@ -1,0 +1,91 @@
+/* ------------------------------------------------------------------ */
+/*  UserDetailPage — header + tabs + scrollable content                */
+/* ------------------------------------------------------------------ */
+
+.titleAlias {
+  font-weight: var(--oi-text-body-s-font-weight);
+  color: var(--oi-content-color-secondary);
+}
+
+/* ---------- content area ---------- */
+
+.content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: var(--oi-spacing-l) var(--oi-spacing-xl) var(--oi-spacing-xl);
+}
+
+.overview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-s);
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--oi-spacing-s);
+}
+
+@media (max-width: 960px) {
+  .cardGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- link lists inside cards ---------- */
+
+.linkList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-xs);
+}
+
+.linkRow {
+  display: flex;
+  align-items: center;
+  height: 20px;
+}
+
+.linkDisabled {
+  color: var(--oi-content-color-disabled);
+  pointer-events: none;
+  cursor: default;
+}
+
+.placeholder {
+  margin: 0;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  color: var(--oi-content-color-tertiary);
+}
+
+/* ---------- "not found" fallback ---------- */
+
+.missing {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--oi-spacing-m);
+  padding: var(--oi-spacing-xl);
+}
+
+.missingTitle {
+  margin: 0;
+  font-size: var(--oi-text-heading-04-font-size);
+  line-height: var(--oi-text-heading-04-line-height);
+  font-weight: var(--oi-text-heading-04-font-weight);
+  color: var(--oi-content-color-primary);
+}
+
+.missingBody {
+  margin: 0;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  color: var(--oi-content-color-secondary);
+}

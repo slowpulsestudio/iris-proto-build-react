@@ -1,0 +1,38 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-s);
+  min-width: 0;
+}
+
+.control {
+  min-width: 0;
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+  font-size: var(--oi-text-body-s-strong-font-size);
+  line-height: var(--oi-text-body-s-strong-line-height);
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+  color: var(--oi-content-color-primary);
+}
+
+.required {
+  color: var(--oi-content-color-tertiary);
+  font-weight: var(--oi-text-body-s-font-weight);
+}
+
+.info {
+  display: inline-flex;
+  color: var(--oi-content-color-tertiary);
+  cursor: help;
+}
+
+.error {
+  margin: 0;
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  color: var(--oi-color-red-600);
+}

@@ -1,0 +1,39 @@
+/* Typography ramp exposed as CSS custom properties.
+ * Names match the Figma text styles (Heading 04, Body small, Caption, …)
+ * so component CSS can apply them via a single shorthand block. */
+:root {
+  /* Heading 03 — large numeric / hero metrics */
+  --oi-text-heading-03-font-size: var(--oi-font-size-xxl);
+  --oi-text-heading-03-line-height: var(--oi-line-height-xxl);
+  --oi-text-heading-03-font-weight: var(--oi-font-weight-600);
+
+  /* Heading 04 — page titles */
+  --oi-text-heading-04-font-size: var(--oi-font-size-l);
+  --oi-text-heading-04-line-height: var(--oi-line-height-l);
+  --oi-text-heading-04-font-weight: var(--oi-font-weight-600);
+
+  /* Heading 05 — card titles */
+  --oi-text-heading-05-font-size: var(--oi-font-size-m);
+  --oi-text-heading-05-line-height: var(--oi-line-height-m);
+  --oi-text-heading-05-font-weight: var(--oi-font-weight-600);
+
+  /* Body small — primary UI text */
+  --oi-text-body-s-font-size: var(--oi-font-size-s);
+  --oi-text-body-s-line-height: var(--oi-line-height-s);
+  --oi-text-body-s-font-weight: var(--oi-font-weight-400);
+
+  /* Body small (semi bold) — table headers, selected nav */
+  --oi-text-body-s-strong-font-size: var(--oi-font-size-s);
+  --oi-text-body-s-strong-line-height: var(--oi-line-height-s);
+  --oi-text-body-s-strong-font-weight: var(--oi-font-weight-600);
+
+  /* Caption — labels */
+  --oi-text-caption-font-size: var(--oi-font-size-xs);
+  --oi-text-caption-line-height: var(--oi-line-height-xs);
+  --oi-text-caption-font-weight: var(--oi-font-weight-400);
+
+  /* Caption (semi bold) — segmented labels, badges */
+  --oi-text-caption-strong-font-size: var(--oi-font-size-xs);
+  --oi-text-caption-strong-line-height: var(--oi-line-height-xs);
+  --oi-text-caption-strong-font-weight: var(--oi-font-weight-600);
+}

@@ -1,0 +1,49 @@
+.textarea {
+  display: block;
+  width: 100%;
+  min-height: 96px;
+  padding: var(--oi-spacing-s);
+  background-color: var(--oi-background-color-primary);
+  color: var(--oi-content-color-primary);
+  border-radius: var(--oi-border-radius-default);
+  border: .5px var(--oi-border-style-solid) var(--oi-border-color-default);
+  font-family: var(--oi-font-family-default);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  resize: vertical;
+  transition:
+    background-color var(--oi-motion-duration-short) var(--oi-motion-ease-default),
+    border-color var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.textarea::placeholder {
+  color: var(--oi-content-color-tertiary);
+}
+
+.textarea:hover {
+  background-color: var(--oi-background-color-secondary);
+}
+
+.textarea:focus {
+  outline: 1.5px solid var(--oi-border-color-focus);
+  outline-offset: -1.5px;
+  background-color: var(--oi-background-color-primary);
+  border-color: transparent;
+  box-shadow: none;
+}
+
+/* Suppress the global :focus-visible halo from reset.css. */
+.textarea:focus-visible {
+  box-shadow: none;
+}
+
+.invalid {
+  border-color: var(--oi-color-red-500);
+}
+.invalid:focus {
+  outline: 1.5px solid var(--oi-color-red-500);
+  outline-offset: -1.5px;
+  border-color: transparent;
+  box-shadow: none;
+}

@@ -1,0 +1,131 @@
+.page {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-l);
+  padding: var(--oi-spacing-l);
+  min-width: 0;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--oi-spacing-m);
+}
+
+.pageTitle {
+  margin: 0;
+  font-size: var(--oi-text-heading-04-font-size);
+  line-height: var(--oi-text-heading-04-line-height);
+  font-weight: var(--oi-text-heading-04-font-weight);
+  color: var(--oi-content-color-primary);
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--oi-spacing-m);
+  flex-wrap: wrap;
+  margin-top: var(--oi-spacing-m);
+}
+
+.filtersLeft,
+.filtersRight {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-6);
+}
+
+.filtersGhostAction.filtersGhostAction,
+.filtersGhostAction.filtersGhostAction:hover:not(:disabled),
+.filtersGhostAction.filtersGhostAction:active:not(:disabled) {
+  border-color: transparent;
+  color: var(--oi-content-color-secondary);
+}
+
+.cardsGridGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-m);
+}
+
+.noShadowCard {
+  box-shadow: none;
+}
+
+/* Object Distribution card only: clip the legend so a very narrow card
+   (e.g. side sheet open) never bleeds chips past the card edge. The
+   DonutChart's own container-query reflow handles most cases; this is
+   the final guard. */
+.distributionCard {
+  overflow: hidden;
+}
+
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--oi-spacing-m);
+}
+
+.chartGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--oi-spacing-m);
+}
+
+.empty {
+  margin: 0;
+  color: var(--oi-content-color-tertiary);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+}
+
+/* Recent Users — same heading + helper as Card, but no container chrome. */
+.recent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-l);
+  margin-top: var(--oi-spacing-m);
+}
+
+.recentHead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-xs);
+}
+
+.recentTitle {
+  margin: 0;
+  font-size: var(--oi-text-heading-05-font-size);
+  line-height: var(--oi-text-heading-05-line-height);
+  font-weight: var(--oi-text-heading-05-font-weight);
+  color: var(--oi-content-color-primary);
+}
+
+.recentHelper {
+  margin: 0;
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  font-weight: var(--oi-text-caption-font-weight);
+  color: var(--oi-content-color-secondary);
+}
+
+@media (max-width: 1100px) {
+  .statGrid,
+  .chartGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .statGrid,
+  .chartGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

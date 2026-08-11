@@ -1,0 +1,108 @@
+/* ------------------------------------------------------------------ */
+/*  ContentHeader — shared page (list) + object (detail) header         */
+/* ------------------------------------------------------------------ */
+
+/* Only the top edge is padded on the container itself so that full-bleed
+   children (e.g. the detail tab strip) can span the full container width.
+   Inset rows re-add their own inline padding below. */
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-m);
+  padding-top: var(--oi-spacing-xl);
+}
+
+/* ---------- title / identity rows ---------- */
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-m);
+  padding-inline: var(--oi-spacing-xl);
+}
+
+.titleActions {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+}
+
+.identityRow {
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-m);
+  padding-inline: var(--oi-spacing-xl);
+}
+
+.identityText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-xs);
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--oi-text-heading-04-font-size);
+  line-height: var(--oi-text-heading-04-line-height);
+  font-weight: var(--oi-text-heading-04-font-weight);
+  color: var(--oi-content-color-primary);
+  word-break: break-word;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  color: var(--oi-content-color-tertiary);
+}
+
+.pager {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+  flex-shrink: 0;
+}
+
+/* Header-specific inset for slotted content (e.g. the detail tab strip) that
+   would otherwise sit full-bleed against the container edges. */
+.tabs {
+  margin-inline: var(--oi-spacing-xl);
+  padding-top: var(--oi-spacing-m);
+}
+
+/* ---------- list toolbar (search + actions) ---------- */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-m);
+  padding-inline: var(--oi-spacing-xl);
+  margin-bottom: var(--oi-spacing-xl);
+}
+
+/* When a filter bar follows the toolbar, the big bottom margin (which separates
+   the toolbar from the content below) collapses to a tight gap. */
+.toolbar:has(+ .filtersBar) {
+  margin-bottom: var(--oi-spacing-s);
+}
+
+.search {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-m);
+  flex-shrink: 0;
+}
+
+/* Filter bar sits directly under the toolbar. The header column uses an
+   `--oi-spacing-m` gap; pull the bar up so the toolbar → filters gap is
+   exactly `--oi-spacing-s` (8px). */
+.filtersBar {
+  margin-top: calc(var(--oi-spacing-s) - var(--oi-spacing-m));
+}

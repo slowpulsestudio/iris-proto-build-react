@@ -1,0 +1,182 @@
+.menu {
+  position: fixed;
+  z-index: 1000;
+  min-width: 180px;
+  max-width: 240px;
+  background-color: var(--oi-background-color-primary);
+  border-radius: var(--oi-border-radius-l);
+  box-shadow: var(--oi-shadow-mid);
+  padding: var(--oi-spacing-xs);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  /* Origin-aware grow: the menu scales up from the corner nearest its
+     trigger so it reads as opening *from* the trigger. Submenu flyouts and
+     pointer-anchored menus anchor by their left edge (top-left origin); a
+     trigger menu aligned to its right edge flips to top-right below. */
+  transform-origin: top left;
+  animation: oi-menu-in var(--oi-motion-duration-default)
+    cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.menu[data-align='end'] {
+  transform-origin: top right;
+}
+
+@keyframes oi-menu-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu {
+    animation: none;
+  }
+}
+
+.section {
+  padding: var(--oi-spacing-s) var(--oi-spacing-s) var(--oi-spacing-xs);
+  color: var(--oi-content-color-tertiary);
+  font-size: var(--oi-text-caption-strong-font-size);
+  line-height: var(--oi-text-caption-strong-line-height);
+  font-weight: var(--oi-text-caption-strong-font-weight);
+  text-transform: uppercase;
+  letter-spacing: var(--oi-letter-spacing-xl);
+}
+
+.divider {
+  height: 1px;
+  margin: var(--oi-spacing-xs) 0;
+  background-color: var(--oi-border-color-muted);
+}
+
+/* ── Header (identity block) ─────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  padding: var(--oi-spacing-s);
+  min-width: 0;
+}
+
+.headerVisual {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.headerText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 2px;
+}
+
+.headerPrimary {
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+  color: var(--oi-content-color-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.headerSecondary {
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  color: var(--oi-content-color-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  width: 100%;
+  height: var(--oi-size-default);
+  padding-inline: var(--oi-spacing-s);
+  border-radius: var(--oi-border-radius-default);
+  background-color: transparent;
+  color: var(--oi-content-color-primary);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--oi-motion-duration-short)
+    var(--oi-motion-ease-default);
+}
+
+.item:hover:not(:disabled),
+.item:focus-visible {
+  background-color: var(--oi-background-color-secondary);
+  outline: none;
+}
+
+.item:disabled {
+  color: var(--oi-content-color-disabled);
+  cursor: not-allowed;
+}
+
+.itemInactive {
+  color: var(--oi-content-color-disabled);
+  cursor: not-allowed;
+}
+
+.itemInactive .itemIcon {
+  color: var(--oi-content-color-disabled);
+}
+
+.itemInactive:hover {
+  background-color: transparent;
+}
+
+.itemSelected {
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+}
+
+.itemIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  color: var(--oi-content-color-secondary);
+  flex-shrink: 0;
+}
+
+.itemLabel {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.itemCheck {
+  color: var(--oi-base-color-brand);
+  flex-shrink: 0;
+}
+
+.itemDanger {
+  color: var(--oi-content-color-error);
+}
+
+.itemDanger .itemIcon {
+  color: var(--oi-content-color-error);
+}
+
+.submenuCaret {
+  display: inline-flex;
+  align-items: center;
+  color: var(--oi-content-color-secondary);
+  flex-shrink: 0;
+}

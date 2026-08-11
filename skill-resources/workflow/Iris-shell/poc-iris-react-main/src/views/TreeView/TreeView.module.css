@@ -1,0 +1,144 @@
+/* ------------------------------------------------------------------ */
+/*  Tree view — shared styles for empty / list / detail pages          */
+/* ------------------------------------------------------------------ */
+
+/* ---------- list page toolbar ---------- */
+
+.toolbarSeparator {
+  align-self: center;
+  width: 1px;
+  height: 20px;
+  background: var(--oi-border-color-default);
+  flex-shrink: 0;
+}
+
+.addBtn {
+  gap: var(--oi-button-gap-s);
+}
+
+.addBtn > span:last-child {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.tableWrap {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  padding: var(--oi-spacing-m) var(--oi-spacing-l);
+  container-type: inline-size;
+  border-top: 1px solid var(--oi-border-color-muted);
+}
+
+.pagination > * {
+  flex: 1;
+}
+
+/* Name cell: leading type icon + link. */
+.nameCell {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+  min-width: 0;
+}
+
+.nameIcon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--oi-content-color-secondary);
+}
+
+.nameText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------- detail page ---------- */
+
+.content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: var(--oi-spacing-l) var(--oi-spacing-xl) var(--oi-spacing-xl);
+}
+
+/* General tab: properties card (left) + object-management card (right). */
+.generalGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: var(--oi-spacing-s);
+  align-items: stretch;
+}
+
+@media (max-width: 960px) {
+  .generalGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.linkGroups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-m);
+}
+
+.linkList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-xs);
+}
+
+.linkRow {
+  display: flex;
+  align-items: center;
+  height: 20px;
+}
+
+.linkDisabled {
+  color: var(--oi-content-color-disabled);
+  pointer-events: none;
+  cursor: default;
+}
+
+.placeholder {
+  margin: 0;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  color: var(--oi-content-color-tertiary);
+}
+
+/* ---------- "not found" fallback ---------- */
+
+.missing {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--oi-spacing-m);
+  padding: var(--oi-spacing-xl);
+}
+
+.missingTitle {
+  margin: 0;
+  font-size: var(--oi-text-heading-03-font-size);
+  line-height: var(--oi-text-heading-03-line-height);
+  font-weight: var(--oi-text-heading-03-font-weight);
+  color: var(--oi-content-color-primary);
+}
+
+.missingBody {
+  margin: 0;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  color: var(--oi-content-color-tertiary);
+}

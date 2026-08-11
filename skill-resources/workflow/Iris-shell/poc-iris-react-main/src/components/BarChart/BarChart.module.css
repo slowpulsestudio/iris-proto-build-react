@@ -1,0 +1,35 @@
+.svg {
+  display: block;
+  width: 100%;
+  height: 200px;
+  overflow: visible;
+}
+
+.gridline {
+  stroke: var(--oi-border-color-muted);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+
+.tick,
+.axisLabel {
+  font-family: var(--oi-font-family-default);
+  font-size: 10px;
+  fill: var(--oi-content-color-tertiary);
+}
+
+.bar {
+  transition: opacity var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.bar:hover {
+  opacity: 0.85;
+}
+
+.color_blue .bar {
+  fill: var(--oi-chart-color-1);
+}
+
+.color_purple .bar {
+  fill: var(--oi-chart-color-2);
+}

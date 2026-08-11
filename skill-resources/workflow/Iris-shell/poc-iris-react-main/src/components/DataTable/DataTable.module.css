@@ -1,0 +1,252 @@
+.scroller {
+  /* Owns both scroll axes so the sticky header (top) and the pinned columns
+     (inline-start/end) work; also the container for the responsive layout. */
+  overflow: auto;
+  overscroll-behavior: contain;
+  height: 100%;
+  container-type: inline-size;
+  container-name: datatable;
+}
+
+.scroller:focus-visible {
+  outline: var(--oi-border-width-l) var(--oi-border-style-solid)
+    var(--oi-border-color-focus);
+  outline-offset: calc(-1 * var(--oi-border-width-l));
+}
+
+.table {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--oi-background-color-primary);
+  border-top: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  width: 100%;
+}
+
+.head {
+  display: flex;
+  align-items: stretch;
+  background-color: var(--oi-background-color-primary);
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+
+.headCell {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  height: 44px;
+  padding-inline: var(--oi-spacing-m);
+  background-color: var(--oi-background-color-primary);
+  border-bottom: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  border-right: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  color: var(--oi-content-color-secondary);
+  font-size: var(--oi-text-body-s-strong-font-size);
+  line-height: var(--oi-text-body-s-strong-line-height);
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+  overflow: hidden;
+  flex: var(--cell-flex, 0 0 auto);
+  min-width: var(--cell-min-width, 0);
+  max-width: var(--cell-max-width, none);
+}
+
+.headCell:last-child {
+  border-right: 0;
+}
+
+.headIcon {
+  display: inline-flex;
+  color: var(--oi-content-color-tertiary);
+  flex-shrink: 0;
+}
+
+.headLabel {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  align-items: stretch;
+  background-color: var(--oi-background-color-primary);
+  width: 100%;
+  transition: background-color var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.row:hover {
+  background-color: var(--oi-background-color-secondary);
+}
+
+.rowSelected,
+.rowSelected:hover {
+  background-color: var(--oi-background-color-brand);
+}
+
+.cell {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding-inline: var(--oi-spacing-m);
+  border-bottom: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  border-right: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  color: var(--oi-content-color-primary);
+  overflow: hidden;
+  flex: var(--cell-flex, 0 0 auto);
+  min-width: var(--cell-min-width, 0);
+  max-width: var(--cell-max-width, none);
+}
+
+.cell:last-child {
+  border-right: 0;
+}
+
+/* When a cell hosts a single text node make it truncate cleanly. */
+.cell > :only-child {
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.checkboxCell,
+.actionCell {
+  justify-content: center;
+  padding-inline: var(--oi-spacing-s);
+}
+
+/* ── Pinned (sticky) columns ────────────────────────────────
+   The selection column, the first data column, and the row-action column
+   stay in place while the middle columns scroll horizontally. Pinned cells
+   need an opaque background so scrolling content does not bleed through; the
+   background tracks the row's hover/selected state. */
+.pin {
+  position: sticky;
+  z-index: 2;
+  background-color: var(--oi-background-color-primary);
+}
+
+.head .pin {
+  z-index: 4;
+}
+
+.pinStartInner {
+  inset-inline-start: 0;
+}
+
+.pinStart {
+  inset-inline-start: var(--pin-start, 0);
+}
+
+.pinEnd {
+  inset-inline-end: 0;
+}
+
+.row:hover .pin {
+  background-color: var(--oi-background-color-secondary);
+}
+
+/* Selected pinned cells must be fully opaque. Several themes define the brand
+   background as a semi-transparent tint; on a sticky column that would let the
+   scrolling middle columns bleed through and overlap. Composite the tint over
+   the opaque row base so the result is always opaque (in themes where the brand
+   background is already opaque, the tint simply covers the base). */
+.rowSelected .pin,
+.rowSelected:hover .pin {
+  background-color: var(--oi-background-color-primary);
+  background-image: linear-gradient(
+    var(--oi-background-color-brand),
+    var(--oi-background-color-brand)
+  );
+}
+
+/* Edge shadows appear only while there is scrollable content beneath the
+   pinned column on that side (toggled via data attributes on the scroller). */
+.scroller[data-ovf-start] .pinStart {
+  box-shadow: none;
+}
+
+.scroller[data-ovf-end] .pinEnd {
+  box-shadow: none;
+}
+
+/* ── Empty state row ─────────────────────────────────────────────
+   Rendered inside the body when `rows` is empty and an `emptyState`
+   is provided. Stretches across the full table width. */
+.emptyRow {
+  display: flex;
+  width: 100%;
+}
+
+.emptyCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--oi-spacing-xs);
+  flex: 1 1 auto;
+  padding: var(--oi-spacing-xxxl) var(--oi-spacing-m);
+  text-align: center;
+}
+
+.emptyTitle {
+  margin: 0;
+  font-size: var(--oi-text-body-s-strong-font-size);
+  line-height: var(--oi-text-body-s-strong-line-height);
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+  color: var(--oi-content-color-primary);
+}
+
+.emptyDescription {
+  margin: 0;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  color: var(--oi-content-color-tertiary);
+}
+
+.emptyAction {
+  margin-top: var(--oi-spacing-s);
+  background: transparent;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--oi-content-color-link);
+  cursor: pointer;
+}
+
+.emptyAction:hover {
+  text-decoration: underline;
+}
+
+.emptyAction:focus-visible {
+  outline: none;
+  box-shadow: var(--oi-focus-ring);
+  border-radius: var(--oi-border-radius-s);
+}
+
+/* ── Tablet & below: horizontal scroll ───────────────────────
+   Desktop keeps the plain flex layout (columns shrink/truncate, never
+   scroll). Only once the container is too narrow to hold the columns do we
+   switch to horizontal scroll. `min-width: max-content` makes the rows span
+   the full content width so backgrounds, borders and the pinned columns
+   stay aligned while scrolling. */
+@container datatable (max-width: 1080px) {
+  .table {
+    min-width: max-content;
+  }
+}

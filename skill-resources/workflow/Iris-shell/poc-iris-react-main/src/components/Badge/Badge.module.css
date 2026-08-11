@@ -1,0 +1,43 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+  height: 1.375rem;
+  padding-inline: var(--oi-spacing-xs);
+  border-radius: var(--oi-border-radius-default);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid) var(--oi-border-color-default);
+  background-color: var(--oi-background-color-primary);
+  color: var(--oi-content-color-primary);
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  font-weight: var(--oi-text-caption-font-weight);
+  white-space: nowrap;
+}
+
+.label {
+  display: inline-block;
+}
+
+.tone_info {
+  border-color: var(--oi-border-color-badge-info);
+  background-color: var(--oi-background-color-info);
+  color: var(--oi-content-color-info);
+}
+
+.tone_success {
+  border-color: var(--oi-border-color-badge-success);
+  background-color: var(--oi-background-color-success);
+  color: var(--oi-content-color-success);
+}
+
+.tone_warning {
+  border-color: var(--oi-border-color-badge-warning);
+  background-color: var(--oi-background-color-warning);
+  color: var(--oi-content-color-warning);
+}
+
+.tone_error {
+  border-color: var(--oi-border-color-badge-error);
+  background-color: var(--oi-background-color-error);
+  color: var(--oi-content-color-error);
+}

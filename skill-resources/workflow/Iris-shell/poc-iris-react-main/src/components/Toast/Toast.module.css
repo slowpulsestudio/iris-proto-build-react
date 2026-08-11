@@ -1,0 +1,92 @@
+/* Toast — bottom-right notification card.
+   Visual treatment follows the Figma `Toast` component: white surface,
+   featured success icon, body-small (semibold) message, dismiss X. Slides
+   in from the right; respects `prefers-reduced-motion`. */
+
+.toast {
+  position: fixed;
+  right: var(--oi-spacing-l);
+  bottom: var(--oi-spacing-l);
+  z-index: 100;
+
+  display: flex;
+  align-items: flex-start;
+  gap: var(--oi-spacing-l);
+  width: min(calc(100vw - 2 * var(--oi-spacing-l)), 352px);
+  padding: var(--oi-spacing-l);
+
+  background-color: var(--oi-background-color-primary);
+  border-radius: var(--oi-border-radius-l);
+  box-shadow: var(--oi-shadow-mid);
+
+  /* Rise from below with a fade, slight scale, and cross-blur. Resting
+     (hidden) state carries the faster close clock; the visible state below
+     carries the slower open clock, so arriving feels deliberate and leaving
+     feels snappy from a single attribute flip. */
+  transform: translateY(var(--oi-spacing-l)) scale(0.97);
+  opacity: 0;
+  filter: blur(2px);
+  will-change: transform, opacity, filter;
+  transition:
+    transform var(--oi-motion-duration-short) var(--oi-motion-ease-default),
+    opacity var(--oi-motion-duration-short) var(--oi-motion-ease-default),
+    filter var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.toast[data-visible='true'] {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  filter: blur(0);
+  transition:
+    transform var(--oi-motion-duration-long) var(--oi-motion-ease-default),
+    opacity var(--oi-motion-duration-long) var(--oi-motion-ease-default),
+    filter var(--oi-motion-duration-long) var(--oi-motion-ease-default);
+}
+
+/* Featured success icon. Fixed 20px slot so the message column starts at a
+   stable x regardless of the icon glyph. Color is tinted green via the
+   success content token. */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: var(--oi-content-color-success);
+}
+
+.message {
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+  /* Reserve enough room on the right that wrapped lines never slide under
+     the absolutely-positioned dismiss X. The button is 24px wide and sits
+     14px from the toast's right edge — so we need at least 14+24 = 38px of
+     dead space inside the message column. The toast's own 16px right
+     padding contributes 16px, the remaining ~22px (rounded up to
+     `--oi-spacing-xxl`, 32px) comes from this padding. */
+  padding-right: var(--oi-spacing-xxl);
+  color: var(--oi-content-color-primary);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-strong-font-weight, 600);
+  word-break: break-word;
+}
+
+/* Absolutely positionedY(0) scale(1);
+    filter: nonematch the Figma layout (14px from top/right of
+   the card). Applied directly to the IconButton via its `className` prop
+   so we avoid a wrapper span. */
+.dismiss {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    transition: opacity var(--oi-motion-duration-default) var(--oi-motion-ease-default);
+    transform: translateX(0);
+  }
+}

@@ -1,0 +1,21 @@
+.tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background-color: var(--oi-background-color-primary);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  border-radius: var(--oi-border-radius-max);
+  color: var(--oi-content-color-secondary);
+}
+
+.size_default {
+  width: 2rem;
+  height: 2rem;
+}
+
+.size_l {
+  width: 2.5rem;
+  height: 2.5rem;
+}

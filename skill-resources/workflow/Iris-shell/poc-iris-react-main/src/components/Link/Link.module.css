@@ -1,0 +1,41 @@
+.link {
+  text-decoration: none;
+  cursor: pointer;
+  transition: color var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.link:focus-visible {
+  box-shadow: var(--oi-focus-ring);
+  border-radius: var(--oi-border-radius-s);
+  outline: none;
+}
+
+/* ---------- tones ---------- */
+
+.tone_brand {
+  color: var(--oi-content-color-link);
+}
+.tone_brand:hover {
+  color: var(--oi-content-color-link-hover);
+}
+.tone_brand:visited {
+  color: var(--oi-content-color-link-visited);
+}
+
+/* In-app hash routes (#/...) are navigation, not external content links —
+   suppress the visited color shift so list rows do not look inconsistently
+   "used" after a user drills into a detail page and returns. */
+.tone_brand[href^="#"]:visited {
+  color: var(--oi-content-color-link);
+}
+
+.tone_danger {
+  color: var(--oi-color-red-600);
+}
+.tone_danger:hover {
+  color: var(--oi-color-red-700);
+}

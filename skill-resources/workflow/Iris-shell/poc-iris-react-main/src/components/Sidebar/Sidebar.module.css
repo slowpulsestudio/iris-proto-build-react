@@ -1,0 +1,69 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 254px;
+  flex-shrink: 0;
+  background-color: var(--oi-background-color-primary);
+  border-radius: var(--oi-border-radius-l);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  overflow: hidden;
+}
+
+.viewSwitch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--oi-spacing-m) var(--oi-spacing-m);
+}
+
+.selectBlock {
+  padding: var(--oi-spacing-zero) var(--oi-spacing-l) var(--oi-spacing-l);
+}
+
+.directorySelect {
+  width: 100%;
+}
+
+.favEmpty {
+  margin: 0;
+  padding: var(--oi-spacing-s) var(--oi-spacing-m);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  color: var(--oi-content-color-tertiary);
+  text-align: center;
+}
+
+.nav {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-2);
+  padding: var(--oi-spacing-s) var(--oi-spacing-l);
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Shared active bar that slides between rows. JS writes translateY + height
+   from the active NavItem's offsetTop / offsetHeight. */
+.navIndicator {
+  position: absolute;
+  left: calc(var(--oi-spacing-l) - var(--oi-spacing-xs));
+  top: 0;
+  width: 2px;
+  height: 0;
+  background-color: var(--oi-base-color-brand);
+  border-radius: var(--oi-border-radius-default);
+  transform: translateY(0);
+  transition:
+    transform var(--oi-motion-duration-default) cubic-bezier(0.22, 1, 0.36, 1),
+    height var(--oi-motion-duration-default) cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navIndicator {
+    transition: none;
+  }
+}

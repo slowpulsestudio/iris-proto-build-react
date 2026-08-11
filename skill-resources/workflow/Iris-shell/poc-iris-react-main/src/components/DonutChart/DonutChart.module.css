@@ -1,0 +1,124 @@
+.wrap {
+  display: flex;
+  /* `flex-wrap` + split column/row gaps let the legend reflow onto a new
+     row at narrow widths. The narrow-width @container rules below target
+     descendants (.legend, .svg) because @container queries match
+     descendants of the container element, not the container itself. */
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--oi-spacing-xxl);
+  row-gap: var(--oi-spacing-m);
+  /* Establishes an inline-size container so the donut + legend can reflow
+     based on the card's own width (e.g. when the side sheet opens) rather
+     than the viewport. */
+  container-type: inline-size;
+}
+
+/* Below ~360px the fixed 200px donut + a 3-column legend stops fitting,
+   so push the legend onto its own row and center the donut above it. */
+@container (max-width: 360px) {
+  .legend {
+    flex-basis: 100%;
+  }
+  .svg {
+    margin-inline: auto;
+  }
+}
+
+.svg {
+  width: 200px;
+  height: 200px;
+  flex-shrink: 0;
+}
+
+.centerNum {
+  font-family: var(--oi-font-family-code);
+  font-size: 18px;
+  font-weight: var(--oi-font-weight-600);
+  fill: var(--oi-content-color-primary);
+}
+
+.centerLbl {
+  font-family: var(--oi-font-family-default);
+  font-size: 10px;
+  fill: var(--oi-content-color-tertiary);
+}
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.legendItem {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  color: var(--oi-content-color-primary);
+  /* Let the label column shrink below its intrinsic size so the ellipsis
+     rule on .legendLabel can engage. */
+  min-width: 0;
+  /* Staggered rise-in on mount, complementing the d3 arc animation. */
+  animation: donut-legend-in var(--oi-motion-duration-default)
+    var(--oi-motion-ease-default) both;
+}
+
+.legendItem:nth-child(2) {
+  animation-delay: 40ms;
+}
+.legendItem:nth-child(3) {
+  animation-delay: 80ms;
+}
+.legendItem:nth-child(4) {
+  animation-delay: 120ms;
+}
+.legendItem:nth-child(5) {
+  animation-delay: 160ms;
+}
+
+@keyframes donut-legend-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .legendItem {
+    animation: none;
+  }
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.legendLabel {
+  color: var(--oi-content-color-secondary);
+  /* Safety net: truncate rather than overflow the card if the legend ever
+     gets narrower than the longest label (e.g. very narrow side sheet). */
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.legendValue {
+  font-weight: var(--oi-text-caption-strong-font-weight);
+  font-variant-numeric: tabular-nums;
+  font-family: var(--oi-font-family-code);
+}

@@ -1,0 +1,1534 @@
+/* AiPanel — chat panel docked to the right of the main content area.
+ * All values come from --oi-* design tokens. */
+
+.panel {
+  position: relative;
+  flex: 0 0 var(--ai-panel-width, 452px);
+  min-width: 0;
+  min-height: 0;
+  overflow: visible;
+  /* Keep the left boundary line available for a centered resize handle. */
+  isolation: isolate;
+}
+
+.panelSurface {
+  position: relative; /* contain the scroll-down FAB */
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background-color: var(--oi-background-color-primary);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  border-radius: var(--oi-border-radius-l);
+  box-shadow: var(--oi-shadow-low);
+  overflow: hidden;
+}
+
+
+.resizeHandle {
+  --ai-panel-resize-hit-width: 10px;
+  --ai-panel-resize-line-width: 1.5px;
+  position: absolute;
+  top: 0;
+  left: calc(var(--ai-panel-resize-hit-width) / -2);
+  bottom: 0;
+  z-index: 3;
+  width: var(--ai-panel-resize-hit-width);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
+  cursor: col-resize;
+  touch-action: none;
+  outline: none;
+}
+
+.resizeHandleGrip {
+  width: var(--ai-panel-resize-line-width);
+  height: 100%;
+  border-radius: 0;
+  background-color: transparent;
+  transition: background-color var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.resizeHandle:hover .resizeHandleGrip,
+.resizeHandle:focus-visible .resizeHandleGrip {
+  background-color: var(--oi-border-color-strong);
+}
+
+.resizeHandle.resizeHandleDragging .resizeHandleGrip {
+  background-color: var(--oi-button-background-primary, var(--oi-base-color-brand));
+  transition: none;
+}
+/* ── Header (Figma `AI_Panel_Header`) ──
+   Single-row flex: back button → title (flex-1, truncates) → actions.
+   Item gap `l` (16px) per Figma; the actions cluster uses `s` (8px). */
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-l);
+  height: 44px;
+  flex-shrink: 0;
+  padding: 0 var(--oi-spacing-l);
+  background-color: var(--oi-background-color-secondary);
+  border-bottom: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+}
+
+/* Lock the back button against shrinking. In a flex row, a child's
+   declared `width` is treated as `flex-basis` and the default
+   `flex-shrink: 1` lets it collapse when the sibling `.title` content
+   grows past the available space — producing a visibly narrower back
+   button on long conversations. */
+.header > button {
+  flex-shrink: 0;
+}
+
+.title {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  font-size: var(--oi-text-body-s-strong-font-size);
+  line-height: var(--oi-text-body-s-strong-line-height);
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+  color: var(--oi-content-color-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.headerActions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  flex-shrink: 0;
+}
+
+/* ── Body / conversation ── */
+.body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  padding: var(--oi-spacing-m) var(--oi-spacing-m) var(--oi-spacing-l);
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-l);
+  scroll-behavior: smooth;
+}
+
+/* Empty-state surface (Figma node `Content / justify-end`): pin the only
+   child — the EmptyState block — to the bottom of the body so the heading
+   + suggestions hug the composer. As soon as messages land, this class
+   comes off and the normal top-down chat flow returns. */
+.bodyEmpty {
+  justify-content: flex-end;
+}
+
+/* User bubble */
+.userRow {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.userColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--oi-spacing-xs);
+  max-width: 85%;
+  min-width: 0;
+}
+
+.userBubble {
+  max-width: 100%;
+  padding: var(--oi-spacing-s) var(--oi-spacing-m);
+  background-color: var(--oi-button-background-primary, var(--oi-base-color-brand));
+  color: var(--oi-content-color-constant);
+  border-radius: var(--oi-border-radius-l);
+  /* Subtle chat-tail towards the user side. */
+  border-bottom-right-radius: var(--oi-spacing-xs);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  overflow-wrap: anywhere;
+}
+
+/* Attachment chips rendered above the user bubble (already-sent). */
+.attachmentRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--oi-spacing-xs);
+}
+
+.attachmentChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 220px;
+  padding: 2px 8px;
+  background-color: var(--oi-background-color-secondary);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  border-radius: var(--oi-border-radius-max);
+  color: var(--oi-content-color-secondary);
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+}
+
+.attachmentChipLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Assistant message — avatar column + content column */
+.assistantRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--oi-spacing-s);
+  min-width: 0;
+}
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-top: 0;
+  border-radius: var(--oi-border-radius-max);
+  background-color: var(--oi-background-color-primary);
+  border: 1px solid var(--oi-border-color-muted);
+  color: var(--oi-content-color-brand);
+  flex-shrink: 0;
+}
+
+.assistant {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-xs);
+  color: var(--oi-content-color-primary);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.assistantBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-s);
+}
+
+.assistant p {
+  margin: 0;
+}
+
+.list {
+  /* Re-enable numeric markers for ordered lists rendered inside an
+     assistant message; the global reset clears list-style on all ul/ol. */
+  list-style: decimal;
+  margin: 0;
+  padding-left: var(--oi-spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-xs);
+}
+
+/* ── Assistant code block ──
+   Fenced monospace surface with a copy button pinned to the top-right. */
+.codeBlock {
+  position: relative;
+  background-color: var(--oi-background-color-secondary);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  border-radius: var(--oi-border-radius-l);
+  overflow: hidden;
+}
+
+.codeCopy {
+  position: absolute;
+  top: var(--oi-spacing-xs);
+  right: var(--oi-spacing-xs);
+  z-index: 1;
+}
+
+.codePre {
+  margin: 0;
+  /* Reserve room on the right so long lines never slide under the copy
+     button in the top-right corner. */
+  padding: var(--oi-spacing-m);
+  padding-right: calc(var(--oi-size-default, 32px) + var(--oi-spacing-s));
+  overflow-x: auto;
+  font-family: var(--oi-font-family-code, 'IBM Plex Mono', monospace);
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  color: var(--oi-content-color-primary);
+  white-space: pre;
+}
+
+.codePre code {
+  font: inherit;
+  color: inherit;
+}
+
+/* ── Assistant table preview ── */
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+}
+
+.tableHeadCell,
+.tableCell {
+  padding: var(--oi-spacing-s) var(--oi-spacing-l) var(--oi-spacing-s) 0;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+}
+
+.tableHeadCell {
+  font-weight: var(--oi-text-body-s-strong-font-weight, 600);
+  color: var(--oi-content-color-primary);
+}
+
+.tableCell {
+  color: var(--oi-content-color-secondary);
+}
+
+.table tbody tr:last-child .tableCell {
+  border-bottom: none;
+}
+
+/* ── Assistant source links ──
+   "Sources:" label followed by reference links rendered as pills, each with a
+   trailing external-link glyph. */
+.sourcesRow {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  min-width: 0;
+  overflow: hidden;
+}
+
+.sourcesLabel {
+  flex-shrink: 0;
+  color: var(--oi-content-color-tertiary);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+}
+
+.sourcesPills {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--oi-spacing-xs);
+  min-width: 0;
+}
+
+.sourcePill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+  min-width: 0;
+  flex: 0 1 auto;
+  padding: var(--oi-spacing-xs) var(--oi-spacing-m);
+  background-color: var(--oi-background-color-primary);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  border-radius: var(--oi-border-radius-max);
+  color: var(--oi-content-color-link);
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--oi-motion-duration-short) var(--oi-motion-ease-default, ease),
+    border-color var(--oi-motion-duration-short) var(--oi-motion-ease-default, ease);
+}
+
+.sourcePill:hover {
+  background-color: var(--oi-background-color-secondary);
+  border-color: var(--oi-border-color-default);
+}
+
+.sourcePill:focus-visible {
+  outline: 2px solid var(--oi-border-color-focus);
+  outline-offset: 2px;
+}
+
+.sourcePillLabel {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Keep the trailing external-link glyph fixed while the label absorbs any
+   shrink, so the pill collapses by ellipsizing text rather than the icon. */
+.sourcePill > svg {
+  flex-shrink: 0;
+}
+
+/* Action row under assistant message — always visible so the affordances
+   for copy / thumbs-up / thumbs-down are discoverable without hover. */
+.messageActions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+  padding-top: 2px;
+}
+
+/* Drop the default IconButton ghost color (secondary) to tertiary in this
+   context — these are quiet, secondary affordances and should sit visually
+   below the message text. Hover/active still resolve to primary via the
+   higher-specificity `.variant_ghost:hover` rule in IconButton.module.css. */
+.messageActions button {
+  color: var(--oi-content-color-tertiary);
+}
+
+/* Active thumb-up / thumb-down state. Tints the IconButton to the brand
+   colour so the persisted rating is visible at a glance. The hover/active
+   selectors are listed explicitly so the brand tint *survives* the higher-
+   specificity `.variant_ghost:hover` / `:active` rules in
+   IconButton.module.css — without these, hovering an active thumb would
+   flick it back to the default primary colour and feel "unsticky". */
+.messageActions button.thumbActive,
+.messageActions button.thumbActive:hover,
+.messageActions button.thumbActive:active {
+  color: var(--oi-content-color-brand);
+}
+
+/* Inline “Not helpful” panel. Rendered below `.messageActions` inside the
+   assistant column so it sits beneath the message it’s rating. Two views
+   (chips, free-text) toggled inline — no portal, no overlay. */
+.feedbackPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-s);
+  margin-top: var(--oi-spacing-s);
+  padding: var(--oi-spacing-m);
+  background-color: var(--oi-background-color-primary);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-default);
+  border-radius: var(--oi-border-radius-l);
+}
+
+.feedbackHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+}
+
+.feedbackPrompt {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-strong-font-weight, 600);
+  color: var(--oi-content-color-primary);
+}
+
+.feedbackChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--oi-spacing-xs);
+}
+
+.feedbackChip {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--oi-spacing-xs) var(--oi-spacing-m);
+  background-color: var(--oi-background-color-primary);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  border-radius: var(--oi-border-radius-max);
+  color: var(--oi-content-color-secondary);
+  font-family: inherit;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  /* Negative-feedback chips are full sentences that can wrap onto two lines;
+     left-align the text so wrapped rows read naturally inside the chip. */
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color var(--oi-motion-duration-short) var(--oi-motion-ease-default, ease),
+    border-color var(--oi-motion-duration-short) var(--oi-motion-ease-default, ease),
+    color var(--oi-motion-duration-short) var(--oi-motion-ease-default, ease);
+}
+
+.feedbackChip:hover {
+  background-color: var(--oi-background-color-secondary);
+  border-color: var(--oi-border-color-default);
+  color: var(--oi-content-color-primary);
+}
+
+.feedbackChip:focus-visible {
+  outline: 2px solid var(--oi-border-color-focus);
+  outline-offset: 2px;
+}
+
+/* Wrap so the send button can sit absolutely-positioned in the textarea’s
+   bottom-right corner, matching the composer pattern. The border lives here
+   (not on the textarea) and swaps to the focus colour via `:focus-within`,
+   mirroring `.composer` — this keeps the focus treatment to a single border
+   and avoids the double outline the textarea would otherwise get from its own
+   `:focus` border plus the global `:focus-visible` ring. */
+.feedbackTextWrap {
+  position: relative;
+  background-color: var(--oi-background-color-primary);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  border-radius: var(--oi-border-radius-default);
+  transition: border-color var(--oi-motion-duration-short) var(--oi-motion-ease-default, ease);
+}
+
+.feedbackTextWrap:focus-within {
+  border-color: var(--oi-border-color-focus);
+}
+
+/* Borderless + transparent so the surrounding `.feedbackTextWrap` supplies the
+   chrome (matches `.textarea` inside the composer). `outline: none` drops the
+   default focus outline; the wrapper's `:focus-within` border is the sole
+   focus indicator. */
+.feedbackTextarea {
+  display: block;
+  width: 100%;
+  min-height: 72px;
+  max-height: 200px;
+  /* Reserve room on the right edge for the absolutely-positioned send
+     button so the user’s text never slides under the icon. */
+  padding: var(--oi-spacing-s) calc(var(--oi-spacing-xl) + var(--oi-spacing-s))
+    var(--oi-spacing-s) var(--oi-spacing-s);
+  resize: vertical;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-family: inherit;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  color: var(--oi-content-color-primary);
+}
+
+.feedbackSend {
+  position: absolute;
+  right: var(--oi-spacing-xs);
+  bottom: var(--oi-spacing-xs);
+}
+
+/* Promote the submit button to the primary brand-blue treatment once the
+   textarea has any content, so the send affordance reads as the primary
+   action. Overrides the IconButton `secondary` variant via higher-specificity
+   selectors that survive hover/active. Uses the same brand tokens as the
+   composer's filled send button. */
+.feedbackSend .feedbackSendActive,
+.feedbackSend .feedbackSendActive:hover,
+.feedbackSend .feedbackSendActive:active {
+  background-color: var(--oi-button-background-primary, var(--oi-base-color-brand));
+  color: var(--oi-content-color-constant);
+  box-shadow: var(--oi-shadow-low);
+  border-color: var(--oi-button-background-primary, var(--oi-base-color-brand));
+}
+
+.feedbackSend .feedbackSendActive:hover {
+  background-color: var(--oi-button-background-primary-hover, var(--oi-base-color-brand));
+}
+
+/* Visually-hidden but readable by AT — used for the "Copied" live region. */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Blinking cursor appended to the streaming assistant message. */
+.streamCursor {
+  display: inline-block;
+  width: 0.5em;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background-color: var(--oi-content-color-primary);
+  border-radius: 1px;
+  animation: ai-cursor-blink 1s steps(2, end) infinite;
+}
+
+@keyframes ai-cursor-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Slide-and-fade entrance for new conversation items. */
+.appear {
+  animation: ai-msg-in var(--oi-motion-duration-default) var(--oi-motion-ease-default, ease-out) both;
+}
+
+@keyframes ai-msg-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .appear,
+  .streamCursor,
+  .thinking::before {
+    animation: none;
+  }
+  .streamFresh {
+    opacity: 1;
+    filter: none;
+  }
+  .body {
+    scroll-behavior: auto;
+  }
+  .panel,
+  .panelDragging,
+  .resizeHandleGrip {
+    transition: none;
+  }
+}
+
+/* ── Copy → Check icon swap (message actions) ──
+   Cross-fade two icons in the same slot with blur + scale on copy confirm. */
+.iconSwap {
+  position: relative;
+  display: inline-flex;
+  width: 16px;
+  height: 16px;
+}
+
+.iconSwapLayer {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    opacity var(--oi-motion-duration-default) var(--oi-motion-ease-default),
+    transform var(--oi-motion-duration-default) var(--oi-motion-ease-default),
+    filter var(--oi-motion-duration-default) var(--oi-motion-ease-default);
+}
+
+.iconSwapCopy {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+
+.iconSwapCheck {
+  opacity: 0;
+  transform: scale(0.8);
+  filter: blur(2px);
+}
+
+.iconSwap[data-copied='true'] .iconSwapCopy {
+  opacity: 0;
+  transform: scale(0.8);
+  filter: blur(2px);
+}
+
+.iconSwap[data-copied='true'] .iconSwapCheck {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+
+/* ── Staggered blurred rise for the empty-state heading + suggestion chips.
+   Each item carries its own --reveal-delay (40ms stagger). ── */
+.revealItem {
+  animation: ai-text-reveal var(--oi-motion-duration-long)
+    var(--oi-motion-ease-default) both;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+
+@keyframes ai-text-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* ── Accordion reveal for the inline feedback panel ──
+   Grows from zero height (grid-rows 0fr → 1fr) on mount so the panel
+   expands instead of popping in. ── */
+.accReveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--oi-motion-duration-default)
+    var(--oi-motion-ease-default);
+}
+
+.accRevealOpen {
+  grid-template-rows: 1fr;
+}
+
+.accRevealInner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iconSwapLayer {
+    transition: none;
+  }
+  .revealItem {
+    animation: none;
+  }
+  .accReveal {
+    transition: none;
+    grid-template-rows: 1fr;
+  }
+}
+
+/* ── Empty state (Figma `Content` → heading + suggestion chips) ── */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  /* 32px between the heading and the chip group, matching the Figma
+     `Content` node gap. The composer is rendered in its own wrap below
+     `.body`, so the heading + chips share a single 32px rhythm here. */
+  gap: var(--oi-spacing-xxl);
+}
+
+.emptyHeading {
+  margin: 0;
+  width: 100%;
+  text-align: center;
+  /* Figma `Heading 04` — 20/28 semibold. Token names follow the typography
+     scale defined in src/styles/typography.css. */
+  font-size: var(--oi-text-heading-04-font-size, 20px);
+  line-height: var(--oi-text-heading-04-line-height, 28px);
+  font-weight: var(--oi-text-heading-04-font-weight, 600);
+  color: var(--oi-content-color-primary);
+}
+
+/* ── Suggestion chips (Figma `.AI_Quick_Actions`) ── */
+.suggestions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--oi-spacing-xs);
+  width: 100%;
+}
+
+.suggestionChip {
+  display: flex;
+  align-items: center;
+  /* gap-m between icon and label per Figma; padding-s all around. */
+  gap: var(--oi-spacing-m);
+  text-align: left;
+  width: 100%;
+  padding: var(--oi-spacing-s);
+  background-color: var(--oi-background-color-primary);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  border-radius: var(--oi-border-radius-max);
+  color: var(--oi-content-color-secondary);
+  font-family: inherit;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  cursor: pointer;
+  transition:
+    background-color var(--oi-motion-duration-short) var(--oi-motion-ease-default, ease),
+    border-color var(--oi-motion-duration-short) var(--oi-motion-ease-default, ease),
+    transform var(--oi-motion-duration-short) var(--oi-motion-ease-default, ease);
+}
+
+.suggestionChip:hover {
+  background-color: var(--oi-background-color-secondary);
+}
+
+/* Re-assert the pill radius under :focus-visible. The global rule in
+   reset.css forces `border-radius-default` (4px) on every focused element
+   so the box-shadow halo renders as a rounded square; that clashes with
+   the chip's max-radius pill. Setting `radius-max` here keeps the standard
+   1.5px brand stroke from `--oi-focus-ring` flush to the pill curvature. */
+.suggestionChip:focus-visible {
+  border-radius: var(--oi-border-radius-max);
+}
+
+.suggestionChip:active {
+  transform: scale(0.98);
+}
+
+.suggestionChipIcon {
+  color: var(--oi-content-color-tertiary);
+  flex-shrink: 0;
+}
+
+.suggestionChipLabel {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Scroll-to-latest FAB ── */
+.scrollDown {
+  position: absolute;
+  left: 50%;
+  /* Sit just above the composer block. */
+  bottom: 120px;
+  transform: translate(-50%, 8px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background-color: var(--oi-background-color-primary);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  border-radius: var(--oi-border-radius-max);
+  color: var(--oi-content-color-secondary);
+  box-shadow: var(--oi-shadow-low);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 150ms var(--oi-motion-ease-default, ease),
+    transform 150ms var(--oi-motion-ease-default, ease);
+}
+
+.scrollDownVisible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+
+.scrollDown:hover {
+  background-color: var(--oi-background-color-secondary);
+}
+
+/* ── Composer ── */
+.composerWrap {
+  padding: var(--oi-spacing-s) var(--oi-spacing-m) var(--oi-spacing-m);
+  flex-shrink: 0;
+}
+
+/* Caption rendered under the composer pill (Figma `.Input feedback messages`).
+   12/16 tertiary, centred. Always visible \u2014 the AI-output caveat persists
+   alongside the conversation, not just on the empty state. */
+.composerFootnote {
+  margin: var(--oi-spacing-s) 0 0;
+  text-align: center;
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  color: var(--oi-content-color-tertiary);
+  opacity: 0.8;
+}
+
+.composer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-s);
+  padding: var(--oi-spacing-m);
+  background-color: var(--oi-background-color-primary);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-default);
+  border-radius: 1.5rem;
+  transition:
+    border-color 150ms var(--oi-motion-ease-default, ease),
+    box-shadow 150ms var(--oi-motion-ease-default, ease);
+}
+
+/* Focused composer pill — Figma ".AI_TextArea_Input / State=Typing".
+   Border swaps to the focus colour; no extra ring or drop shadow. The
+   `:not(.composerFocusSuppressed)` guard lets us hold the default border
+   while the textarea is disabled during recording, even if a click still
+   manages to focus a descendant button. */
+
+/* .composer:focus-within:not(.composerFocusSuppressed) {
+  border-color: var(--oi-border-color-focus);
+} */
+
+.placeholder {
+  margin: 0;
+  min-height: 50px;
+  color: var(--oi-content-color-tertiary);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+}
+
+/* Pending attachments shown inside the composer pill, above the textarea. */
+.composerAttachmentsWrap {
+  position: relative;
+}
+
+/* Off-screen copy of the full chip set, laid out identically to the visible
+   row so JS can measure how many chips fit in the 2-line budget. */
+.composerAttachmentsMeasure {
+  position: absolute;
+  inset: 0 0 auto 0;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.composerAttachments {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+}
+
+.composerChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 240px;
+  padding: 2px 8px 2px 3px;
+  background-color: var(--oi-background-color-primary);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  border-radius: var(--oi-border-radius-max);
+  color: var(--oi-content-color-secondary);
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+}
+
+.composerChipLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.composerChipRemove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  border-radius: var(--oi-border-radius-max);
+  color: var(--oi-content-color-tertiary);
+  cursor: pointer;
+  transition: background-color var(--oi-motion-duration-short) var(--oi-motion-ease-default, ease);
+}
+
+.composerChipRemove:hover {
+  background-color: var(--oi-background-color-tertiary, var(--oi-background-color-secondary));
+  color: var(--oi-content-color-primary);
+}
+
+.composerChipClear {
+  margin-inline-start: auto;
+  padding: 2px 8px;
+  background-color: transparent;
+  border: none;
+  color: var(--oi-content-color-tertiary);
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  cursor: pointer;
+  border-radius: var(--oi-border-radius-s, 4px);
+}
+
+.composerChipClear:hover {
+  color: var(--oi-content-color-primary);
+  text-decoration: underline;
+}
+
+/* "+ N more" overflow pill shown when the chips exceed the 2-line preview. */
+.composerChipMore {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  background-color: var(--oi-background-color-secondary);
+  border-radius: var(--oi-border-radius-max);
+  color: var(--oi-content-color-secondary);
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  white-space: nowrap;
+}
+
+/* Real textarea inside the composer. Inherits the surrounding pill's bg,
+ * has no chrome of its own, and is sized by JS auto-grow (1–~10 rows). */
+.textarea {
+  margin: 0;
+  width: 100%;
+  min-height: 24px;
+  max-height: 200px;
+  resize: none;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-family: inherit;
+  color: var(--oi-content-color-primary);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  overflow-y: auto;
+}
+
+.textarea::placeholder {
+  /* Figma `--oi-content-color-placeholder` (#90a1b9). Falls back to the
+     closest existing semantic token until that variable lands in the
+     theme files. */
+  color: var(--oi-content-color-placeholder, var(--oi-content-color-tertiary));
+  opacity: 1; /* override the browser's default placeholder fade */
+}
+
+/* Disabled while voice capture is active. The textarea remains visible so
+   the placeholder — or whatever the user had typed — keeps showing above
+   the recording timeline, matching Figma `.AI_TextArea_Input / State=Recording`.
+   These overrides cancel the browser's default disabled-input fade so the
+   surface looks identical to the idle state. */
+.textarea:disabled {
+  background-color: transparent;
+  color: var(--oi-content-color-primary);
+  -webkit-text-fill-color: var(--oi-content-color-primary);
+  opacity: 1;
+  cursor: default;
+}
+
+.textarea:disabled::placeholder {
+  /* Fall back to the closest existing semantic token rather than a literal
+     hex — the hex was the Figma value for `--oi-content-color-placeholder`
+     in the light theme only, which doesn't read correctly in dark / HC. */
+  color: var(--oi-content-color-placeholder, var(--oi-content-color-tertiary));
+  opacity: 1;
+}
+
+/* Suppress the global :focus-visible halo from reset.css — the composer
+   pill itself is the focus surface. */
+.textarea:focus,
+.textarea:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Caption hint below the composer pill. */
+.composerHint {
+  margin: var(--oi-spacing-xs) 0 0;
+  text-align: center;
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  color: var(--oi-content-color-tertiary);
+}
+
+.composerHint kbd {
+  display: inline-block;
+  padding: 0 4px;
+  background-color: var(--oi-background-color-secondary);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+  border-radius: var(--oi-border-radius-xs, 4px);
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--oi-content-color-secondary);
+}
+
+/* Typing indicator — a shimmering “Thinking…” label (transitions.dev
+   shimmer-text). A muted base with a highlight band swept across the glyphs
+   via a background-clipped ::before layer. Pure CSS, theme-adaptive because
+   the colours come from --oi-content-color-* tokens. */
+.thinking {
+  position: relative;
+  display: inline-block;
+  align-self: center;
+  color: var(--oi-content-color-tertiary);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+}
+
+.thinking::before {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 40%,
+    var(--oi-content-color-primary) 50%,
+    transparent 60%,
+    transparent 100%
+  );
+  background-size: 400% 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: ai-shimmer 2000ms linear infinite;
+}
+
+@keyframes ai-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0% 0;
+  }
+}
+
+/* Streaming edge — soften the in-progress trailing word so freshly typed
+   glyphs ease in instead of snapping. Resolves to full weight once the
+   stream moves past the word. */
+.streamFresh {
+  opacity: 0.5;
+  filter: blur(0.3px);
+}
+
+.composerActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--oi-spacing-s);
+}
+
+/* Recording variant — left "pill" expands to fill, right button group sits
+   flush against it. Matches Figma `.AI_Action_Bar / State=Recording`. */
+.composerActionsRecording {
+  justify-content: flex-start;
+  gap: var(--oi-spacing-s);
+}
+
+.composerLeft,
+.composerRight {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+}
+
+/* ── Recording pill (timer + waveform) ───────────────────────────────
+   Renders inside the action-bar row during voice capture and pushes the
+   right-side button group (Cancel + Send recording) outward via flex-grow. */
+.recordingPill {
+  display: flex;
+  align-items: center;
+  flex: 1 1 0;
+  min-width: 0;
+  height: var(--oi-size-default, 32px);
+  padding: 0 var(--oi-spacing-l);
+  gap: var(--oi-spacing-m);
+  background-color: var(--oi-background-color-info);
+  border-radius: var(--oi-border-radius-max);
+}
+
+.recordingTimer {
+  flex-shrink: 0;
+  font-family: var(--oi-font-family-code, 'IBM Plex Mono', monospace);
+  font-size: 14px;
+  line-height: 18px;
+  color: var(--oi-content-color-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.recordingWaveform {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 16px;
+  overflow: hidden;
+}
+
+.recordingBarActive,
+.recordingBarFuture {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 2px;
+  border-radius: 1px;
+}
+
+.recordingBarActive {
+  background-color: var(--oi-base-color-brand);
+  height: var(--bar-h, 12%);
+  opacity: var(--bar-opacity, 1);
+  transform-origin: center;
+  transition:
+    height 180ms cubic-bezier(0.2, 0.9, 0.3, 1),
+    opacity 180ms cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+/* One-shot "pop in" applied only to the newest bar as it enters from the
+   right edge of the scrolling buffer. */
+.recordingBarEnter {
+  animation: ai-recording-enter var(--oi-motion-duration-short) ease-out;
+}
+
+.recordingBarFuture {
+  background-color: var(--oi-border-color-default);
+  height: 4px;
+}
+
+@keyframes ai-recording-enter {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .recordingBarActive {
+    transition: none;
+  }
+  .recordingBarEnter {
+    animation: none;
+  }
+}
+
+/* ── Composer action buttons (".AI_CTA") ──────────────────────────────
+   Seven states from the Figma "AI_CTA" component set, all rendered as 32px
+   circles. Variants differ only in fill, icon colour, border, and shadow:
+
+     • ghost      — voice · stop · cancel  (transparent → hover-fill)
+     • outlined   — upload                  (white + default border)
+     • filled     — send · send-recording   (brand-blue + white icon + shadow)
+     • processing — processing              (slate fill + spinning icon)
+
+   See <ComposerButton /> in AiPanel.tsx for the state → variant mapping. */
+.cbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--oi-size-default, 32px);
+  height: var(--oi-size-default, 32px);
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  border-radius: var(--oi-border-radius-max);
+  color: var(--oi-content-color-tertiary);
+  cursor: pointer;
+  transition:
+    background-color var(--oi-motion-duration-short) var(--oi-motion-ease-default, ease),
+    border-color var(--oi-motion-duration-short) var(--oi-motion-ease-default, ease),
+    color var(--oi-motion-duration-short) var(--oi-motion-ease-default, ease),
+    box-shadow var(--oi-motion-duration-short) var(--oi-motion-ease-default, ease);
+}
+
+.cbtn:disabled:not(.cbtnProcessing) {
+  cursor: not-allowed;
+}
+
+.cbtn:focus-visible {
+  outline: 2px solid var(--oi-base-color-brand);
+  outline-offset: 2px;
+}
+
+/* Ghost — voice, stop, cancel. No border, no fill until hover. */
+.cbtnGhost {
+  background-color: transparent;
+  color: var(--oi-content-color-tertiary);
+}
+
+.cbtnGhost:hover:not(:disabled) {
+  background-color: var(
+    --oi-button-background-secondary-hover,
+    var(--oi-background-color-secondary)
+  );
+  color: var(--oi-content-color-secondary);
+}
+
+.cbtnGhost:active:not(:disabled) {
+  background-color: var(
+    --oi-button-background-secondary-active,
+    var(--oi-background-color-tertiary)
+  );
+}
+
+/* Outlined — upload. White surface with a default border that fades on hover. */
+.cbtnOutlined {
+  background-color: var(--oi-background-color-primary);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-default);
+  color: var(--oi-content-color-tertiary);
+}
+
+.cbtnOutlined:hover:not(:disabled) {
+  background-color: var(
+    --oi-button-background-secondary-hover,
+    var(--oi-background-color-secondary)
+  );
+  border-color: transparent;
+  color: var(--oi-content-color-secondary);
+}
+
+.cbtnOutlined:active:not(:disabled) {
+  background-color: var(
+    --oi-button-background-secondary-active,
+    var(--oi-background-color-tertiary)
+  );
+  border-color: transparent;
+}
+
+/* Filled — send, send-recording. Brand-blue circle with white icon + shadow. */
+.cbtnFilled {
+  background-color: var(--oi-button-background-primary, var(--oi-base-color-brand));
+  color: var(--oi-content-color-constant);
+  box-shadow: var(--oi-shadow-low);
+}
+
+.cbtnFilled:hover:not(:disabled) {
+  background-color: var(--oi-button-background-primary-hover, var(--oi-base-color-brand));
+}
+
+.cbtnFilled:disabled {
+  background-color: var(--oi-background-color-tertiary);
+  color: var(--oi-content-color-tertiary);
+  box-shadow: none;
+}
+
+/* Processing — light slate fill, non-interactive, icon spins. */
+.cbtnProcessing {
+  background-color: var(
+    --oi-button-background-secondary-active,
+    var(--oi-background-color-tertiary)
+  );
+  color: var(--oi-content-color-tertiary);
+  cursor: default;
+}
+
+.cbtnProcessingIcon {
+  animation: ai-cbtn-spin 1s linear infinite;
+}
+
+@keyframes ai-cbtn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cbtnProcessingIcon {
+    animation: none;
+  }
+}
+
+/* Mode badge ("Auto") */
+.modeBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+  padding: var(--oi-spacing-s);
+  background-color: var(--oi-background-color-primary);
+  border: 0.5px var(--oi-border-style-solid) var(--oi-border-color-default);
+  border-radius: var(--oi-border-radius-default);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  color: var(--oi-content-color-primary);
+}
+
+.modeDot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--oi-border-radius-max);
+  background-color: var(--oi-content-color-success);
+}
+
+/* ── History view ─────────────────────────────────────────────
+   Replaces the body + composer when the user opens the history
+   browser from the header. Rows are clickable buttons; the trash
+   affordance fades in on hover or keyboard focus to keep the row
+   uncluttered at rest. */
+
+/* Flex column that pins the search bar to the top and lets the
+   grouped list below it own the scrollable area. */
+.historyWrap {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.historyControls {
+  flex-shrink: 0;
+  padding: var(--oi-spacing-s) var(--oi-spacing-m);
+}
+
+.historyScroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding-bottom: var(--oi-spacing-l);
+}
+
+/* Date-bucket section: small uppercase label above each group's ul. */
+.historyGroup + .historyGroup {
+  margin-top: var(--oi-spacing-s);
+}
+
+.historyGroupLabel {
+  margin: 0;
+  padding: var(--oi-spacing-s) var(--oi-spacing-m) var(--oi-spacing-xs);
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  font-weight: var(--oi-text-body-s-strong-font-weight, var(--oi-text-body-s-font-weight));
+  color: var(--oi-content-color-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.historyList {
+  list-style: none;
+  margin: 0;
+  padding: 0 var(--oi-spacing-s);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.historyNoMatch {
+  margin: 0;
+  padding: var(--oi-spacing-l);
+  text-align: center;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  color: var(--oi-content-color-tertiary);
+}
+
+.historyItem {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  border-radius: var(--oi-border-radius-default);
+}
+
+.historyItem:hover,
+.historyItem:focus-within {
+  background-color: var(--oi-background-color-secondary);
+}
+
+.historyItemActive {
+  background-color: var(--oi-background-color-secondary);
+}
+
+.historyItemMain {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: var(--oi-spacing-s) var(--oi-spacing-m);
+  background: transparent;
+  border: 0;
+  border-radius: var(--oi-border-radius-default);
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+}
+
+.historyItemMain:focus-visible {
+  outline: var(--oi-focus-ring);
+  outline-offset: -2px;
+}
+
+.historyItemTitle {
+  display: block;
+  width: 100%;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  color: var(--oi-content-color-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.historyItemTime {
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  color: var(--oi-content-color-tertiary);
+}
+
+/* Trash button sits absolutely on the row's trailing edge so it can
+   overlay the title's ellipsis area without reflowing the row when
+   it appears. Hidden at rest; revealed on row hover or keyboard
+   focus within the row (keeps it discoverable for keyboard users). */
+.historyItemDelete {
+  position: absolute;
+  top: 50%;
+  right: var(--oi-spacing-s);
+  transform: translateY(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--oi-motion-duration-short) var(--oi-motion-ease-default, ease);
+}
+
+.historyItem:hover .historyItemDelete,
+.historyItem:focus-within .historyItemDelete {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.historyEmpty {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--oi-spacing-xs);
+  padding: var(--oi-spacing-l);
+  text-align: center;
+}
+
+.historyEmptyTitle {
+  margin: 0;
+  font-size: var(--oi-text-body-m-font-size);
+  line-height: var(--oi-text-body-m-line-height);
+  font-weight: var(--oi-text-body-m-strong-font-weight, var(--oi-text-body-m-font-weight));
+  color: var(--oi-content-color-primary);
+}
+
+.historyEmptyHint {
+  margin: 0;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  color: var(--oi-content-color-tertiary);
+}
+
