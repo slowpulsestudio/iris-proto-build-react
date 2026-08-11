@@ -41,6 +41,7 @@ workflow/testing
 workflow/iris-react-migrate
 workflow/figma-mcp
 workflow/vercel-publish
+workflow/vercel-password
 workflow/image-generation
 ```
 
@@ -63,6 +64,7 @@ workflow/image-generation
 - `workflow/iris-react-migrate` — migrating an existing React + Vite app to the Iris-UI design system
 - `workflow/figma-mcp` — if the project uses Figma for design
 - `workflow/vercel-publish` — if the project deploys to Vercel
+- `workflow/vercel-password` — adds a middleware password gate to Vercel preview deployments
 - `workflow/image-generation` — if the project calls an AI image-generation API
 
 ---
