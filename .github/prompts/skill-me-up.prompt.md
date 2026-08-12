@@ -8,7 +8,7 @@ description: Rebuild master-skills.md by fetching the latest skill files from th
 Before doing anything else, fetch the latest version of this prompt from the up-skill repo:
 
 ```
-https://raw.githubusercontent.com/slowpulsestudio/up-skill/main/.github/prompts/skill-me-up.prompt.md
+https://raw.githubusercontent.com/slowpulsestudio/iris-proto-build-react/main/.github/prompts/skill-me-up.prompt.md
 ```
 
 Compare it to the current contents of `.github/prompts/skill-me-up.prompt.md` in this project.
@@ -26,15 +26,9 @@ Check whether a `.skills` file exists in the root of this project.
 
 **If `.skills` does not exist:** ask the user the following questions one at a time, waiting for an answer before asking the next:
 
-1. *"Which platform does this project use? Pick one:"*
-   - `platform/ios` — Swift iOS app
-   - `platform/chrome-extension` — Chrome browser extension
-   - `platform/iris-react` — React + Vite app using the Iris-UI design system
-   - `platform/iris-shell` — multi-product shell app built on Iris UI
-   - `platform/python-mac` — Python desktop app for Mac
-   - `platform/python-website` — Python web app (FastAPI etc.)
-   - `platform/python-cli` — Python local script/CLI tool
-   - `platform/web-scraper` — Python scraping project
+1. *"Does this project need the Iris ecosystem shell — the title bar and navigation?"*
+   - Yes → `platform/iris-react-with-shell` — Iris UI with app shell, global sidebar, and navigation
+   - No → `platform/iris-react` — React + Vite app using the Iris-UI design system
 
 2. *"`workflow/general` is always included. Which of these workflow skills also apply? Pick as many as needed:"*
    - `workflow/git` — source control rules
@@ -48,7 +42,7 @@ Check whether a `.skills` file exists in the root of this project.
 
 3. For each of the following selected skills, ask a follow-up question:
 
-   - **`platform/iris-shell`** — *"Which product should load by default when the app opens? Pick one:"*
+   - **`platform/iris-react-with-shell`** — *"Which product should load by default when the app opens? Pick one:"`*
      - Active Roles
      - On-Demand Services
      - Identity Manager
@@ -99,7 +93,7 @@ Do not proceed to the next step until this is resolved.
 For each skill name, fetch the corresponding skill file from GitHub using this URL pattern:
 
 ```
-https://raw.githubusercontent.com/slowpulsestudio/up-skill/main/skills/{skill-name}.md
+https://raw.githubusercontent.com/slowpulsestudio/iris-proto-build-react/main/skills/{skill-name}.md
 ```
 
 Fetch all skills in parallel. Then concatenate them in the order they appear in `.skills`, with a blank line between each, and write the result to `master-skills.md` in the project root, overwriting whatever was there before.
@@ -119,7 +113,7 @@ source-folder/ -> dest-folder/
 
 For each mapping, use the zip download approach:
 1. Download the up-skill repo as a zip:
-   `https://github.com/slowpulsestudio/up-skill/archive/refs/heads/main.zip`
+   `https://github.com/slowpulsestudio/iris-proto-build-react/archive/refs/heads/main.zip`
 2. Extract only the files whose path within the zip starts with `up-skill-main/skill-resources/{skill-name}/{source-folder}/`
 3. Write each extracted file to `{project-root}/{dest-folder}/{relative-path}`, where `relative-path` is the portion after `up-skill-main/skill-resources/{skill-name}/{source-folder}/`. Create any necessary directories.
 4. If a file already exists at the destination and its content differs, warn the user and skip it — do not overwrite.

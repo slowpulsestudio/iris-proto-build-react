@@ -34,7 +34,7 @@ The AI will ask you these questions in order:
 1. Which platform this project uses
 2. Which workflow skills apply
 3. Follow-up questions for specific skills:
-   - **`platform/iris-shell`** — which product loads by default (Active Roles, On-Demand Services, Identity Manager, or Safeguard)
+   - **`platform/iris-react-with-shell`** — which product loads by default (Active Roles, On-Demand Services, Identity Manager, or Safeguard)
    - **`workflow/git`** — GitHub repo URL
    - **`workflow/figma-mcp`** — Figma file URL
    - **`workflow/image-generation`** — which image generation provider
@@ -42,14 +42,8 @@ The AI will ask you these questions in order:
 **Platform — pick one:**
 
 ```
-platform/ios
-platform/chrome-extension
 platform/iris-react
-platform/iris-shell
-platform/python-mac
-platform/python-website
-platform/python-cli
-platform/web-scraper
+platform/iris-react-with-shell
 ```
 
 **Workflow — `workflow/general` is always included. Add as many others as apply:**
@@ -68,14 +62,8 @@ workflow/image-generation
 
 | Skill | When to include |
 |---|---|
-| `platform/ios` | Swift iOS app |
-| `platform/chrome-extension` | Chrome browser extension |
 | `platform/iris-react` | React + Vite app using the Iris-UI design system |
-| `platform/iris-shell` | Multi-product shell app built on Iris UI |
-| `platform/python-mac` | Python desktop app for Mac |
-| `platform/python-website` | Python web app (FastAPI etc.) |
-| `platform/python-cli` | Python local script/CLI tool |
-| `platform/web-scraper` | Python scraping project |
+| `platform/iris-react-with-shell` | Iris UI with app shell, global sidebar, and navigation |
 | `workflow/general` | Core execution rules — always include |
 | `workflow/git` | Source control rules |
 | `workflow/architecture` | General code structure rules |

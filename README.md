@@ -14,22 +14,19 @@ This approach avoids relying on AI agents to resolve nested imports or follow mu
 
 ```text
 skills/
-    general.md          ← always included in every project
-    architecture.md
-    testing.md
-    git.md
-    figma-mcp.md
-    iris-ui.md
-    vercel-publish.md
-    image-generation.md
-    project-type/
-        ios.md
-        chrome-extension.md
-        python-mac.md
-        python-website.md
-        python-cli.md
-        web-scraper.md
+    workflow/
+        general.md          ← always included in every project
+        architecture.md
+        testing.md
+        git.md
+        figma-mcp.md
+        vercel-publish.md
+        vercel-password.md
+        image-generation.md
+        iris-react-migrate.md
+    platform/
         iris-react.md
+        iris-react-with-shell.md
 ```
 
 Each file should cover **one topic only** and remain reusable across projects.
@@ -40,7 +37,7 @@ For each project:
 
 1. Always start with `general.md` — it applies to every project.
 2. Select any additional skills from `skills/` that apply.
-3. From `skills/project-type/`, pick **exactly one** to match the project's platform (e.g. `ios.md` for an iOS app, `python-mac.md` for a Mac desktop app). Never include more than one project-type skill.
+3. From `skills/platform/`, pick **exactly one**: `iris-react.md` for a standalone Iris UI app, or `iris-react-with-shell.md` if the project needs the app shell (title bar and navigation). Never include more than one platform skill.
 4. Concatenate them, in order, into a single `master-skills.md`.
 5. Append any project-specific instructions.
 6. Point both `CLAUDE.md` and `.github/copilot-instructions.md` at the generated `master-skills.md`.
