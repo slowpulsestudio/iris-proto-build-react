@@ -164,13 +164,9 @@ Ask the following questions one at a time, only for the skills that are active. 
 - If no: skip.
 
 **If `workflow/vercel-publish` is active** (ask after the git question is resolved):
-*"Would you like me to walk you through setting up auto-publish from your GitHub repo to Vercel?"*
-- If yes: walk the user through the following steps one at a time, waiting for confirmation after each:
-  1. Go to [vercel.com](https://vercel.com) and sign in (or create an account).
-  2. Click **Add New → Project**.
-  3. Select **Import Git Repository** and connect your GitHub account if not already connected.
-  4. Find and select this repo from the list, then click **Import**.
-  5. Review the build settings (framework, build command, output directory) — confirm they look correct or adjust as needed.
-  6. Click **Deploy**. Vercel will build and deploy. Every future push to `main` will trigger a new production deployment automatically.
-  7. To add environment variables: go to Project Settings → Environment Variables and add them there. Never add secrets to the codebase.
-- If no: skip.
+Check whether `.vercel/project.json` exists in the project root.
+
+- **If it exists:** Vercel is already connected — skip this question entirely.
+- **If it does not exist:** ask: *"Would you like me to walk you through setting up auto-publish from your GitHub repo to Vercel?"*
+  - If yes: guide the user through connecting the repo to Vercel for automatic deploys, one step at a time.
+  - If no: skip.
