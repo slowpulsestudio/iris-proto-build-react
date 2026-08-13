@@ -77,3 +77,7 @@ This repository is intended to be version-controlled independently and shared ac
 The `/skill-me-up` prompt and `master-skills.md` build step described above are for **consumer projects** — they are never run inside this repository.
 
 This repo itself is maintained directly: when a gap, mistake, or new pattern is found (in this repo or while working on a consumer project), paste the relevant prompt/context straight into chat here and have the AI update or add the appropriate skill file by hand. There is no build/generation step for `up-skill` itself.
+
+## Future enhancements
+
+- Currently Ryan manually drags iris-react and shell files into the folder periodically so when you run this, it may not be 100% up to date with our Iris-UI-react repo. Eventually on initial load, it will dynamically pull the latest
