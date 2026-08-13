@@ -10,6 +10,10 @@ Projects should **not** point AI agents directly at individual skill files. Inst
 
 This approach avoids relying on AI agents to resolve nested imports or follow multiple levels of references, which can produce inconsistent results.
 
+## UX Research considerations
+
+If you really think about UX Research best practise - we don't want auto-refresh of Iris UI git update imports or fancy branching. When we decide to test a specific prototype - we want to stamp the current state in time and store that as a frozen branch for future reference.
+
 ## Repository Structure
 
 ```text
@@ -22,8 +26,7 @@ skills/
         figma-mcp.md
         vercel-publish.md
         vercel-password.md
-        image-generation.md
-        iris-react-migrate.md
+        migrate-non-iris-to-iris.md
     platform/
         iris-react.md
         iris-react-with-shell.md

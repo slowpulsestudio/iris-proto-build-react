@@ -26,21 +26,25 @@ Check whether a `.skills` file exists in the root of this project.
 
 **If `.skills` does not exist:** ask the user the following questions one at a time, waiting for an answer before asking the next:
 
-1. *"Does this project need the Iris ecosystem shell — the title bar and navigation?"*
+1. *"What is the name of this prototype?"* — save the answer as `PROJECT_NAME` to use when generating `master-skills.md`, `copilot-instructions.md`, and `CLAUDE.md`.
+
+2. *"In a sentence or two, describe what you're trying to test — or add any relevant context (version, goal, background) that will help the AI understand this prototype."* — save the answer as `PROJECT_DESCRIPTION`.
+
+3. *"Does this project need the Iris ecosystem shell — the title bar and navigation?"*
    - Yes → `platform/iris-react-with-shell` — Iris UI with app shell, global sidebar, and navigation
    - No → `platform/iris-react` — React + Vite app using the Iris-UI design system
 
-2. *"`workflow/general` is always included. Which of these workflow skills also apply? Pick as many as needed:"*
-   - `workflow/git` — source control rules
-   - `workflow/architecture` — general code structure rules
-   - `workflow/testing` — testing standards
-   - `workflow/iris-react-migrate` — migrating an existing app to Iris-UI
-   - `workflow/figma-mcp` — if the project uses Figma
-   - `workflow/vercel-publish` — if the project deploys to Vercel
-   - `workflow/vercel-password` — password gate for Vercel preview deployments
-   - `workflow/image-generation` — if the project calls an AI image-generation API
+4. *"`workflow/general` is always included. The skills below are pre-selected by default — deselect any that don't apply, and add any others you need:"*
+   - [on] `workflow/architecture` — general code structure rules
+   - [on] `workflow/deep-linking` — URL-addressable tree navigation
+   - [on] `workflow/figma-mcp` — if the project uses Figma
+   - [on] `workflow/git` — source control rules
+   - [on] `workflow/testing` — testing standards
+   - [on] `workflow/vercel-publish` — if the project deploys to Vercel
+   - [off] `workflow/migrate-non-iris-to-iris` — migrating a non-Iris app to Iris-UI
+   - [off] `workflow/vercel-password` — password gate for Vercel preview deployments
 
-3. For each of the following selected skills, ask a follow-up question:
+5. For each of the following selected skills, ask a follow-up question:
 
    - **`platform/iris-react-with-shell`** — *"Which product should load by default when the app opens? Pick one:"`*
      - Active Roles
@@ -57,8 +61,6 @@ Check whether a `.skills` file exists in the root of this project.
    - **`workflow/figma-mcp`** — *"What is the Figma file URL for this project?"* Give the user two options:
      - Paste the URL now — save it to `.figma-url` in the project root
      - *"I'll paste it in this chat when I have it"* — reply: *"No problem — paste the Figma URL in this chat whenever you're ready and I'll save it to `.figma-url`."* then continue setup. When the user later pastes a URL starting with `https://www.figma.com/`, write it to `.figma-url`.
-   - **`workflow/image-generation`** — *"Which image generation provider does this project use?"* (e.g. OpenAI / DALL·E, Replicate, Stability AI)
-
    Only ask follow-up questions for skills that were selected. Skip any that weren't.
 
    Once all questions are answered, write the `.skills` file with the standard comment header followed by the chosen skills, one per line. Always include `workflow/general` as the first workflow entry:

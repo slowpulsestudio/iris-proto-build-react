@@ -31,13 +31,14 @@ This always pulls the latest versions from GitHub, so any improvements made to U
 ## Step 3 — Question time
 
 The AI will ask you these questions in order:
-1. Which platform this project uses
-2. Which workflow skills apply
-3. Follow-up questions for specific skills:
+1. What the prototype is called
+2. A brief description of what you're testing or the wider context
+3. Which platform this project uses
+4. Which workflow skills apply
+5. Follow-up questions for specific skills:
    - **`platform/iris-react-with-shell`** — which product loads by default (Active Roles, On-Demand Services, Identity Manager, or Safeguard)
    - **`workflow/git`** — GitHub repo URL
    - **`workflow/figma-mcp`** — Figma file URL
-   - **`workflow/image-generation`** — which image generation provider
 
 **Platform — pick one:**
 
@@ -50,14 +51,14 @@ platform/iris-react-with-shell
 
 ```
 workflow/general
-workflow/git
 workflow/architecture
-workflow/testing
-workflow/iris-react-migrate
+workflow/deep-linking
 workflow/figma-mcp
+workflow/git
+workflow/testing
 workflow/vercel-publish
+workflow/migrate-non-iris-to-iris
 workflow/vercel-password
-workflow/image-generation
 ```
 
 | Skill | When to include |
@@ -65,14 +66,14 @@ workflow/image-generation
 | `platform/iris-react` | React + Vite app using the Iris-UI design system |
 | `platform/iris-react-with-shell` | Iris UI with app shell, global sidebar, and navigation |
 | `workflow/general` | Core execution rules — always include |
-| `workflow/git` | Source control rules |
 | `workflow/architecture` | General code structure rules |
-| `workflow/testing` | Testing standards |
-| `workflow/iris-react-migrate` | Migrating an existing app to Iris-UI |
+| `workflow/deep-linking` | URL-addressable tree navigation |
 | `workflow/figma-mcp` | If the project uses Figma for design |
+| `workflow/git` | Source control rules |
+| `workflow/testing` | Testing standards |
 | `workflow/vercel-publish` | If the project deploys to Vercel |
+| `workflow/migrate-non-iris-to-iris` | Migrating a non-Iris app to Iris-UI |
 | `workflow/vercel-password` | Password gate for Vercel preview deployments |
-| `workflow/image-generation` | If the project calls an AI image-generation API |
 
 ---
 
