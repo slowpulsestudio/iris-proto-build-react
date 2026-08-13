@@ -3,21 +3,6 @@ mode: agent
 description: Rebuild master-skills.md by fetching the latest skill files from the up-skill repo on GitHub, and copy any skill-bundled files into this project.
 ---
 
-## Step -1 — Self-update check
-
-Before doing anything else, fetch the latest version of this prompt from the up-skill repo:
-
-```
-https://raw.githubusercontent.com/slowpulsestudio/iris-proto-build-react/main/.github/prompts/skill-me-up.prompt.md
-```
-
-Compare it to the current contents of `.github/prompts/skill-me-up.prompt.md` in this project.
-
-- **If they are identical:** continue to Step 0.
-- **If they differ:** tell the user: *"There are updates available for the skill-me-up prompt. Would you like me to update it now? You'll need to run `/skill-me-up` again after."*
-  - If yes: overwrite `.github/prompts/skill-me-up.prompt.md` with the fetched version and stop. Do not continue setup.
-  - If no: continue to Step 0 with the current version.
-
 ## Step 0 — Skills setup
 
 Check whether a `.skills` file exists in the root of this project.
