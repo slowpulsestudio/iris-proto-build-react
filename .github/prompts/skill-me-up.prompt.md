@@ -180,6 +180,9 @@ Check whether any files were actually changed or created during this run (e.g. `
 Check whether `.vercel/project.json` exists in the project root.
 
 - **If it exists:** Vercel is already connected — skip this question entirely.
-- **If it does not exist:** ask: *"Would you like me to walk you through setting up auto-publish from your GitHub repo to Vercel?"*
-  - If yes: guide the user through connecting the repo to Vercel for automatic deploys, one step at a time.
-  - If no: skip.
+- **If it does not exist:** check `.skill-answers` for the key `vercel-setup`.
+  - **If `vercel-setup = yes`:** the user previously agreed — proceed with guiding them through the setup without re-asking.
+  - **If `vercel-setup = no`:** the user previously declined — skip this question entirely.
+  - **If the key is absent:** ask: *"Would you like me to walk you through setting up auto-publish from your GitHub repo to Vercel?"*
+    - If yes: save `vercel-setup = yes` to `.skill-answers`, then guide the user through connecting the repo to Vercel for automatic deploys, one step at a time.
+    - If no: save `vercel-setup = no` to `.skill-answers` and skip.
