@@ -177,12 +177,10 @@ Check whether any files were actually changed or created during this run (e.g. `
 - If no: skip.
 
 **If `workflow/vercel-publish` is active** (ask after the git question is resolved):
-Check whether `.vercel/project.json` exists in the project root.
+Check `.skill-answers` for `vercel-setup`, and whether `.vercel/project.json` exists.
 
-- **If it exists:** Vercel is already connected — skip this question entirely.
-- **If it does not exist:** check `.skill-answers` for the key `vercel-setup`.
-  - **If `vercel-setup = yes`:** the user previously agreed — proceed with guiding them through the setup without re-asking.
-  - **If `vercel-setup = no`:** the user previously declined — skip this question entirely.
-  - **If the key is absent:** ask: *"Would you like me to walk you through setting up auto-publish from your GitHub repo to Vercel?"*
-    - If yes: save `vercel-setup = yes` to `.skill-answers`, then guide the user through connecting the repo to Vercel for automatic deploys, one step at a time.
-    - If no: save `vercel-setup = no` to `.skill-answers` and skip.
+- **If `vercel-setup = done` in `.skill-answers`, OR `.vercel/project.json` exists:** Vercel is already connected — skip this question entirely.
+- **If `vercel-setup = no` in `.skill-answers`:** user previously declined — skip this question entirely.
+- **Otherwise:** ask: *"Would you like me to walk you through setting up auto-publish from your GitHub repo to Vercel?"*
+  - If yes: guide the user through connecting the repo to Vercel via the Vercel dashboard (Import Project → select repo). Once they confirm it's connected, save `vercel-setup = done` to `.skill-answers`.
+  - If no: save `vercel-setup = no` to `.skill-answers` and skip.
