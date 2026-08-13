@@ -22,9 +22,9 @@ Compare it to the current contents of `.github/prompts/skill-me-up.prompt.md` in
 
 Check whether a `.skills` file exists in the root of this project.
 
-**If `.skills` exists:** read it. It contains a list of skill names, one per line. Skip blank lines and any line starting with `#`.
+**If `.skills` exists:** read it. It contains a list of skill names, one per line. Skip blank lines and any line starting with `#`. Skip the rest of Step 0 entirely — do not ask any questions, do not create `.skill-answers`. Proceed directly to Step 0b.
 
-**If `.skills` does not exist:** proceed to the questions below.
+**If `.skills` does not exist:** proceed to the questions below. Do not improvise or skip ahead — follow the steps exactly as written.
 
 ### Answer tracking
 
