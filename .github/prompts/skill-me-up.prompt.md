@@ -24,58 +24,69 @@ Check whether a `.skills` file exists in the root of this project.
 
 **If `.skills` exists:** read it. It contains a list of skill names, one per line. Skip blank lines and any line starting with `#`.
 
-**If `.skills` does not exist:** ask the user the following questions one at a time, waiting for an answer before asking the next:
+**If `.skills` does not exist:** proceed to the questions below.
 
-1. *"What is the name of this prototype?"* — save the answer as `PROJECT_NAME` to use when generating `master-skills.md`, `copilot-instructions.md`, and `CLAUDE.md`.
+### Answer tracking
 
-2. *"In a sentence or two, describe what you're trying to test — or add any relevant context (version, goal, background) that will help the AI understand this prototype."* — save the answer as `PROJECT_DESCRIPTION`.
+Before asking any setup questions, check whether `.skill-answers` exists in the project root. If it does, read it — it stores previously given answers as `key = value` pairs, one per line (skip blank lines and lines starting with `#`).
 
-3. *"Does this project need the Iris ecosystem shell — the title bar and navigation?"*
-   - Yes → `platform/iris-react-with-shell` — Iris UI with app shell, global sidebar, and navigation
-   - No → `platform/iris-react` — React + Vite app using the Iris-UI design system
+For every question below, check whether its key already exists in `.skill-answers`:
 
-4. *"`workflow/general` is always included. The skills below are pre-selected by default — deselect any that don't apply, and add any others you need:"*
-   - [on] `workflow/architecture` — general code structure rules
-   - [on] `workflow/deep-linking` — URL-addressable tree navigation
-   - [on] `workflow/figma-mcp` — if the project uses Figma
-   - [on] `workflow/git` — source control rules
-   - [on] `workflow/testing` — testing standards
-   - [on] `workflow/vercel-publish` — if the project deploys to Vercel
-   - [off] `workflow/migrate-non-iris-to-iris` — migrating a non-Iris app to Iris-UI
-   - [off] `workflow/vercel-password` — password gate for Vercel preview deployments
+- **Key exists:** skip the question silently. Use the stored value.
+- **Key is missing:** ask the question. When answered, add `key = value` to `.skill-answers` (creating the file if it doesn't exist yet).
 
-5. For each of the following selected skills, ask a follow-up question:
+After all questions are resolved, write any newly collected answers to `.skill-answers`.
 
-   - **`platform/iris-react-with-shell`** — *"Which product should load by default when the app opens? Pick one:"`*
-     - Active Roles
-     - On-Demand Services
-     - Identity Manager
-     - Safeguard
+### Questions
 
-     Once confirmed, update the following three files in `src/iris-shell/` to reflect the chosen default:
-     - `src/lib/router.ts` — set `const DEFAULT` to the correct hash (`#/insights` for Active Roles, `#/services` for On-Demand Services, `#/identity` for Identity Manager, `#/safeguard` for Safeguard)
-     - `src/lib/verticals.ts` — set `defaultRoute` on the matching vertical record to the same hash
-     - `src/lib/productMenu.tsx` — ensure the matching product entry is first in the list and its `route` matches
+**`project-name`** — *"What is the name of this prototype?"*
 
-   - **`workflow/git`** — *"What is the GitHub repo URL for this project?"*
-   - **`workflow/figma-mcp`** — *"What is the Figma file URL for this project?"* Give the user two options:
-     - Paste the URL now — save it to `.figma-url` in the project root
-     - *"I'll paste it in this chat when I have it"* — reply: *"No problem — paste the Figma URL in this chat whenever you're ready and I'll save it to `.figma-url`."* then continue setup. When the user later pastes a URL starting with `https://www.figma.com/`, write it to `.figma-url`.
-   Only ask follow-up questions for skills that were selected. Skip any that weren't.
+**`project-description`** — *"In a sentence or two, describe what you're trying to test — or add any relevant context (version, goal, background) that will help the AI understand this prototype."*
 
-   Once all questions are answered, write the `.skills` file with the standard comment header followed by the chosen skills, one per line. Always include `workflow/general` as the first workflow entry:
+**`platform`** — *"Does this project need the Iris ecosystem shell — the title bar and navigation?"*
 
-   ```
-   # This file is only a pseudo-import list for the Up-Skill mechanism — like a
-   # requirements.txt for skills. It just names reusable skill files to fetch.
-   # It carries NO information about what this project actually is or does.
-   # The project's real identity, purpose, and requirements come from the
-   # original build/meta-prompt used to create it — not from this file, and
-   # not from the generated master-skills.md. Never infer project intent from
-   # the skill names listed below.
-   ```
+- Yes → `platform/iris-react-with-shell`
+- No → `platform/iris-react`
 
-Do not proceed to Step 1 until the `.skills` file exists and the skill list is confirmed.
+**`workflow-skills`** — *"`workflow/general` is always included. The skills below are pre-selected by default — deselect any that don't apply, and add any others you need:"*
+
+- [on] `workflow/architecture`
+- [on] `workflow/deep-linking`
+- [on] `workflow/figma-mcp`
+- [on] `workflow/git`
+- [on] `workflow/testing`
+- [on] `workflow/vercel-publish`
+- [off] `workflow/migrate-non-iris-to-iris`
+- [off] `workflow/vercel-password`
+
+**`default-product`** — only if `platform/iris-react-with-shell` was chosen: *"Which product should load by default when the app opens?"*
+
+- Active Roles / On-Demand Services / Identity Manager / Safeguard
+
+Once confirmed, update the following three files in `src/iris-shell/` to reflect the chosen default:
+- `src/lib/router.ts` — set `const DEFAULT` to the correct hash (`#/insights` for Active Roles, `#/services` for On-Demand Services, `#/identity` for Identity Manager, `#/safeguard` for Safeguard)
+- `src/lib/verticals.ts` — set `defaultRoute` on the matching vertical record to the same hash
+- `src/lib/productMenu.tsx` — ensure the matching product entry is first in the list and its `route` matches
+
+**`git-remote`** — only if `workflow/git` was selected: *"What is the GitHub repo URL for this project?"*
+
+**`figma-url`** — only if `workflow/figma-mcp` was selected: *"What is the Figma file URL for this project?"* Give the user two options:
+- Paste the URL now — save it to `.figma-url` in the project root
+- *"I'll paste it in this chat when I have it"* — reply: *"No problem — paste the Figma URL in this chat whenever you're ready and I'll save it to `.figma-url`."* then continue setup. When the user later pastes a URL starting with `https://www.figma.com/`, write it to `.figma-url`.
+
+Once all questions are resolved, write the `.skills` file if it doesn't exist yet, using the standard comment header followed by the chosen skills, one per line. Always include `workflow/general` as the first workflow entry:
+
+```
+# This file is only a pseudo-import list for the Up-Skill mechanism — like a
+# requirements.txt for skills. It just names reusable skill files to fetch.
+# It carries NO information about what this project actually is or does.
+# The project's real identity, purpose, and requirements come from the
+# original build/meta-prompt used to create it — not from this file, and
+# not from the generated master-skills.md. Never infer project intent from
+# the skill names listed below.
+```
+
+The `.skill-answers` file should be committed — it's not secret. When a new question is added to this prompt in future, give it a new key and it will be asked on the next run of any project that doesn't have that key yet.
 
 ## Step 0b — Git setup (if applicable)
 
