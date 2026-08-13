@@ -124,19 +124,26 @@ Download the zip once and reuse it for all resource mappings across all skills.
 
 ## Step 3 — Create AI instruction files
 
-Check for the following two files and create them if they don't already exist:
+Check for the following three files and create them if they don't already exist:
 
 **`.github/copilot-instructions.md`**
 ```
-Read master-skills.md for your operating instructions.
+Read master-skills.md and prototype-specific-agent-instructions.md for your operating instructions.
 ```
 
 **`CLAUDE.md`**
 ```
-Read master-skills.md for your operating instructions.
+Read master-skills.md and prototype-specific-agent-instructions.md for your operating instructions.
 ```
 
-If either file already exists, leave it untouched — do not overwrite or append.
+**`prototype-specific-agent-instructions.md`**
+```
+# Prototype-specific agent instructions
+
+Add any instructions here that are specific to this prototype — design decisions, constraints, what you're testing, known issues, personas, etc. This file is never overwritten by /skill-me-up.
+```
+
+If any of these files already exist, leave them untouched — do not overwrite or append.
 
 ## Step 4 — Report
 
@@ -145,7 +152,7 @@ When done, report:
 - The total line count of the new `master-skills.md`
 - Any skills that failed to fetch (404 or network error)
 - Which bundled files were copied (grouped by skill), and any that were skipped due to conflicts
-- Whether `.github/copilot-instructions.md` and `CLAUDE.md` were created or already existed
+- Whether `.github/copilot-instructions.md`, `CLAUDE.md`, and `prototype-specific-agent-instructions.md` were created or already existed
 
 ## Step 5 — Post-setup actions (ask in order, only if applicable)
 
