@@ -170,8 +170,10 @@ When done, report:
 Ask the following questions one at a time, only for the skills that are active. Skip any that aren't.
 
 **If `workflow/git` is active:**
-*"Would you like me to commit and push this initial setup to GitHub?"*
-- If yes: stage all files, commit with the message `Initial project setup`, and push to origin.
+Check whether any files were actually changed or created during this run (e.g. `master-skills.md` was overwritten, new bundled files were copied, or instruction files were created).
+- **If files were changed/created:** ask: *"Would you like me to commit and push these changes to GitHub?"*
+  - If yes: stage all changed/new files, write a commit message that summarises what changed (e.g. `Update master-skills.md and copy bundled resources`), and push to origin.
+- **If nothing changed:** skip — do not ask.
 - If no: skip.
 
 **If `workflow/vercel-publish` is active** (ask after the git question is resolved):
