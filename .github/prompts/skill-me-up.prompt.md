@@ -69,10 +69,6 @@ Once confirmed, update the following three files in `src/iris-shell/` to reflect
 - `src/lib/verticals.ts` — set `defaultRoute` on the matching vertical record to the same hash
 - `src/lib/productMenu.tsx` — ensure the matching product entry is first in the list and its `route` matches
 
-**`default-route`** — only if `platform/iris-react-with-shell` was chosen: *"What screen do you want to use as your default for this prototype?"*
-
-Once confirmed, add any required route and URL-addressable state to the router, then set `const DEFAULT` in `src/iris-shell/src/lib/router.ts` to the selected hash. An empty hash must open the selected route; direct links to it must reproduce the requested state.
-
 **`git-remote`** — only if `workflow/git` was selected: *"What is the GitHub repo URL for this project?"*
 
 **`figma-url`** — only if `workflow/figma-mcp` or `workflow/figma-write-to-canvas` was selected: *"What is the Figma file URL for this project?"* Give the user two options:

@@ -33,9 +33,7 @@ A vertical is one record in `src/iris-shell/src/lib/verticals.ts` plus one route
 
 ## Routing
 
-The shell uses a hash router (`src/iris-shell/src/lib/router.ts`) with no external dependencies. Routes are a discriminated union — add new routes to the union, do not use string literals. An empty hash normalises to the project-specific default route selected during setup; unknown hashes fall back to `usersList`.
-
-During project setup, ask which URL route or deep link should open by default. It may be a top-level page, a subpage, or a route representing a table action. Add the selected route to the route union and configure it as the empty-hash fallback so it opens when the prototype starts.
+The shell uses a hash router (`src/iris-shell/src/lib/router.ts`) with no external dependencies. Routes are a discriminated union — add new routes to the union, do not use string literals. An empty hash normalises to `#/insights`; unknown hashes fall back to `usersList`.
 
 **A failed response looks like:**
 - Using `window.location.href` or `window.location.hash` directly instead of the `navigate()` helper
