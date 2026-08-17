@@ -53,6 +53,7 @@ After all questions are resolved, write any newly collected answers to `.skill-a
 - [on] `workflow/architecture`
 - [on] `workflow/deep-linking`
 - [on] `workflow/figma-mcp`
+- [off] `workflow/figma-write-to-canvas`
 - [on] `workflow/git`
 - [on] `workflow/testing`
 - [on] `workflow/vercel-publish`
@@ -70,7 +71,7 @@ Once confirmed, update the following three files in `src/iris-shell/` to reflect
 
 **`git-remote`** — only if `workflow/git` was selected: *"What is the GitHub repo URL for this project?"*
 
-**`figma-url`** — only if `workflow/figma-mcp` was selected: *"What is the Figma file URL for this project?"* Give the user two options:
+**`figma-url`** — only if `workflow/figma-mcp` or `workflow/figma-write-to-canvas` was selected: *"What is the Figma file URL for this project?"* Give the user two options:
 - Paste the URL now — save it to `.figma-url` in the project root
 - *"I'll paste it in this chat when I have it"* — reply: *"No problem — paste the Figma URL in this chat whenever you're ready and I'll save it to `.figma-url`."* then continue setup. When the user later pastes a URL starting with `https://www.figma.com/`, write it to `.figma-url`.
 

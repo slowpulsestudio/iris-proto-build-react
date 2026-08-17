@@ -54,6 +54,7 @@ workflow/general
 workflow/architecture
 workflow/deep-linking
 workflow/figma-mcp
+workflow/figma-write-to-canvas
 workflow/git
 workflow/testing
 workflow/vercel-publish
@@ -69,6 +70,7 @@ workflow/vercel-password
 | `workflow/architecture` | General code structure rules |
 | `workflow/deep-linking` | URL-addressable tree navigation |
 | `workflow/figma-mcp` | If the project uses Figma for design |
+| `workflow/figma-write-to-canvas` | Writing design frames to Figma canvas from code |
 | `workflow/git` | Source control rules |
 | `workflow/testing` | Testing standards |
 | `workflow/vercel-publish` | If the project deploys to Vercel |

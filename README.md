@@ -24,6 +24,7 @@ skills/
         testing.md
         git.md
         figma-mcp.md
+        figma-write-to-canvas.md
         vercel-publish.md
         vercel-password.md
         migrate-non-iris-to-iris.md
