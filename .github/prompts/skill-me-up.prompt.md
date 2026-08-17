@@ -101,10 +101,10 @@ For each skill name, fetch the corresponding skill file from GitHub using this U
 https://raw.githubusercontent.com/slowpulsestudio/iris-proto-build-react/main/skills/{skill-name}.md
 ```
 
-Fetch all skills in parallel. Then concatenate them in the order they appear in `.skills`, with a blank line between each. Compare the assembled content with the existing `master-skills.md` in the project root:
+Fetch all skills in parallel every run, even when `.skills` has not changed, because a skill's upstream content may have changed. Then concatenate them in the order they appear in `.skills`, with a blank line between each. Compare both the current `.skills` selection and the assembled skill content with the existing `master-skills.md` in the project root:
 
-- If the content is identical, leave `master-skills.md` untouched and report that it is already up to date.
-- If the content differs, write the assembled content to `master-skills.md`.
+- If the `.skills` selection and assembled content are both unchanged, leave `master-skills.md` untouched and report that it is already up to date.
+- If the `.skills` selection changed or any fetched skill content differs, write the assembled content to `master-skills.md`.
 - If `master-skills.md` does not exist, create it.
 
 ## Step 2 — Copy skill-bundled files
