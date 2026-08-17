@@ -29,4 +29,4 @@ iris-ui-main/ -> src/iris-ui/
 
 The left side is relative to `skill-resources/{skill-name}/`. The right side is the destination in the project root.
 
-When `/skill-me-up` runs, it reads the `## Resources` section, looks up the files in the up-skill repo via the GitHub API, and copies them into the new project at the specified paths. Files that already exist and differ are skipped with a warning.
+When `/skill-me-up` runs, it reads the `## Resources` section, downloads the up-skill repo as a zip archive, extracts the matching files, and copies them into the new project at the specified paths. Files that already exist and differ are skipped with a warning.

@@ -1,6 +1,7 @@
 ---
 mode: agent
 description: Rebuild master-skills.md by fetching the latest skill files from the up-skill repo on GitHub, and copy any skill-bundled files into this project.
+version: 1
 ---
 
 ## Step -1 — Self-update check
@@ -11,9 +12,9 @@ Before doing anything else, fetch the latest version of this prompt from the up-
 https://raw.githubusercontent.com/slowpulsestudio/iris-proto-build-react/main/.github/prompts/skill-me-up.prompt.md
 ```
 
-Compare it to the current contents of `.github/prompts/skill-me-up.prompt.md` in this project.
+Compare the fetched `version:` frontmatter field to the `version:` field in the current `.github/prompts/skill-me-up.prompt.md` in this project. If the version field is missing from either file, fall back to comparing full file contents instead.
 
-- **If they are identical:** continue to Step 0.
+- **If the versions (or full contents, when falling back) are identical:** continue to Step 0.
 - **If they differ:** tell the user: *"There are updates available for the skill-me-up prompt. Would you like me to update it now? You'll need to run `/skill-me-up` again after."*
   - If yes: overwrite `.github/prompts/skill-me-up.prompt.md` with the fetched version and stop. Do not continue setup.
   - If no: continue to Step 0 with the current version.
@@ -101,7 +102,7 @@ For each skill name, fetch the corresponding skill file from GitHub using this U
 https://raw.githubusercontent.com/slowpulsestudio/iris-proto-build-react/main/skills/{skill-name}.md
 ```
 
-Fetch all skills in parallel every run, even when `.skills` has not changed, because a skill's upstream content may have changed. Then concatenate them in the order they appear in `.skills`, with a blank line between each. Compare both the current `.skills` selection and the assembled skill content with the existing `master-skills.md` in the project root:
+Fetch all skills in parallel every run, even when `.skills` has not changed, because a skill's upstream content may have changed. If any skill fails to fetch (404 or network error), stop before writing `master-skills.md` and report the failure clearly to the user, listing which skill(s) failed — do not silently omit a failed skill from the concatenated content. Then concatenate them in the order they appear in `.skills`, with a blank line between each. Compare both the current `.skills` selection and the assembled skill content with the existing `master-skills.md` in the project root:
 
 - If the `.skills` selection and assembled content are both unchanged, leave `master-skills.md` untouched and report that it is already up to date.
 - If the `.skills` selection changed or any fetched skill content differs, write the assembled content to `master-skills.md`.
@@ -117,15 +118,16 @@ The `## Resources` section contains directory copy mappings, one per line, in th
 source-folder/ -> dest-folder/
 ```
 
-- `source-folder/` is a path relative to `skill-resources/{skill-name}/` in the up-skill repo. Resolve it as a normalized path, so `../` may be used when a bundled resource is stored under a shared sibling folder.
+- `source-folder/` is a path relative to `skill-resources/{skill-name}/` in the up-skill repo. `{skill-name}` is the full name including its category folder (e.g. `platform/iris-react-with-shell`, not just `iris-react-with-shell`) — use it as-is when building this base directory, never just its last path segment.
 - `dest-folder/` is the destination path relative to this project's root
 
 For each mapping, use the zip download approach:
 1. Download the up-skill repo as a zip:
    `https://github.com/slowpulsestudio/iris-proto-build-react/archive/refs/heads/main.zip`
-2. Extract only the files whose path within the zip starts with `up-skill-main/skill-resources/{skill-name}/{source-folder}/`
-3. Write each extracted file to `{project-root}/{dest-folder}/{relative-path}`, where `relative-path` is the portion after `up-skill-main/skill-resources/{skill-name}/{source-folder}/`. Create any necessary directories.
+2. Extract only the files whose path within the zip starts with `iris-proto-build-react-main/skill-resources/{skill-name}/{source-folder}/` — for example, for the `platform/iris-react-with-shell` skill with a `poc-iris-react-main/` source folder, the full prefix is `iris-proto-build-react-main/skill-resources/platform/iris-react-with-shell/poc-iris-react-main/`.
+3. Write each extracted file to `{project-root}/{dest-folder}/{relative-path}`, where `relative-path` is the portion after the prefix in step 2. Create any necessary directories.
 4. If a file already exists at the destination and its content differs, warn the user and skip it — do not overwrite.
+5. If a mapping matches zero files in the zip, this is an error, not an empty result — stop and report the exact prefix searched so the user can check the archive contents. Do not report it as "nothing to copy".
 
 Download the zip once and reuse it for all resource mappings across all skills.
 

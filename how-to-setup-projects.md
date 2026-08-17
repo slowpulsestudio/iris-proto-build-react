@@ -12,7 +12,7 @@ Up-Skill is a library of AI instruction files. When you start a new project, you
 
 Copy the entire `.github/` folder from this repo into the root of your new project. It contains all the prompt files already in the right place:
 
-Only include `migrate-to-iris-react.prompt.md` if you need to move from one platform to iris-react — otherwise delete it after copying.
+Only include `migrate-non-iris-to-iris.prompt.md` if you need to move from one platform to iris-react — otherwise delete it after copying.
 
 ---
 
