@@ -101,7 +101,11 @@ For each skill name, fetch the corresponding skill file from GitHub using this U
 https://raw.githubusercontent.com/slowpulsestudio/iris-proto-build-react/main/skills/{skill-name}.md
 ```
 
-Fetch all skills in parallel. Then concatenate them in the order they appear in `.skills`, with a blank line between each, and write the result to `master-skills.md` in the project root, overwriting whatever was there before.
+Fetch all skills in parallel. Then concatenate them in the order they appear in `.skills`, with a blank line between each. Compare the assembled content with the existing `master-skills.md` in the project root:
+
+- If the content is identical, leave `master-skills.md` untouched and report that it is already up to date.
+- If the content differs, write the assembled content to `master-skills.md`.
+- If `master-skills.md` does not exist, create it.
 
 ## Step 2 — Copy skill-bundled files
 
@@ -154,7 +158,7 @@ If any of these files already exist, leave them untouched — do not overwrite o
 
 When done, report:
 - Which skills were fetched successfully
-- The total line count of the new `master-skills.md`
+- The total line count of `master-skills.md`, and whether it was created, updated, or already up to date
 - Any skills that failed to fetch (404 or network error)
 - Which bundled files were copied (grouped by skill), and any that were skipped due to conflicts
 - Whether `.github/copilot-instructions.md`, `CLAUDE.md`, and `prototype-specific-agent-instructions.md` were created or already existed
