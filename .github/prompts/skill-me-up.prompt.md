@@ -60,15 +60,6 @@ After all questions are resolved, write any newly collected answers to `.skill-a
 - [off] `workflow/migrate-non-iris-to-iris`
 - [off] `workflow/vercel-password`
 
-**`default-product`** — only if `platform/iris-react-with-shell` was chosen: *"Which product should load by default when the app opens?"*
-
-- Active Roles / On-Demand Services / Identity Manager / Safeguard
-
-Once confirmed, update the following three files in `src/iris-shell/` to reflect the chosen default:
-- `src/lib/router.ts` — set `const DEFAULT` to the correct hash (`#/insights` for Active Roles, `#/services` for On-Demand Services, `#/identity` for Identity Manager, `#/safeguard` for Safeguard)
-- `src/lib/verticals.ts` — set `defaultRoute` on the matching vertical record to the same hash
-- `src/lib/productMenu.tsx` — ensure the matching product entry is first in the list and its `route` matches
-
 **`git-remote`** — only if `workflow/git` was selected: *"What is the GitHub repo URL for this project?"*
 
 **`figma-url`** — only if `workflow/figma-mcp` or `workflow/figma-write-to-canvas` was selected: *"What is the Figma file URL for this project?"* Give the user two options:
@@ -122,7 +113,7 @@ The `## Resources` section contains directory copy mappings, one per line, in th
 source-folder/ -> dest-folder/
 ```
 
-- `source-folder/` is a path relative to `skill-resources/{skill-name}/` in the up-skill repo
+- `source-folder/` is a path relative to `skill-resources/{skill-name}/` in the up-skill repo. Resolve it as a normalized path, so `../` may be used when a bundled resource is stored under a shared sibling folder.
 - `dest-folder/` is the destination path relative to this project's root
 
 For each mapping, use the zip download approach:

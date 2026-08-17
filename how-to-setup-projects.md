@@ -36,9 +36,8 @@ The AI will ask you these questions in order:
 3. Which platform this project uses
 4. Which workflow skills apply
 5. Follow-up questions for specific skills:
-   - **`platform/iris-react-with-shell`** — which product loads by default (Active Roles, On-Demand Services, Identity Manager, or Safeguard)
    - **`workflow/git`** — GitHub repo URL
-   - **`workflow/figma-mcp`** — Figma file URL
+   - **`workflow/figma-mcp`** or **`workflow/figma-write-to-canvas`** — Figma file URL
 
 **Platform — pick one:**
 
@@ -76,6 +75,12 @@ workflow/vercel-password
 | `workflow/vercel-publish` | If the project deploys to Vercel |
 | `workflow/migrate-non-iris-to-iris` | Migrating a non-Iris app to Iris-UI |
 | `workflow/vercel-password` | Password gate for Vercel preview deployments |
+
+The write-to-canvas skill documents workflows provided by Figma's MCP server.
+Install the Figma MCP plugin for the agent, or download the skills from the
+[Figma MCP skills repository](https://github.com/figma/mcp-server-guide/tree/main/skills).
+This Up-Skill repository provides project guidance but does not install those
+Figma skills or create their slash commands.
 
 ---
 

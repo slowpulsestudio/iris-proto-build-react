@@ -83,4 +83,4 @@ The AI panel (`AiPanel`) attaches context from the current page via `setAiContex
 ---
 
 ## Resources
-poc-iris-react-main/ -> src/iris-shell/
+../iris-shell/poc-iris-react-main/ -> src/iris-shell/
