@@ -5,10 +5,17 @@ https://help.figma.com/hc/en-us/articles/40219873508247-Workflow-lab-Code-to-can
 
 ---
 
+**Always use the remote MCP server**
+All Figma MCP work uses the remote server (`https://mcp.figma.com/mcp`). Never use the desktop MCP server. The desktop app does not need to be open.
+
+**A failed response looks like:**
+- Connecting to the desktop MCP server instead of the remote one
+- Assuming the desktop app must be open before Figma MCP tools will work
+
+---
+
 **Write to canvas goes code → Figma, not the other way**
 The write-to-canvas skills place real design frames onto the Figma canvas from running code. They do not generate code. Use the `figma-mcp` skill for the reverse direction (reading from Figma to implement code).
-
-The remote MCP server (`https://mcp.figma.com/mcp`) is required. The write-to-canvas skills are not available on the desktop MCP server.
 
 ---
 

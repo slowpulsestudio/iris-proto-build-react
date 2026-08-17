@@ -2,15 +2,23 @@
 
 ---
 
+**Always use the remote MCP server**
+All Figma MCP work uses the remote server (`https://mcp.figma.com/mcp`). Never use the desktop MCP server. The desktop app does not need to be open.
+
+**A failed response looks like:**
+- Connecting to the desktop MCP server instead of the remote one
+- Assuming the desktop app must be open before Figma MCP tools will work
+
+---
+
 **Figma MCP is the only source of truth for design values**
-All colours, spacing, radii, font sizes, and component structures must come from Figma via the MCP tools — never guessed, hardcoded, or inferred from screenshots. The Figma desktop app must be open for the MCP tools to work.
+All colours, spacing, radii, font sizes, and component structures must come from Figma via the MCP tools — never guessed, hardcoded, or inferred from screenshots.
 
 **A failed response looks like:**
 - Opening the Figma link in a browser tab, or using `get_screenshot`, instead of the `get_metadata` / `get_design_context` / `get_variable_defs` MCP tools
 - Treating a blocked or login-walled browser tab as proof that Figma access is broken — the MCP tools are what matter, not the browser
 - Hardcoding a colour, spacing value, radius, font size, or component structure instead of pulling it from Figma
 - Proceeding by estimating or guessing a value when the MCP tools returned nothing, instead of stopping
-- Starting any Figma-based work without first confirming the Figma desktop app is open
 
 ---
 
