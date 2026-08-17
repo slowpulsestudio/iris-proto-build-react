@@ -36,7 +36,7 @@ The AI will ask you these questions in order:
 3. Which platform this project uses
 4. Which workflow skills apply
 5. Follow-up questions for specific skills:
-   - **`platform/iris-react-with-shell`** — which product loads by default (Active Roles, On-Demand Services, Identity Manager, or Safeguard)
+   - **`platform/iris-react-with-shell`** — which product loads by default (Active Roles, On-Demand Services, Identity Manager, or Safeguard), and which URL route or deep link opens by default
    - **`workflow/git`** — GitHub repo URL
    - **`workflow/figma-mcp`** — Figma file URL
 
