@@ -1,7 +1,5 @@
 # How to set up a new project with Up-Skill
 
----
-
 ## What this does
 
 Up-Skill is a library of AI instruction files. When you start a new project, you pick the ones that apply, combine them into one file, and point your AI assistant at it. From that point on the AI knows your rules.
@@ -14,13 +12,15 @@ Up-Skill is a library of AI instruction files. When you start a new project, you
 2. Open the Copilot Chat panel.
 3. Paste this message and send it:
 
+```
    > Fetch `https://raw.githubusercontent.com/slowpulsestudio/iris-proto-build-react/main/.github/prompts/skill-me-up.prompt.md` and save it to `.github/prompts/skill-me-up.prompt.md` in this project.
+```
 
 ---
 
 ## Step 2 — Run "Skill me up"
 
-Open the project in VS Code. In the Copilot chat panel, type:
+In the Copilot chat panel, type:
 
 ```
 /skill-me-up
