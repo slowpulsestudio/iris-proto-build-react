@@ -8,11 +8,13 @@ Up-Skill is a library of AI instruction files. When you start a new project, you
 
 ---
 
-## Step 1 — Copy the `.github/` folder into your project
+## Step 1 — Get the prompt file into your project
 
-Copy the entire `.github/` folder from this repo into the root of your new project. It contains all the prompt files already in the right place:
+1. Open your new project folder in VS Code.
+2. Open the Copilot Chat panel.
+3. Paste this message and send it:
 
-Only include `migrate-non-iris-to-iris.prompt.md` if you need to move from one platform to iris-react — otherwise delete it after copying.
+   > Fetch `https://raw.githubusercontent.com/slowpulsestudio/iris-proto-build-react/main/.github/prompts/skill-me-up.prompt.md` and save it to `.github/prompts/skill-me-up.prompt.md` in this project.
 
 ---
 
