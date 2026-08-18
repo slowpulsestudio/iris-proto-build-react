@@ -2,6 +2,16 @@
 
 ---
 
+**Verify the Figma MCP connection before relying on it**
+Connection is set up once during `/skill-me-up` (Figma's Dev Mode → MCP → Clients → **Get Figma integration** — never manual `mcp.json` edits or "Add MCP Server"). If both `figma-read-from-mcp` and `figma-write-to-canvas` are in use, that setup only happens once. Before doing any Figma MCP work in a session, confirm the connection still works with a real tool call (e.g. `get_metadata` on the file in `.figma-url`) rather than assuming it from a prior setup.
+
+**A failed response looks like:**
+- Giving manual `mcp.json` JSON snippets or "Add MCP Server" command-palette steps instead of pointing back to the Dev Mode → MCP → Clients flow
+- Assuming the connection still works without a real tool call, especially in a new session
+- Re-running the full connection walkthrough when it's already confirmed working
+
+---
+
 **Always use the remote MCP server**
 All Figma MCP work uses the remote server (`https://mcp.figma.com/mcp`). Never use the desktop MCP server. The desktop app does not need to be open.
 

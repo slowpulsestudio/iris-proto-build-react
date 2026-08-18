@@ -37,7 +37,7 @@ The AI will ask you these questions in order:
 4. Which workflow skills apply
 5. Follow-up questions for specific skills:
    - **`workflow/git`** — GitHub repo URL
-   - **`workflow/figma-mcp`** or **`workflow/figma-write-to-canvas`** — Figma file URL
+   - **`workflow/figma-read-from-mcp`** or **`workflow/figma-write-to-canvas`** — Figma file URL
 
 **Platform — pick one:**
 
@@ -52,7 +52,7 @@ platform/iris-react-with-shell
 workflow/general
 workflow/architecture
 workflow/deep-linking
-workflow/figma-mcp
+workflow/figma-read-from-mcp
 workflow/figma-write-to-canvas
 workflow/git
 workflow/testing
@@ -68,7 +68,7 @@ workflow/vercel-password
 | `workflow/general` | Core execution rules — always include |
 | `workflow/architecture` | General code structure rules |
 | `workflow/deep-linking` | URL-addressable tree navigation |
-| `workflow/figma-mcp` | If the project uses Figma for design |
+| `workflow/figma-read-from-mcp` | If the project uses Figma for design |
 | `workflow/figma-write-to-canvas` | Writing design frames to Figma canvas from code |
 | `workflow/git` | Source control rules |
 | `workflow/testing` | Testing standards |

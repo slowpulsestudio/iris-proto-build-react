@@ -1,7 +1,7 @@
 ---
 mode: agent
 description: Rebuild master-skills.md by fetching the latest skill files from the up-skill repo on GitHub, and copy any skill-bundled files into this project.
-version: 1
+version: 3
 ---
 
 ## Step -1 — Self-update check
@@ -53,7 +53,7 @@ After all questions are resolved, write any newly collected answers to `.skill-a
 
 - [on] `workflow/architecture`
 - [on] `workflow/deep-linking`
-- [on] `workflow/figma-mcp`
+- [on] `workflow/figma-read-from-mcp`
 - [off] `workflow/figma-write-to-canvas`
 - [on] `workflow/git`
 - [on] `workflow/testing`
@@ -63,7 +63,7 @@ After all questions are resolved, write any newly collected answers to `.skill-a
 
 **`git-remote`** — only if `workflow/git` was selected: *"What is the GitHub repo URL for this project?"*
 
-**`figma-url`** — only if `workflow/figma-mcp` or `workflow/figma-write-to-canvas` was selected: *"What is the Figma file URL for this project?"* Give the user two options:
+**`figma-url`** — only if `workflow/figma-read-from-mcp` or `workflow/figma-write-to-canvas` was selected: *"What is the Figma file URL for this project?"* Give the user two options:
 - Paste the URL now — save it to `.figma-url` in the project root
 - *"I'll paste it in this chat when I have it"* — reply: *"No problem — paste the Figma URL in this chat whenever you're ready and I'll save it to `.figma-url`."* then continue setup. When the user later pastes a URL starting with `https://www.figma.com/`, write it to `.figma-url`.
 
@@ -93,6 +93,21 @@ If `workflow/git` is in the skills list, check whether a git remote is already c
 - If **no remote is set** and no URL was provided, ask: *"What is the GitHub repo URL for this project?"* then follow the steps above.
 
 Do not proceed to the next step until this is resolved.
+
+## Step 0c — Connect Figma MCP (if applicable)
+
+If `workflow/figma-read-from-mcp` or `workflow/figma-write-to-canvas` is in the skills list, the Figma MCP server must be connected before continuing. If both skills are selected, this only needs to happen once — do not repeat it.
+
+First check whether it's already connected: call `get_metadata` on the file in `.figma-url` (or a lightweight `use_figma` read). If real data comes back, the connection already works — skip the walkthrough below.
+
+If it does not work, walk the user through connecting via Figma's own UI. Never write or edit `mcp.json` by hand, never use VS Code's "Add MCP Server" command, and never consider a non-cloud/local server address:
+
+1. Open the Figma desktop app (or figma.com), open the target file, and switch to **Dev Mode**.
+2. Open the **MCP** panel and go to **Clients**.
+3. Next to **Visual Studio Code**, click **+** / **Get Figma integration**.
+4. Figma auto-installs the integration, opens VS Code, and completes the connection automatically — no config file, no copy-pasted URL, no command palette steps.
+
+After the walkthrough, call `get_metadata` again to confirm the connection now works before continuing to Step 1.
 
 ## Step 1 — Rebuild master-skills.md
 

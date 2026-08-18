@@ -23,7 +23,7 @@ skills/
         architecture.md
         testing.md
         git.md
-        figma-mcp.md
+        figma-read-from-mcp.md
         figma-write-to-canvas.md
         vercel-publish.md
         vercel-password.md
