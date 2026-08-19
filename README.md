@@ -10,6 +10,24 @@ Projects should **not** point AI agents directly at individual skill files. Inst
 
 This approach avoids relying on AI agents to resolve nested imports or follow multiple levels of references, which can produce inconsistent results.
 
+## Setup Steps
+
+1. Copy and paste this prompt into your VSCode Copilot using Claude Sonnet 5:
+
+```
+   > Fetch `https://raw.githubusercontent.com/slowpulsestudio/iris-proto-build-react/main/.github/prompts/skill-me-up.prompt.md` and save it to `.github/prompts/skill-me-up.prompt.md` in this project.
+```
+
+2. Run "Skill me up"
+
+In the same Copilot chat panel run this prompt and the setup steps will commence. It can take 15 mins:
+
+```
+/skill-me-up
+```
+
+3. Question time: the agent will ask you a bunch of questions to finish the setup and you are done!
+
 ## UX Research considerations
 
 If you really think about UX Research best practise - we don't want auto-refresh of Iris UI git update imports or fancy branching. When we decide to test a specific prototype - we want to stamp the current state in time and store that as a frozen branch for future reference.
