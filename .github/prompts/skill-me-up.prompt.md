@@ -1,7 +1,7 @@
 ---
 mode: agent
 description: Rebuild master-skills.md by fetching the latest skill files from the up-skill repo on GitHub, and copy any skill-bundled files into this project.
-version: 14
+version: 15
 ---
 
 ## Cross-platform execution guardrails
@@ -316,3 +316,18 @@ Check `.skill-answers` for `figma-build-mode`.
   4. Build locally and ask "are you happy with this change?" before moving to the next discrepancy
   5. Continue until all discrepancy rows are resolved or explicitly deferred
 - If no: stop there — no further action.
+
+## Step 6 — Final local run handoff (always)
+
+After all previous steps finish, regardless of route taken, run this final handoff:
+
+1. Run a local build (`pnpm build`) and report whether it passed.
+2. Start or reuse a local dev server (`pnpm dev`).
+3. Provide the running localhost URL as a clickable link in the final response.
+
+The final user-facing message must explicitly state:
+- that a build was run
+- whether it passed or failed
+- the local server URL to open
+
+If the server cannot be started, explain the exact blocker and the next single command the user should run.
