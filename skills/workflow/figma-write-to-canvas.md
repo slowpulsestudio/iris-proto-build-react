@@ -39,9 +39,11 @@ Read the `.figma-url` file at the project root before any Figma MCP work. The fi
 
 | Goal | Figma skill |
 | --- | --- |
-| Put a running local prototype into Figma | `/prototype-to-figma` |
+| Put a running local prototype into Figma | No dedicated skill for this exact workflow — trigger Figma's `generate_figma_design` tool ("code to canvas") with a plain-language prompt, e.g. "Start a local server for my app and capture the UI in this Figma file: `<URL>`" |
 | Put coded screens and tokens into Figma | `/figma-generate-design` and `/figma-generate-library` |
 | Explore a design direction from a problem statement | `/figma-use` |
+
+`figma-generate-design`, `figma-generate-library`, and `figma-use` are real Figma-provided skills — this repo does not install them. They ship automatically via the Figma plugin in supported clients (Claude Code, Cursor, VS Code, etc.) once the remote MCP server is connected, or can be downloaded manually from Figma's `mcp-server-guide` repo on GitHub if a client doesn't support plugins. If one is missing, that's a client/environment setup issue — report it as such rather than inventing a substitute command.
 
 ## Default approach: rough reference, then design system
 
@@ -51,7 +53,7 @@ Before starting any capture, state the plan to the Designer in one short sentenc
 
 Then follow these steps, in order:
 
-1. **Capture a rough reference** — use `/prototype-to-figma` (or `generate_figma_design`) to capture the running prototype pixel-for-pixel. This is raw DOM/CSS, disconnected from the design system, and exists only as a temporary visual reference.
+1. **Capture a rough reference** — prompt Figma's `generate_figma_design` tool in plain language to capture the running prototype pixel-for-pixel (e.g. "Start a local server for my app and capture the UI in this Figma file: `<URL>`"). This is raw DOM/CSS, disconnected from the design system, and exists only as a temporary visual reference.
 2. **Look for an existing screen to clone** — before building anything from scratch, search the target Figma file/page for a screen that's already structurally close to the target. Cloning and adapting real, already-composed component instances (auto-layout, bound variables) is far more reliable than assembling one from `search_design_system` results component-by-component.
 3. **Rebuild using the Iris design system** — always real Iris UI components and Iris UI Variables (tokens), never disconnected colours, shapes, or hardcoded text styling. Detach nested instances only where a structural change is required (column reorder, re-parenting children) — Figma blocks structural edits on instance descendants.
 4. **Refine one section at a time** — screenshot after each section (header, table, action bar, etc.) before moving to the next, and fix issues one at a time rather than making sweeping changes across the whole screen at once.
@@ -75,19 +77,16 @@ Then follow these steps, in order:
 
 ## How to use it
 
-Start the local app if using `/prototype-to-figma`. Then include all of the following in the prompt:
+Start the local app. Then include all of the following in the prompt:
 
-- The Figma skill to run
-- The local app URL or problem statement
+- The local app URL, or the screens/problem statement if using a skill instead
 - The target Figma file URL
 - The screens, components, and token constraints to follow
 
 Example:
 
 ```text
-/prototype-to-figma
-
-Capture the running prototype at http://localhost:5173 in this Figma file:
+Start a local server for my app and capture the UI at http://localhost:5173 into this Figma file:
 <Figma file URL>
 
 Include every unique screen. Use the existing design-system components and map
