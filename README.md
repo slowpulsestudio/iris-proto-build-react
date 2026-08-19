@@ -89,7 +89,29 @@ Each file should cover **one topic only** and remain reusable across projects.
 
 
 
-# Extra Details
+# Appendix
+
+
+## Generated Project Structure
+
+After running `/skill-me-up`, a downstream consumer project will contain the following files:
+
+| File | What it's for |
+|---|---|
+| `.github/prompts/skill-me-up.prompt.md` | The setup prompt itself, fetched in Step 1 and self-updating on every run |
+| `.skills` | Pseudo-import list of the skill names selected for this project |
+| `.skill-answers` | Stores answers to setup questions so reruns don't re-ask them |
+| `.figma-url` | The project's Figma file URL, if a Figma workflow skill was selected |
+| `master-skills.md` | The combined, flattened instruction file assembled from the selected skills — the AI's actual source of truth |
+| `example-prompts.md` | Example prompts and direction to give the agent, refreshed from this repo on every run |
+| `.github/copilot-instructions.md` | Points Copilot at `master-skills.md` and `prototype-specific-agent-instructions.md` |
+| `CLAUDE.md` | Points Claude at `master-skills.md` and `prototype-specific-agent-instructions.md` |
+| `prototype-specific-agent-instructions.md` | Project-specific instructions (design decisions, constraints, known issues) — never overwritten by `/skill-me-up` |
+| `README.md` | Created only if it doesn't already exist (checked on every run, including reruns) — shows the prototype name, description, Figma link, this repo as the upstream generator, and the skills used to assemble `master-skills.md`. Never overwritten once it exists |
+| bundled skill resources (e.g. `src/iris-ui/`, `src/iris-shell/`) | Files copied in from `skill-resources/` for skills that bundle a library or template, per each skill's `## Resources` mapping |
+
+
+
 
 ## Skills Catalogue
 
@@ -116,22 +138,3 @@ Figma skills or create their slash commands.
 
 
 ---
-
-
-## Generated Project Structure
-
-After running `/skill-me-up`, a downstream consumer project will contain the following files:
-
-| File | What it's for |
-|---|---|
-| `.github/prompts/skill-me-up.prompt.md` | The setup prompt itself, fetched in Step 1 and self-updating on every run |
-| `.skills` | Pseudo-import list of the skill names selected for this project |
-| `.skill-answers` | Stores answers to setup questions so reruns don't re-ask them |
-| `.figma-url` | The project's Figma file URL, if a Figma workflow skill was selected |
-| `master-skills.md` | The combined, flattened instruction file assembled from the selected skills — the AI's actual source of truth |
-| `example-prompts.md` | Example prompts and direction to give the agent, refreshed from this repo on every run |
-| `.github/copilot-instructions.md` | Points Copilot at `master-skills.md` and `prototype-specific-agent-instructions.md` |
-| `CLAUDE.md` | Points Claude at `master-skills.md` and `prototype-specific-agent-instructions.md` |
-| `prototype-specific-agent-instructions.md` | Project-specific instructions (design decisions, constraints, known issues) — never overwritten by `/skill-me-up` |
-| `README.md` | Created only if it doesn't already exist (checked on every run, including reruns) — shows the prototype name, description, Figma link, this repo as the upstream generator, and the skills used to assemble `master-skills.md`. Never overwritten once it exists |
-| bundled skill resources (e.g. `src/iris-ui/`, `src/iris-shell/`) | Files copied in from `skill-resources/` for skills that bundle a library or template, per each skill's `## Resources` mapping |
