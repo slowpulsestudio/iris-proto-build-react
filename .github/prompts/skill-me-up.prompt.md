@@ -1,7 +1,7 @@
 ---
 mode: agent
 description: Rebuild master-skills.md by fetching the latest skill files from the up-skill repo on GitHub, and copy any skill-bundled files into this project.
-version: 11
+version: 12
 ---
 
 ## Cross-platform execution guardrails
@@ -28,6 +28,21 @@ Compare the fetched `version:` frontmatter field to the `version:` field in the 
 - **If they differ:** tell the user: *"There are updates available for the skill-me-up prompt. Would you like me to update it now? You'll need to run `/skill-me-up` again after."*
   - If yes: overwrite `.github/prompts/skill-me-up.prompt.md` with the fetched version and stop. Do not continue setup.
   - If no: continue to Step 0 with the current version.
+
+## Step -0 — Upfront prereq preflight
+
+Before Step 0, run a read-only preflight check for local prerequisites. Do not install anything automatically in this step.
+
+Check and report each item clearly as pass/fail:
+
+1. Git is installed (`git --version`)
+2. Node.js is installed (`node --version`)
+3. pnpm is installed (`pnpm --version`)
+4. The active shell is identified correctly (PowerShell on Windows, zsh/bash on macOS/Linux)
+
+If any check fails, stop and give one exact next command for the user to run, then wait for confirmation before continuing.
+
+If all checks pass, continue to Step 0.
 
 ## Step 0 — Skills setup
 
@@ -113,6 +128,12 @@ Do not proceed to the next step until this is resolved.
 ## Step 0c — Connect Figma MCP (if applicable)
 
 If `workflow/figma-read-from-mcp` or `workflow/figma-write-to-canvas` is in the skills list, the Figma MCP server must be connected before continuing. If both skills are selected, this only needs to happen once — do not repeat it.
+
+Before any MCP connection check or walkthrough, ask exactly:
+
+*"Is this the correct email address for your Figma account?"*
+
+If needed, ask the user to provide the email first, then ask this confirmation question. Do not continue until they confirm.
 
 First check whether it's already connected: call `get_metadata` on the file in `.figma-url` (or a lightweight `use_figma` read). If real data comes back, the connection already works — skip the walkthrough below.
 
