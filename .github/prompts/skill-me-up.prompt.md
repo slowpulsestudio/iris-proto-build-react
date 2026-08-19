@@ -1,7 +1,7 @@
 ---
 mode: agent
 description: Rebuild master-skills.md by fetching the latest skill files from the up-skill repo on GitHub, and copy any skill-bundled files into this project.
-version: 6
+version: 7
 ---
 
 ## Step -1 — Self-update check
@@ -109,7 +109,7 @@ If it does not work, walk the user through connecting via Figma's own UI. Never 
 
 After the walkthrough, call `get_metadata` again to confirm the connection now works before continuing to Step 1.
 
-## Step 1 — Rebuild master-skills.md
+## Step 1 — Rebuild master-skills.md and refresh example-prompts.md
 
 For each skill name, fetch the corresponding skill file from GitHub using this URL pattern:
 
@@ -117,24 +117,25 @@ For each skill name, fetch the corresponding skill file from GitHub using this U
 https://raw.githubusercontent.com/slowpulsestudio/iris-proto-build-react/main/skills/{skill-name}.md
 ```
 
-Fetch all skills in parallel every run, even when `.skills` has not changed, because a skill's upstream content may have changed. If any skill fails to fetch (404 or network error), stop before writing `master-skills.md` and report the failure clearly to the user, listing which skill(s) failed — do not silently omit a failed skill from the concatenated content. Then concatenate them in the order they appear in `.skills`, with a blank line between each. Compare both the current `.skills` selection and the assembled skill content with the existing `master-skills.md` in the project root:
-
-- If the `.skills` selection and assembled content are both unchanged, leave `master-skills.md` untouched and report that it is already up to date.
-- If the `.skills` selection changed or any fetched skill content differs, write the assembled content to `master-skills.md`.
-- If `master-skills.md` does not exist, create it.
-
-## Step 1b — Refresh example-prompts.md
-
-Always fetch the latest example prompts, regardless of which skills are selected — it's general reference material for Designers, not skill-specific:
+In the exact same parallel fetch batch as the skill files above — not a separate step, not a later tool call — also fetch this URL, regardless of which skills are selected (it's general reference material for Designers, not skill-specific):
 
 ```
 https://raw.githubusercontent.com/slowpulsestudio/iris-proto-build-react/main/example-prompts.md
 ```
 
-Compare it to the existing `example-prompts.md` in the project root (if any):
+This file is easy to silently drop because it isn't a "skill" — treat its fetch as mandatory on every single run, with no exceptions, and confirm in your own head that the fetch count is "number of skills + 1" before moving on.
+
+Fetch everything in parallel every run, even when `.skills` has not changed, because upstream content may have changed. If any skill fails to fetch (404 or network error), stop before writing `master-skills.md` and report the failure clearly to the user, listing which skill(s) failed — do not silently omit a failed skill from the concatenated content. Then concatenate the skill files in the order they appear in `.skills`, with a blank line between each. Compare both the current `.skills` selection and the assembled skill content with the existing `master-skills.md` in the project root:
+
+- If the `.skills` selection and assembled content are both unchanged, leave `master-skills.md` untouched and report that it is already up to date.
+- If the `.skills` selection changed or any fetched skill content differs, write the assembled content to `master-skills.md`.
+- If `master-skills.md` does not exist, create it.
+
+Separately, compare the fetched example-prompts.md content to the existing `example-prompts.md` in the project root (if any):
 
 - If it doesn't exist yet, or differs from the fetched content, write the fetched content to `example-prompts.md` in the project root.
 - If it already matches, leave it untouched.
+- This comparison and write must happen every run — do not skip it because `master-skills.md` was unchanged, and do not fold its result silently into the skills report without calling it out on its own line in Step 4.
 
 ## Step 2 — Copy skill-bundled files
 
