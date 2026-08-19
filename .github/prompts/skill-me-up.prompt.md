@@ -212,7 +212,10 @@ Check `.skill-answers` for `vercel-setup`, and whether `.vercel/project.json` ex
 - **If `vercel-setup = done` in `.skill-answers`, OR `.vercel/project.json` exists:** Vercel is already connected — skip this question entirely.
 - **If `vercel-setup = no` in `.skill-answers`:** user previously declined — skip this question entirely.
 - **Otherwise:** ask: *"Would you like me to walk you through setting up auto-publish from your GitHub repo to Vercel?"*
-  - If yes: guide the user through connecting the repo to Vercel via the Vercel dashboard (Import Project → select repo). Once they confirm it's connected, save `vercel-setup = done` to `.skill-answers`.
+  - If yes: guide the user through connecting the repo to Vercel via the Vercel dashboard (Import Project → select repo). Once they confirm it's connected:
+    1. Tell them to turn off **Vercel Authentication** (also called "Require Login") under Project Settings → Deployment Protection (`/~/settings/deployment-protection`) — otherwise preview/snapshot URLs will require a Vercel login to view, blocking Designers and stakeholders who don't have one.
+    2. Point them to the project's **Deployments** tab in the Vercel dashboard — this is where they'll find build status, logs, and the URL for every push going forward.
+    3. Save `vercel-setup = done` to `.skill-answers`.
   - If no: save `vercel-setup = no` to `.skill-answers` and skip.
 
 **If `platform/iris-react-with-shell` is active AND (`workflow/figma-read-from-mcp` or `workflow/figma-write-to-canvas` is active) AND `.figma-url` exists** (ask after the Vercel question is resolved):

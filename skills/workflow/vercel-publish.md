@@ -26,3 +26,12 @@ Secrets and environment variables are set in the Vercel dashboard under Project 
 **A failed response looks like:**
 - Adding a secret or API key to any file in the repo instead of the Vercel dashboard
 - Suggesting `.env` as the way to set variables for the deployed site — `.env` is for local development only; Vercel reads its own dashboard-configured variables at deploy time
+
+---
+
+**Deployment Protection must be off for shareable links to work**
+Vercel's own **Vercel Authentication** / "Require Login" setting (Project Settings → Deployment Protection, `/~/settings/deployment-protection`) is on by default for some account/team types and blocks anyone without a Vercel login from viewing preview or snapshot URLs. This must be turned off right after first connecting the repo, otherwise Designers and stakeholders can't open the links they're sent. This is separate from the `vercel-password` skill's custom middleware gate, which is opt-in and only protects non-`main` branches.
+
+**A failed response looks like:**
+- Sharing a snapshot/preview URL without confirming Deployment Protection is off first
+- Confusing Vercel's native Deployment Protection with the `vercel-password` middleware skill — they are unrelated settings
