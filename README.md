@@ -1,6 +1,6 @@
 # AI Prototyping Skills
 
-This repository contains a reusable library of AI prototyping instruction files ("skills") that can be shared across multiple software projects.
+This repository contains a reusable library of AI prototyping instruction files ("skills") that can be shared across multiple prototype projects.
 
 
 ## Purpose
@@ -13,10 +13,14 @@ Instead of cluttered lists of skills, a single `master-skills.md` file that beco
 
 This approach avoids relying on AI agents to resolve nested imports or follow multiple levels of references, which can produce inconsistent results.
 
-This also pulls directly from the Iris Figma libraries, and the specific product master libraries also.
+This pulls components and tokens directly from the Iris Figma libraries, the specific product master libraries, but also the actual code from the `poc-iris-react` repo.
 
 
 ## Setup Steps
+
+0. Setup your project
+
+Create a fresh Github repo, create a new folder on your computer and open that folder in VSCode
 
 1. Fetch the initation prompt
 
