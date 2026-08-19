@@ -74,6 +74,36 @@ Never hardcode a colour or token value that varies by theme.
 
 ---
 
+## Motion (current baseline)
+
+Motion should be fast, subtle, and purposeful. If motion does not help users understand what changed, do not add it.
+
+Current principles:
+- Functional: explain state changes, do not decorate
+- Fast: do not slow core workflows
+- Consistent: similar interactions behave similarly
+- Subtle: calm, professional transitions
+
+Current token usage:
+- Enter: `--oi-motion-ease-enter`
+- Exit: `--oi-motion-ease-exit`
+- Move: `--oi-motion-ease-move`
+- None: `--oi-motion-ease-none`
+- Snap: `--oi-motion-duration-snap`
+- Short: `--oi-motion-duration-short`
+- Default: `--oi-motion-duration-default`
+- Long: `--oi-motion-duration-long`
+- Loop: `--oi-motion-duration-loop`
+
+Usage rules:
+- Prefer opacity plus small movement (about 8px translate)
+- Keep interaction feedback short (`--oi-motion-duration-short`)
+- Respect reduced-motion settings
+
+The detailed motion pattern page in Figma is pending creation. Until it exists, use this baseline and validate implementation against Storybook behavior.
+
+---
+
 ## AI panel
 
 The AI panel (`AiPanel`) attaches context from the current page via `setAiContext([...])` + `setAiOpen(true)` in `AppShellContext`. The panel clears context on send via `clearAiContext()`. Chat history is persisted per-vertical in `localStorage` and capped at 50 conversations.

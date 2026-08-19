@@ -29,7 +29,10 @@ export interface Vertical {
   id: VerticalId;
   /** Display name in the product chooser and global sidebar header. */
   label: string;
-  /** Figma sub-library URL for this product, when available. */
+  /**
+   * Product-specific Figma sub-library URL for this vertical.
+   * This is additive to `IRIS_GLOBAL_LIBRARIES`, not a replacement.
+   */
   subLibraryUrl?: string;
   /** Glyph used by the product chooser entry for this vertical. */
   productIcon: ProductIconName;
@@ -46,6 +49,27 @@ export interface Vertical {
   secondarySidebar?: VerticalSecondarySidebar;
 }
 
+export interface IrisGlobalLibraries {
+  components: string;
+  icons: string;
+  variables: string;
+  charts: string;
+  /** Optional master URL for motion patterns, when available. */
+  motionPatterns?: string;
+}
+
+/**
+ * Global Iris design libraries used across all verticals.
+ * Each vertical may also provide `subLibraryUrl` for product-specific additions.
+ */
+export const IRIS_GLOBAL_LIBRARIES: IrisGlobalLibraries = {
+  components: 'https://www.figma.com/design/kgmR6KueZaAaS1t9m3WLiQ/Iris-UI--UI-Kit?m=auto',
+  icons: 'https://www.figma.com/design/NOXsUiIDjq0lpRXrAXySLn/Iris-UI--Icons?m=auto&t=7AMUiiJR0qad7aso-1',
+  variables: 'https://www.figma.com/design/QwUAD0F9iGg2ePmEKPk22J/Iris-UI--Variables?m=auto',
+  charts: 'https://www.figma.com/design/udiUmrkIKf7EqwsAfZft0x/Iris-UI--Charts?m=auto&t=7AMUiiJR0qad7aso-6',
+  motionPatterns: 'PENDING: Create Figma motion pattern page',
+};
+
 const COMMON_OTHER_NAV: VerticalNavEntry[] = [
   { value: 'settings', label: 'Settings', icon: 'GearFine', disabled: true },
   { value: 'help', label: 'Help with', icon: 'Question', disabled: true },
@@ -54,7 +78,7 @@ const COMMON_OTHER_NAV: VerticalNavEntry[] = [
 export const ACTIVE_ROLES_VERTICAL: Vertical = {
   id: 'active-roles',
   label: 'Active Roles',
-  subLibraryUrl: '',
+  subLibraryUrl: 'https://www.figma.com/design/IlG4nne9VhqpONzqc0tfKg/ARS---Master?m=auto',
   productIcon: 'active-roles',
   defaultRoute: '#/insights',
   aiTitle: 'Active Roles AI',
@@ -82,7 +106,7 @@ export const ACTIVE_ROLES_VERTICAL: Vertical = {
 export const SERVICES_VERTICAL: Vertical = {
   id: 'services',
   label: 'On Demand Services',
-  subLibraryUrl: '',
+  subLibraryUrl: 'https://www.figma.com/design/tisOoVX7lkvXqwHGCWdx78/On-Demand---Master?m=auto&t=7AMUiiJR0qad7aso-6',
   productIcon: 'services',
   defaultRoute: '#/services',
   aiTitle: 'On Demand Services AI',
@@ -97,7 +121,7 @@ export const SERVICES_VERTICAL: Vertical = {
 export const IDENTITY_MANAGER_VERTICAL: Vertical = {
   id: 'identity-manager',
   label: 'Identity Manager',
-  subLibraryUrl: '',
+  subLibraryUrl: 'https://www.figma.com/design/DHXdGN5yW90DCi5a2ga9Yh/IM---Master?m=auto&t=7AMUiiJR0qad7aso-6',
   productIcon: 'identity-manager',
   defaultRoute: '#/identity',
   aiTitle: 'Identity Manager AI',
