@@ -29,6 +29,8 @@ export interface Vertical {
   id: VerticalId;
   /** Display name in the product chooser and global sidebar header. */
   label: string;
+  /** Figma sub-library URL for this product, when available. */
+  subLibraryUrl?: string;
   /** Glyph used by the product chooser entry for this vertical. */
   productIcon: ProductIconName;
   /** Route hash to navigate to when this vertical is selected. */
@@ -52,6 +54,7 @@ const COMMON_OTHER_NAV: VerticalNavEntry[] = [
 export const ACTIVE_ROLES_VERTICAL: Vertical = {
   id: 'active-roles',
   label: 'Active Roles',
+  subLibraryUrl: '',
   productIcon: 'active-roles',
   defaultRoute: '#/insights',
   aiTitle: 'Active Roles AI',
@@ -79,6 +82,7 @@ export const ACTIVE_ROLES_VERTICAL: Vertical = {
 export const SERVICES_VERTICAL: Vertical = {
   id: 'services',
   label: 'On Demand Services',
+  subLibraryUrl: '',
   productIcon: 'services',
   defaultRoute: '#/services',
   aiTitle: 'On Demand Services AI',
@@ -93,6 +97,7 @@ export const SERVICES_VERTICAL: Vertical = {
 export const IDENTITY_MANAGER_VERTICAL: Vertical = {
   id: 'identity-manager',
   label: 'Identity Manager',
+  subLibraryUrl: '',
   productIcon: 'identity-manager',
   defaultRoute: '#/identity',
   aiTitle: 'Identity Manager AI',
@@ -112,6 +117,7 @@ export const IDENTITY_MANAGER_VERTICAL: Vertical = {
 export const SAFEGUARD_VERTICAL: Vertical = {
   id: 'safeguard',
   label: 'Safeguard',
+  subLibraryUrl: '',
   productIcon: 'safeguard',
   defaultRoute: '#/safeguard',
   aiTitle: 'Safeguard AI',

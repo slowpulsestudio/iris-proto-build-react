@@ -114,18 +114,20 @@ After running `/skill-me-up`, a downstream consumer project will contain the fol
 
 The Iris Shell foundation is included by default in every generated project.
 
+The `iris-react-with-shell` baseline is manually updated from `https://github.com/oi-eng/poc-iris-react`.
+
 | Skill | When to include |
 |---|---|
 | `workflow/general` | Core execution rules — always include |
 | `workflow/architecture` | General code structure rules |
 | `workflow/deep-linking` | URL-addressable tree navigation |
-| `workflow/figma-read-from-mcp` | If the project uses Figma for design |
+| `workflow/figma-read-from-mcp` | If the project uses Figma for design. Automatically gathers your products master library. |
 | `workflow/figma-write-to-canvas` | Writing design frames to Figma canvas from code |
 | `workflow/git` | Source control rules |
 | `workflow/testing` | Testing standards |
 | `workflow/windows` | Windows and PowerShell-safe execution guidance |
-| `workflow/vercel-publish` | If the project deploys to Vercel |
 | `workflow/migrate-non-iris-to-iris` | Migrating a non-Iris app to Iris-UI |
+| `workflow/vercel-publish` | If the project deploys to Vercel |
 | `workflow/vercel-password` | Password gate for Vercel preview deployments |
 
 The write-to-canvas skill documents workflows provided by Figma's MCP server.
@@ -136,10 +138,3 @@ Figma skills or create their slash commands.
 
 
 ---
-
-TODO
-
-
-Add ARS-Libraries and concept for other libraries
-What Product is your prototype for? Add New
-What ppage

@@ -1,6 +1,8 @@
-# Iris Shell Rules
+# Iris React With Shell Rules
 
 The Iris Shell is a multi-product navigation wrapper built on Iris UI foundations. It provides a consistent app header, global sidebar, secondary sidebar, and AI panel across all products. Use the reference implementation at `src/iris-shell/` — integrate from it, do not copy-paste wholesale.
+
+This shell baseline is manually synced from `https://github.com/oi-eng/poc-iris-react`.
 
 ---
 

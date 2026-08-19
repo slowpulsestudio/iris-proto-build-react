@@ -207,7 +207,7 @@ Check `.skill-answers` for `shell-page`.
 
 - **If it exists:** skip silently.
 - **If missing:**
-  1. Read `src/lib/verticals.ts` to find the available products. Ask: *"Which product is this design for?"* listing each vertical's `label` as an option. Save the choice as `shell-product` in `.skill-answers`.
+  1. Read `src/lib/verticals.ts` to find the available products. Ask: *"What product is your prototype for?"* listing each vertical's `label` as an option. Save the choice as `shell-product` in `.skill-answers`.
   2. Read that vertical's `mainNav` entries. Ask: *"Where should we build your design? In an existing left-navigation page, or a new one?"* List every existing `mainNav` entry for that product (including disabled/placeholder pages) as options, plus an **"Add new page"** option.
   3. If an existing page is picked, use its `value` as `shell-page`.
   4. If "Add new page" is picked, ask for the new page's name and use it as `shell-page`. Add it as a new `mainNav` entry in that vertical in `verticals.ts` — no need to explain the mechanics of `verticals.ts`, product chooser, or routing to the Designer, just do it.
