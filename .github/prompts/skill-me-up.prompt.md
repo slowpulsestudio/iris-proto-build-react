@@ -136,20 +136,16 @@ Do not proceed to the next step until this is resolved.
 
 If `workflow/figma-read-from-mcp` or `workflow/figma-write-to-canvas` is in the skills list, the Figma MCP server must be connected before continuing. If both skills are selected, this only needs to happen once — do not repeat it.
 
-Before any MCP connection check or walkthrough, ask exactly:
+First check whether it's already connected: call `get_metadata` on the file in `.figma-url` (or a lightweight `use_figma` read). If real data comes back, the connection already works — report the connected Figma account email address (if available from the MCP response) and skip the walkthrough below. If the call fails, report the exact error message the tool returned (don't paraphrase or invent a different cause) and tell the user the Figma MCP is not connected before proceeding to the walkthrough.
 
-*"Is this the correct email address for your Figma account?"*
+Note: the MCP server requires an active browser/desktop tab currently open on that design (or FigJam) file — the error `"The MCP server is only available if your active tab is a design or FigJam file"` means no such tab is active right now, not that the account/integration is disconnected. Point the user at that distinction rather than assuming the whole integration is broken.
 
-If needed, ask the user to provide the email first, then ask this confirmation question. Do not continue until they confirm.
-
-First check whether it's already connected: call `get_metadata` on the file in `.figma-url` (or a lightweight `use_figma` read). If real data comes back, the connection already works — skip the walkthrough below.
-
-If it does not work, walk the user through connecting via Figma's own UI. Never write or edit `mcp.json` by hand, never use VS Code's "Add MCP Server" command, and never consider a non-cloud/local server address:
+If it does not work, walk the user through connecting via Figma's own UI (do not act as a workaround yourself: never write or edit `mcp.json` by hand, never use VS Code's "Add MCP Server" command, and never consider a non-cloud/local server address). Give the user only these plain steps, with no meta-commentary about what you're avoiding:
 
 1. Open the Figma desktop app (or figma.com), open the target file, and switch to **Dev Mode**.
 2. Open the **MCP** panel and go to **Clients**.
 3. Next to **Visual Studio Code**, click **+** / **Get Figma integration**.
-4. Figma auto-installs the integration, opens VS Code, and completes the connection automatically — no config file, no copy-pasted URL, no command palette steps.
+4. Figma auto-installs the integration and completes the connection to VS Code automatically.
 
 After the walkthrough, call `get_metadata` again to confirm the connection now works before continuing to Step 1.
 
