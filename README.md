@@ -78,7 +78,6 @@ skills/
         vercel-password.md
         migrate-non-iris-to-iris.md
     platform/
-        iris-react.md
         iris-react-with-shell.md
 ```
 
@@ -108,7 +107,7 @@ After running `/skill-me-up`, a downstream consumer project will contain the fol
 | `CLAUDE.md` | Points Claude at `master-skills.md` and `prototype-specific-agent-instructions.md` |
 | `prototype-specific-agent-instructions.md` | Project-specific instructions (design decisions, constraints, known issues) — never overwritten by `/skill-me-up` |
 | `README.md` | Created only if it doesn't already exist (checked on every run, including reruns) — shows the prototype name, description, Figma link, this repo as the upstream generator, and the skills used to assemble `master-skills.md`. Never overwritten once it exists |
-| bundled skill resources (e.g. `src/iris-ui/`, `src/iris-shell/`) | Files copied in from `skill-resources/` for skills that bundle a library or template, per each skill's `## Resources` mapping |
+| bundled skill resources (e.g. `src/iris-shell/`) | Files copied in from `skill-resources/` for skills that bundle a library or template, per each skill's `## Resources` mapping |
 
 
 
@@ -117,7 +116,6 @@ After running `/skill-me-up`, a downstream consumer project will contain the fol
 
 | Skill | When to include |
 |---|---|
-| `platform/iris-react` | React + Vite app using the Iris-UI design system |
 | `platform/iris-react-with-shell` | Iris React + app shell, global sidebar, and navigation |
 | `workflow/general` | Core execution rules — always include |
 | `workflow/architecture` | General code structure rules |
@@ -139,3 +137,9 @@ Figma skills or create their slash commands.
 
 
 ---
+
+TODO
+
+Add ARS-Libraries and concept for other libraries
+What Product is your prototype for? Add New
+What ppage

@@ -1,7 +1,7 @@
 ---
 mode: agent
 description: Rebuild master-skills.md by fetching the latest skill files from the up-skill repo on GitHub, and copy any skill-bundled files into this project.
-version: 10
+version: 11
 ---
 
 ## Cross-platform execution guardrails
@@ -31,9 +31,17 @@ Compare the fetched `version:` frontmatter field to the `version:` field in the 
 
 ## Step 0 — Skills setup
 
+`platform/iris-react-with-shell` is now mandatory for all projects. Standalone `platform/iris-react` is retired.
+
 Check whether a `.skills` file exists in the root of this project.
 
-**If `.skills` exists:** read it to get the skill list. Then proceed to Answer tracking below — new questions added to the prompt since the project was first set up will be asked now if their key is missing from `.skill-answers`. After resolving any missing answers, skip to Step 0b.
+**If `.skills` exists:** read it to get the skill list, then normalize it before doing anything else:
+
+- If `platform/iris-react` is present, replace it with `platform/iris-react-with-shell`.
+- If `platform/iris-react-with-shell` is missing, add it.
+- If both platform entries are present, keep only `platform/iris-react-with-shell`.
+
+Write the normalized `.skills` file back immediately, then proceed to Answer tracking below — new questions added to the prompt since the project was first set up will be asked now if their key is missing from `.skill-answers`. After resolving any missing answers, skip to Step 0b.
 
 **If `.skills` does not exist:** proceed to the questions below. Do not improvise or skip ahead — follow the steps exactly as written.
 
@@ -54,10 +62,7 @@ After all questions are resolved, write any newly collected answers to `.skill-a
 
 **`project-description`** — *"In a sentence or two, describe what you're trying to test — or add any relevant context (version, goal, background) that will help the AI understand this prototype."*
 
-**`platform`** — *"Does this project need the Iris ecosystem shell — the title bar and navigation?"*
-
-- Yes → `platform/iris-react-with-shell`
-- No → `platform/iris-react`
+The platform is fixed and must always be `platform/iris-react-with-shell`. Do not ask a platform-selection question.
 
 **`workflow-skills`** — *"`workflow/general` is always included. The skills below are pre-selected by default — deselect any that don't apply, and add any others you need:"*
 
@@ -78,7 +83,7 @@ After all questions are resolved, write any newly collected answers to `.skill-a
 - Paste the URL now — save it to `.figma-url` in the project root
 - *"I'll paste it in this chat when I have it"* — reply: *"No problem — paste the Figma URL in this chat whenever you're ready and I'll save it to `.figma-url`."* then continue setup. When the user later pastes a URL starting with `https://www.figma.com/`, write it to `.figma-url`.
 
-Once all questions are resolved, write the `.skills` file if it doesn't exist yet, using the standard comment header followed by the chosen skills, one per line. Always include `workflow/general` as the first workflow entry:
+Once all questions are resolved, write the `.skills` file if it doesn't exist yet, using the standard comment header followed by the chosen skills, one per line. Always include `platform/iris-react-with-shell` as the platform entry and `workflow/general` as the first workflow entry:
 
 ```
 # This file is only a pseudo-import list for the Up-Skill mechanism — like a

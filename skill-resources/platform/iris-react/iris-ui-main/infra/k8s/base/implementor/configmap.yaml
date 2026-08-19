@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: implementor-config
-  namespace: iris-ui
-data:
-  GITHUB_REPO: "oi-eng/iris-ui"
-  COPILOT_UNSAFE_ALLOW_ALL: "true"
