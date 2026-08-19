@@ -1,7 +1,7 @@
 ---
 mode: agent
 description: Rebuild master-skills.md by fetching the latest skill files from the up-skill repo on GitHub, and copy any skill-bundled files into this project.
-version: 3
+version: 4
 ---
 
 ## Step -1 — Self-update check
@@ -148,6 +148,21 @@ Download the zip once and reuse it for all resource mappings across all skills.
 
 After all files are copied, if `project-name` is known from `.skill-answers`, find `index.html` in the project (check `src/iris-shell/index.html`, `src/iris-ui/index.html`, then the project root) and update the `<title>` tag to the project name. Skip silently if no `index.html` exists.
 
+## Step 2b — Shell page selection (if applicable)
+
+If `platform/iris-react-with-shell` is active, this must be resolved before continuing to Step 3, since it determines where the design gets built and what loads by default. This step happens after Step 2 so `src/lib/verticals.ts` actually exists in the project to read.
+
+Check `.skill-answers` for `shell-page`.
+
+- **If it exists:** skip silently.
+- **If missing:**
+  1. Read `src/lib/verticals.ts` to find the available products. Ask: *"Which product is this design for?"* listing each vertical's `label` as an option. Save the choice as `shell-product` in `.skill-answers`.
+  2. Read that vertical's `mainNav` entries. Ask: *"Where should we build your design? In an existing left-navigation page, or a new one?"* List every existing `mainNav` entry for that product (including disabled/placeholder pages) as options, plus an **"Add new page"** option.
+  3. If an existing page is picked, use its `value` as `shell-page`.
+  4. If "Add new page" is picked, ask for the new page's name and use it as `shell-page`. Add it as a new `mainNav` entry in that vertical in `verticals.ts` — no need to explain the mechanics of `verticals.ts`, product chooser, or routing to the Designer, just do it.
+  5. Update that vertical's `defaultRoute` to the route for `shell-page`, so this screen is what loads by default when the product is opened.
+- Save the answer as `shell-page = {value}` in `.skill-answers`.
+
 ## Step 3 — Create AI instruction files
 
 Check for the following three files and create them if they don't already exist:
@@ -199,3 +214,12 @@ Check `.skill-answers` for `vercel-setup`, and whether `.vercel/project.json` ex
 - **Otherwise:** ask: *"Would you like me to walk you through setting up auto-publish from your GitHub repo to Vercel?"*
   - If yes: guide the user through connecting the repo to Vercel via the Vercel dashboard (Import Project → select repo). Once they confirm it's connected, save `vercel-setup = done` to `.skill-answers`.
   - If no: save `vercel-setup = no` to `.skill-answers` and skip.
+
+**If `platform/iris-react-with-shell` is active AND (`workflow/figma-read-from-mcp` or `workflow/figma-write-to-canvas` is active) AND `.figma-url` exists** (ask after the Vercel question is resolved):
+Check `.skill-answers` for `figma-build-prompted`.
+
+- **If it exists:** skip silently.
+- **If missing:** ask: *"You've got a Figma file connected — want me to start building out the design from it now, into the `{shell-page}` page?"*
+- Save `figma-build-prompted = yes` or `figma-build-prompted = no` to `.skill-answers` regardless of the answer (so it's only asked once per project, not every rerun).
+- If yes: proceed to implement using the `figma-read-from-mcp` skill rules, targeting `src/views/` and the page named in `shell-page`.
+- If no: stop there — no further action.
