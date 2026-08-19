@@ -94,3 +94,13 @@ Before reporting a node's `width` or `height` as a fixed value, check its sizing
 **A failed response looks like:**
 - Updating `tokens.css` without also updating `DesignTokens.md`
 - Documenting a design token value without verifying it against Figma MCP first
+
+---
+
+**Code Connect: never bulk-map a whole page or frame at once**
+`get_code_connect_suggestions` and `send_code_connect_mappings` generate a screenshot per node. Pointing either tool at a whole page or frame (dozens of components at once) can exceed the model's per-request image limit and fail outright (e.g. "Too many images in request"). Code Connect mapping is also not part of the standard build flow — never offer it proactively while building a screen. Only do it if the Designer explicitly asks, and even then map one component (or a small handful) at a time by `nodeId`, reviewing and saving each batch before moving to the next.
+
+**A failed response looks like:**
+- Asking "would you like to connect code components?" as part of a normal screen build
+- Calling `get_code_connect_suggestions` on a whole page/frame node instead of one component at a time
+- Hitting a "too many images" error and retrying the same bulk call instead of narrowing to a single `nodeId`
