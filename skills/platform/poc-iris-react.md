@@ -1,4 +1,4 @@
-# Iris React With Shell Rules
+# POC Iris React Rules
 
 The Iris Shell is a multi-product navigation wrapper built on Iris UI foundations. It provides a consistent app header, global sidebar, secondary sidebar, and AI panel across all products. Use the reference implementation at `src/iris-shell/` — integrate from it, do not copy-paste wholesale.
 
@@ -74,33 +74,9 @@ Never hardcode a colour or token value that varies by theme.
 
 ---
 
-## Motion (current baseline)
+## Motion
 
-Motion should be fast, subtle, and purposeful. If motion does not help users understand what changed, do not add it.
-
-Current principles:
-- Functional: explain state changes, do not decorate
-- Fast: do not slow core workflows
-- Consistent: similar interactions behave similarly
-- Subtle: calm, professional transitions
-
-Current token usage:
-- Enter: `--oi-motion-ease-enter`
-- Exit: `--oi-motion-ease-exit`
-- Move: `--oi-motion-ease-move`
-- None: `--oi-motion-ease-none`
-- Snap: `--oi-motion-duration-snap`
-- Short: `--oi-motion-duration-short`
-- Default: `--oi-motion-duration-default`
-- Long: `--oi-motion-duration-long`
-- Loop: `--oi-motion-duration-loop`
-
-Usage rules:
-- Prefer opacity plus small movement (about 8px translate)
-- Keep interaction feedback short (`--oi-motion-duration-short`)
-- Respect reduced-motion settings
-
-The detailed motion pattern page in Figma is pending creation. Until it exists, use this baseline and validate implementation against Storybook behavior.
+Use `workflow/motion` for all motion principles, tokens, reduced-motion requirements, and definition-of-done checks. Do not duplicate or override those rules here.
 
 ---
 

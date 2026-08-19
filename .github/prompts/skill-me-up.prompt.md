@@ -1,7 +1,7 @@
 ---
 mode: agent
 description: Rebuild master-skills.md by fetching the latest skill files from the up-skill repo on GitHub, and copy any skill-bundled files into this project.
-version: 12
+version: 13
 ---
 
 ## Cross-platform execution guardrails
@@ -46,15 +46,16 @@ If all checks pass, continue to Step 0.
 
 ## Step 0 — Skills setup
 
-`platform/iris-react-with-shell` is now mandatory for all projects. Standalone `platform/iris-react` is retired.
+`platform/poc-iris-react` is now mandatory for all projects. Legacy `platform/iris-react-with-shell` and standalone `platform/iris-react` are retired.
 
 Check whether a `.skills` file exists in the root of this project.
 
 **If `.skills` exists:** read it to get the skill list, then normalize it before doing anything else:
 
-- If `platform/iris-react` is present, replace it with `platform/iris-react-with-shell`.
-- If `platform/iris-react-with-shell` is missing, add it.
-- If both platform entries are present, keep only `platform/iris-react-with-shell`.
+- If `platform/iris-react` is present, replace it with `platform/poc-iris-react`.
+- If `platform/iris-react-with-shell` is present, replace it with `platform/poc-iris-react`.
+- If `platform/poc-iris-react` is missing, add it.
+- If multiple platform entries are present, keep only `platform/poc-iris-react`.
 
 Write the normalized `.skills` file back immediately, then proceed to Answer tracking below — new questions added to the prompt since the project was first set up will be asked now if their key is missing from `.skill-answers`. After resolving any missing answers, skip to Step 0b.
 
@@ -77,7 +78,7 @@ After all questions are resolved, write any newly collected answers to `.skill-a
 
 **`project-description`** — *"In a sentence or two, describe what you're trying to test — or add any relevant context (version, goal, background) that will help the AI understand this prototype."*
 
-The platform is fixed and must always be `platform/iris-react-with-shell`. Do not ask a platform-selection question.
+The platform is fixed and must always be `platform/poc-iris-react`. Do not ask a platform-selection question.
 
 **`workflow-skills`** — *"`workflow/general` is always included. The skills below are pre-selected by default — deselect any that don't apply, and add any others you need:"*
 
@@ -86,6 +87,7 @@ The platform is fixed and must always be `platform/iris-react-with-shell`. Do no
 - [on] `workflow/figma-read-from-mcp`
 - [off] `workflow/figma-write-to-canvas`
 - [on] `workflow/git`
+- [on] `workflow/motion`
 - [on] `workflow/testing`
 - [off] `workflow/windows`
 - [on] `workflow/vercel-publish`
@@ -98,7 +100,7 @@ The platform is fixed and must always be `platform/iris-react-with-shell`. Do no
 - Paste the URL now — save it to `.figma-url` in the project root
 - *"I'll paste it in this chat when I have it"* — reply: *"No problem — paste the Figma URL in this chat whenever you're ready and I'll save it to `.figma-url`."* then continue setup. When the user later pastes a URL starting with `https://www.figma.com/`, write it to `.figma-url`.
 
-Once all questions are resolved, write the `.skills` file if it doesn't exist yet, using the standard comment header followed by the chosen skills, one per line. Always include `platform/iris-react-with-shell` as the platform entry and `workflow/general` as the first workflow entry:
+Once all questions are resolved, write the `.skills` file if it doesn't exist yet, using the standard comment header followed by the chosen skills, one per line. Always include `platform/poc-iris-react` as the platform entry and `workflow/general` as the first workflow entry:
 
 ```
 # This file is only a pseudo-import list for the Up-Skill mechanism — like a
@@ -184,13 +186,13 @@ The `## Resources` section contains directory copy mappings, one per line, in th
 source-folder/ -> dest-folder/
 ```
 
-- `source-folder/` is a path relative to `skill-resources/{skill-name}/` in the up-skill repo. `{skill-name}` is the full name including its category folder (e.g. `platform/iris-react-with-shell`, not just `iris-react-with-shell`) — use it as-is when building this base directory, never just its last path segment.
+- `source-folder/` is a path relative to `skill-resources/{skill-name}/` in the up-skill repo. `{skill-name}` is the full name including its category folder (e.g. `platform/poc-iris-react`, not just `poc-iris-react`) — use it as-is when building this base directory, never just its last path segment.
 - `dest-folder/` is the destination path relative to this project's root
 
 For each mapping, use the zip download approach:
 1. Download the up-skill repo as a zip:
    `https://github.com/slowpulsestudio/iris-proto-build-react/archive/refs/heads/main.zip`
-2. Extract only the files whose path within the zip starts with `iris-proto-build-react-main/skill-resources/{skill-name}/{source-folder}/` — for example, for the `platform/iris-react-with-shell` skill with a `poc-iris-react-main/` source folder, the full prefix is `iris-proto-build-react-main/skill-resources/platform/iris-react-with-shell/poc-iris-react-main/`.
+2. Extract only the files whose path within the zip starts with `iris-proto-build-react-main/skill-resources/{skill-name}/{source-folder}/` — for example, for the `platform/poc-iris-react` skill with a `poc-iris-react-main/` source folder, the full prefix is `iris-proto-build-react-main/skill-resources/platform/poc-iris-react/poc-iris-react-main/`.
 3. Write each extracted file to `{project-root}/{dest-folder}/{relative-path}`, where `relative-path` is the portion after the prefix in step 2. Create any necessary directories.
 4. If a file already exists at the destination and its content differs, warn the user and skip it — do not overwrite.
 5. If a mapping matches zero files in the zip, this is an error, not an empty result — stop and report the exact prefix searched so the user can check the archive contents. Do not report it as "nothing to copy".
@@ -201,7 +203,7 @@ After all files are copied, if `project-name` is known from `.skill-answers`, fi
 
 ## Step 2b — Shell page selection (if applicable)
 
-If `platform/iris-react-with-shell` is active, this must be resolved before continuing to Step 3, since it determines where the design gets built and what loads by default. This step happens after Step 2 so `src/lib/verticals.ts` actually exists in the project to read.
+If `platform/poc-iris-react` is active, this must be resolved before continuing to Step 3, since it determines where the design gets built and what loads by default. This step happens after Step 2 so `src/lib/verticals.ts` actually exists in the project to read.
 
 Check `.skill-answers` for `shell-page`.
 
@@ -285,7 +287,7 @@ Check `.skill-answers` for `vercel-setup`, and whether `.vercel/project.json` ex
     3. Save `vercel-setup = done` to `.skill-answers`.
   - If no: save `vercel-setup = no` to `.skill-answers` and skip.
 
-**If `platform/iris-react-with-shell` is active AND (`workflow/figma-read-from-mcp` or `workflow/figma-write-to-canvas` is active) AND `.figma-url` exists** (ask after the Vercel question is resolved):
+**If `platform/poc-iris-react` is active AND (`workflow/figma-read-from-mcp` or `workflow/figma-write-to-canvas` is active) AND `.figma-url` exists** (ask after the Vercel question is resolved):
 Check `.skill-answers` for `figma-build-prompted`.
 
 - **If it exists:** skip silently.

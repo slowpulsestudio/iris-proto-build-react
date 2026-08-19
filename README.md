@@ -70,6 +70,7 @@ skills/
     workflow/
         general.md          ← always included in every project
         architecture.md
+        motion.md
         testing.md
         git.md
         figma-read-from-mcp.md
@@ -114,7 +115,7 @@ After running `/skill-me-up`, a downstream consumer project will contain the fol
 
 The Iris Shell foundation is included by default in every generated project.
 
-The `iris-react-with-shell` baseline is manually updated from `https://github.com/oi-eng/poc-iris-react`.
+The `poc-iris-react` baseline is manually updated from `https://github.com/oi-eng/poc-iris-react`.
 
 | Skill | When to include |
 |---|---|
@@ -124,6 +125,7 @@ The `iris-react-with-shell` baseline is manually updated from `https://github.co
 | `workflow/figma-read-from-mcp` | If the project uses Figma for design. Automatically gathers your products master library. |
 | `workflow/figma-write-to-canvas` | Writing design frames to Figma canvas from code |
 | `workflow/git` | Source control rules |
+| `workflow/motion` | Motion principles, token usage, and reduced-motion requirements |
 | `workflow/testing` | Testing standards |
 | `workflow/windows` | Windows and PowerShell-safe execution guidance |
 | `workflow/migrate-non-iris-to-iris` | Migrating a non-Iris app to Iris-UI |
