@@ -1,7 +1,7 @@
 ---
 mode: agent
 description: Rebuild master-skills.md by fetching the latest skill files from the up-skill repo on GitHub, and copy any skill-bundled files into this project.
-version: 5
+version: 6
 ---
 
 ## Step -1 — Self-update check
@@ -123,6 +123,19 @@ Fetch all skills in parallel every run, even when `.skills` has not changed, bec
 - If the `.skills` selection changed or any fetched skill content differs, write the assembled content to `master-skills.md`.
 - If `master-skills.md` does not exist, create it.
 
+## Step 1b — Refresh example-prompts.md
+
+Always fetch the latest example prompts, regardless of which skills are selected — it's general reference material for Designers, not skill-specific:
+
+```
+https://raw.githubusercontent.com/slowpulsestudio/iris-proto-build-react/main/example-prompts.md
+```
+
+Compare it to the existing `example-prompts.md` in the project root (if any):
+
+- If it doesn't exist yet, or differs from the fetched content, write the fetched content to `example-prompts.md` in the project root.
+- If it already matches, leave it untouched.
+
 ## Step 2 — Copy skill-bundled files
 
 After fetching each skill file, scan it for a `## Resources` section. If a skill has no `## Resources` section, skip this step for that skill.
@@ -191,6 +204,7 @@ If any of these files already exist, leave them untouched — do not overwrite o
 When done, report:
 - Which skills were fetched successfully
 - The total line count of `master-skills.md`, and whether it was created, updated, or already up to date
+- Whether `example-prompts.md` was created, updated, or already up to date
 - Any skills that failed to fetch (404 or network error)
 - Which bundled files were copied (grouped by skill), and any that were skipped due to conflicts
 - Whether `.github/copilot-instructions.md`, `CLAUDE.md`, and `prototype-specific-agent-instructions.md` were created or already existed
