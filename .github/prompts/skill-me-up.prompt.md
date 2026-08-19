@@ -1,8 +1,18 @@
 ---
 mode: agent
 description: Rebuild master-skills.md by fetching the latest skill files from the up-skill repo on GitHub, and copy any skill-bundled files into this project.
-version: 8
+version: 10
 ---
+
+## Cross-platform execution guardrails
+
+This prompt must run reliably on macOS/Linux shells and Windows PowerShell.
+
+- Prefer VS Code tools for fetch/read/write/copy operations instead of shell one-liners whenever possible.
+- If terminal commands are required, use syntax that matches the active shell. Never assume bash on Windows.
+- In PowerShell, avoid bash-specific patterns (`&&` chains, heredocs, bash-only quoting). Use PowerShell-native commands and quoting.
+- For Windows paths or user-provided values, prefer PowerShell `-LiteralPath` and `Join-Path` patterns to avoid escaping bugs.
+- If a shell-specific command fails due to quoting/parsing, retry immediately with shell-native syntax while keeping the same step coverage. Do not skip steps silently.
 
 ## Step -1 — Self-update check
 
@@ -57,6 +67,7 @@ After all questions are resolved, write any newly collected answers to `.skill-a
 - [off] `workflow/figma-write-to-canvas`
 - [on] `workflow/git`
 - [on] `workflow/testing`
+- [off] `workflow/windows`
 - [on] `workflow/vercel-publish`
 - [off] `workflow/migrate-non-iris-to-iris`
 - [off] `workflow/vercel-password`

@@ -126,6 +126,7 @@ After running `/skill-me-up`, a downstream consumer project will contain the fol
 | `workflow/figma-write-to-canvas` | Writing design frames to Figma canvas from code |
 | `workflow/git` | Source control rules |
 | `workflow/testing` | Testing standards |
+| `workflow/windows` | Windows and PowerShell-safe execution guidance |
 | `workflow/vercel-publish` | If the project deploys to Vercel |
 | `workflow/migrate-non-iris-to-iris` | Migrating a non-Iris app to Iris-UI |
 | `workflow/vercel-password` | Password gate for Vercel preview deployments |
