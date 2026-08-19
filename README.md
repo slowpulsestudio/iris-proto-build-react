@@ -12,7 +12,9 @@ This approach avoids relying on AI agents to resolve nested imports or follow mu
 
 ## Setup Steps
 
-1. Copy and paste this prompt into your VSCode Copilot using Claude Sonnet 5:
+1. Fetch the initation prompt
+
+Copy and paste this prompt into your VSCode Copilot using Claude Sonnet 5:
 
 ```
    > Fetch `https://raw.githubusercontent.com/slowpulsestudio/iris-proto-build-react/main/.github/prompts/skill-me-up.prompt.md` and save it to `.github/prompts/skill-me-up.prompt.md` in this project.
@@ -26,7 +28,17 @@ In the same Copilot chat panel run this prompt and the setup steps will commence
 /skill-me-up
 ```
 
-3. Question time: the agent will ask you a bunch of questions to finish the setup and you are done!
+3. Question time
+
+The agent will ask you a bunch of questions to finish the setup and you are done. Depending on what skills you choose, different questions will follow. For more details 
+
+4. Prototype refinement
+
+Now your prototype is setup, you can use this file for some examples of the kind of questions and direction you can give the agent: `example-prompts.md`
+
+
+
+# Further Details
 
 ## UX Research considerations
 
@@ -53,16 +65,9 @@ skills/
 
 Each file should cover **one topic only** and remain reusable across projects.
 
-## Usage
+## Instruction Files
 
-For each project:
-
-1. Always start with `general.md` — it applies to every project.
-2. Select any additional skills from `skills/` that apply.
-3. From `skills/platform/`, pick **exactly one**: `iris-react.md` for a standalone Iris UI app, or `iris-react-with-shell.md` if the project needs the app shell (title bar and navigation). Never include more than one platform skill.
-4. Concatenate them, in order, into a single `master-skills.md`.
-5. Append any project-specific instructions.
-6. Point both `CLAUDE.md` and `.github/copilot-instructions.md` at the generated `master-skills.md`.
+The agent points both `CLAUDE.md` and `.github/copilot-instructions.md` at the generated `master-skills.md` file so they remain consistent. It also points the `prototype-specific-agent-instructions.md` which you can specific instructions in.
 
 The AI should consume only the generated file.
 
@@ -75,28 +80,27 @@ The AI should consume only the generated file.
 * AI agents receive a single, flattened instruction file.
 * Never rely on recursive imports or multi-level instruction chains.
 
-## Adding a Skill
+## Skills Catalogue
 
-When adding a new skill:
+| Skill | When to include |
+|---|---|
+| `platform/iris-react` | React + Vite app using the Iris-UI design system |
+| `platform/iris-react-with-shell` | Iris UI with app shell, global sidebar, and navigation |
+| `workflow/general` | Core execution rules — always include |
+| `workflow/architecture` | General code structure rules |
+| `workflow/deep-linking` | URL-addressable tree navigation |
+| `workflow/figma-read-from-mcp` | If the project uses Figma for design |
+| `workflow/figma-write-to-canvas` | Writing design frames to Figma canvas from code |
+| `workflow/git` | Source control rules |
+| `workflow/testing` | Testing standards |
+| `workflow/vercel-publish` | If the project deploys to Vercel |
+| `workflow/migrate-non-iris-to-iris` | Migrating a non-Iris app to Iris-UI |
+| `workflow/vercel-password` | Password gate for Vercel preview deployments |
 
-* Keep it focused on a single domain.
-* Avoid duplicating content from other skills.
-* Write clear, atomic rules.
-* Use headings and bullet points rather than long prose.
-* Assume the skill will be combined with others.
+The write-to-canvas skill documents workflows provided by Figma's MCP server.
+Install the Figma MCP plugin for the agent, or download the skills from the
+[Figma MCP skills repository](https://github.com/figma/mcp-server-guide/tree/main/skills).
+This Up-Skill repository provides project guidance but does not install those
+Figma skills or create their slash commands.
 
-## Updating Skills
-
-Because all projects consume generated instruction files, improvements made here can be propagated to every project simply by rebuilding the project's `master-skills.md`.
-
-This repository is intended to be version-controlled independently and shared across multiple repositories.
-
-## Maintaining This Repository
-
-The `/skill-me-up` prompt and `master-skills.md` build step described above are for **consumer projects** — they are never run inside this repository.
-
-This repo itself is maintained directly: when a gap, mistake, or new pattern is found (in this repo or while working on a consumer project), paste the relevant prompt/context straight into chat here and have the AI update or add the appropriate skill file by hand. There is no build/generation step for `up-skill` itself.
-
-## Future enhancements
-
-- Currently Ryan manually drags iris-react and shell files into the folder periodically so when you run this, it may not be 100% up to date with our Iris-UI-react repo. Eventually on initial load, it will dynamically pull the latest
+---
