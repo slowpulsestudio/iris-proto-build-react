@@ -80,20 +80,24 @@ After all questions are resolved, write any newly collected answers to `.skill-a
 
 The platform is fixed and must always be `platform/poc-iris-react`. Do not ask a platform-selection question.
 
-**`workflow-skills`** — *"`workflow/general` is always included. The skills below are pre-selected by default — deselect any that don't apply, and add any others you need:"*
+**`workflow-skills`** — *"`workflow/general` is always included. Select from the table below. Skill names are shown without the `workflow/` prefix for readability."*
 
-- [on] `workflow/architecture`
-- [on] `workflow/deep-linking`
-- [on] `workflow/figma-read-from-mcp`
-- [off] `workflow/figma-write-to-canvas`
-- [off] `workflow/figma-update-existing-screen`
-- [on] `workflow/git`
-- [on] `workflow/motion`
-- [on] `workflow/testing`
-- [off] `workflow/windows`
-- [on] `workflow/vercel-publish`
-- [off] `workflow/migrate-non-iris-to-iris`
-- [off] `workflow/vercel-password`
+| Default | Skill | When to include |
+|---|---|---|
+| on | `architecture` | General code structure rules |
+| on | `deep-linking` | URL-addressable navigation is needed |
+| on | `figma-read-from-mcp` | Building screens from Figma designs |
+| off | `figma-write-to-canvas` | Writing generated results back to Figma canvas |
+| off | `figma-update-existing-screen` | Updating an existing `poc-iris-react` screen via audit-first flow |
+| on | `git` | Git workflow support is needed |
+| on | `motion` | Motion principles, token usage, and reduced-motion checks are needed |
+| on | `testing` | Testing standards and verification guidance are needed |
+| off | `windows` | The user/team uses Windows or PowerShell |
+| on | `vercel-publish` | Project will deploy to Vercel |
+| off | `migrate-non-iris-to-iris` | Migrating a non-Iris app to Iris |
+| off | `vercel-password` | Vercel preview password-gating is required |
+
+When saving to `.skills`, always expand selected entries to full names with the `workflow/` prefix (for example `motion` -> `workflow/motion`).
 
 **`git-remote`** — only if `workflow/git` was selected: *"What is the GitHub repo URL for this project?"*
 
