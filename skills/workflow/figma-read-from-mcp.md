@@ -32,6 +32,28 @@ All colours, spacing, radii, font sizes, and component structures must come from
 
 ---
 
+**Library source order (global + vertical)**
+When selecting component or token references, always use both global Iris libraries and the selected product vertical library.
+
+Source of truth for links:
+- `skill-resources/platform/poc-iris-react/poc-iris-react-main/src/lib/verticals.ts`
+- Read `IRIS_GLOBAL_LIBRARIES` for global libraries
+- Read the active vertical's `subLibraryUrl` for product-specific additions
+
+Resolution order:
+1. Vertical library (`subLibraryUrl`) for product-specific patterns
+2. Global libraries (`IRIS_GLOBAL_LIBRARIES`) for shared components, icons, variables, charts
+3. The working design file (`.figma-url`) for final screen-level truth
+
+If a required vertical `subLibraryUrl` is empty, stop and ask the user for that product's library link instead of guessing.
+
+**A failed response looks like:**
+- Using only global libraries and ignoring the active vertical's library
+- Treating vertical libraries as replacements for global libraries instead of additive
+- Proceeding when a required library URL is missing
+
+---
+
 **Exploring file structure**
 To discover pages, frames, and components in a Figma file, use `use_figma` with JavaScript via the Plugin API — e.g. `figma.root.children` to list pages, `page.children` to list frames. Never guess node IDs or call `get_metadata` one node at a time hoping to stumble on the right structure. Never ask the Designer to manually find node IDs or copy URLs from Figma.
 
