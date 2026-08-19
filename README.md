@@ -2,6 +2,7 @@
 
 This repository contains a reusable library of AI prototyping instruction files ("skills") that can be shared across multiple software projects.
 
+
 ## Purpose
 
 Copilot agents by default are lazy and incompetent prototype builders - they need a whole load of guardrails and explicit instruction to act more like a human Senior Frontend Developer. This skills repo does just that.
@@ -11,6 +12,9 @@ The skills in this repository are the **source of truth** for AI vibe prototypin
 Instead of cluttered lists of skills, a single `master-skills.md` file that becomes the project's authoritative instruction document.
 
 This approach avoids relying on AI agents to resolve nested imports or follow multiple levels of references, which can produce inconsistent results.
+
+This also pulls directly from the Iris Figma libraries, and the specific product master libraries also.
+
 
 ## Setup Steps
 
@@ -115,7 +119,7 @@ After running `/skill-me-up`, a downstream consumer project will contain the fol
 
 The Iris Shell foundation is included by default in every generated project.
 
-The `poc-iris-react` baseline is manually updated from `https://github.com/oi-eng/poc-iris-react`.
+The `poc-iris-react` baseline is manually updated by Ryan from Abhi's shell repo: `https://github.com/oi-eng/poc-iris-react`.
 
 | Skill | When to include |
 |---|---|
