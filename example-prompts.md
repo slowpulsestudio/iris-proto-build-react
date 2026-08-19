@@ -4,23 +4,20 @@ A collection of example prompts for Designers who are new to this prototype syst
 
 ---
 
-## Auditing Figma vs. the built prototype
+## Good initial review for refining discrepencies
 
 ```
 Do a full audit on the discrepancies between my Figma screen and the built prototype. Pay close attention to Iris components and tokens from the Figma MCP.
 ```
 
-```
-Check whether every component on the [screen name] screen is a real bound Iris UI component, or just something styled to look like one. Give me a checklist with a tick or cross for each one.
-```
+---
+
+## Push your refined prototype, back into a Figma design with all the Iris components and tokens connected
 
 ```
-The code for [screen name] already exists — make sure it references the same tokens as Figma, not new ones. Also double-check you audited the right screen; it looks like you compared against [wrong screen] instead of [correct screen].
+Push my prototype back into this Figma file: <Figma file URL>. Follow the figma-write-to-canvas skill.
 ```
 
-```
-Why isn't this using design system components from the connected libraries and tokens? Check whether it fell back to plain styled elements instead of real Iris instances.
-```
 
 ---
 
@@ -33,32 +30,14 @@ Build it using real Iris components, tokens, and icons only — resolve them the
 
 Place it inside the existing app shell (top bar + left nav), under the [product name] product.
 
-Then wire it into the scaffold: create a new scenario file for it, make sure it shows up on the Welcome page, and don't touch Git branches directly.
-```
+Use the wired Figma prototype links to get the basic interactivity and we can refine later.
 
-```
-Here's a Figma link for a new prototype screen: <Figma URL>
-
-Build it the same way as always — real Iris components, tokens, and icons, wired into the scaffold.
-
-Your very next message must be the Build Verification Checklist from AGENTS.md, filled in — nothing else before it. If you get blocked for any reason, still reply with that same checklist, every box marked failed, and a brief summary underneath explaining what happened, what's blocking it, what you need to continue, and the exact tool calls you made up to the point of failure.
-```
-
-```
-Pull the full variable set for the [screen name] screen from Figma before you build anything. Show me the token list first so I can confirm it's right.
 ```
 
 ---
 
-## Putting the prototype back into Figma
 
-```
-Capture the running prototype at localhost and put it into this Figma file: <Figma file URL>. Do the rough reference version first, then tell me before you start linking up real Iris components and tokens.
-```
-
----
-
-## Working with tokens and components
+## If tokens seem to be missing
 
 ```
 Is this colour/spacing value coming from an Iris token, or is it hardcoded? If it's hardcoded, tell me which token it should be using instead.
@@ -66,14 +45,6 @@ Is this colour/spacing value coming from an Iris token, or is it hardcoded? If i
 
 ```
 List every Iris UI component we're currently using in this prototype, and flag anything that doesn't have a real Iris equivalent.
-```
-
-```
-When you click on the [component name], the content just pops back into place instantly instead of animating. Can you make it use the exit motion token with proper easing to slide back down, and check it's consistent on [page name] too?
-```
-
-```
-Use the motion design Iris tokens to move the [component name] up and down — enter and exit easing tokens applied appropriately. When scrolling to the bottom item, leave a single row-height gap so the last row scrolls above the [component name]. Apply the same behaviour on both [first screen] and [second screen], and add an extra [component name] action for '[action name]'. Ask me first if anything needs clarifying.
 ```
 
 ```
@@ -120,32 +91,12 @@ You didn't need to flip the [gradient/fade element] — flip it back. The real i
 I have an existing screen that isn't using the Iris design system yet. Audit it first — list every component, its Iris equivalent (or note if there isn't one), and the token replacements needed. Don't change anything yet, just show me the audit.
 ```
 
-```
-Migrate the tokens on [screen/component name] to Iris tokens first. Don't touch the components yet — that's a separate step.
-```
-
 ---
 
 ## Navigation and deep-linking
 
 ```
-Make sure every node in this tree can be linked to directly with a URL, so I can start my UX Tweak tasks from a specific place & situation
-```
-
-```
-If I share a link to a deeply nested item, does the tree open, expand, and scroll to it automatically? Check this and fix it if not.
-```
-
----
-
-## Testing and verification
-
-```
-Don't just tell me it compiles — run it and show me what actually happens on screen before you say it's done.
-```
-
-```
-Test [feature] on its own first, then test it as part of the full flow, so we know exactly where it breaks if something's wrong.
+Make sure every link in this breadcrumb can be linked to directly with a URL, so I can start my UX Tweak tasks from a specific place & situation
 ```
 
 ---
