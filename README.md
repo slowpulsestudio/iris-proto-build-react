@@ -77,8 +77,6 @@ skills/
         vercel-publish.md
         vercel-password.md
         migrate-non-iris-to-iris.md
-    platform/
-        iris-react-with-shell.md
 ```
 
 Each file should cover **one topic only** and remain reusable across projects.
@@ -114,9 +112,10 @@ After running `/skill-me-up`, a downstream consumer project will contain the fol
 
 ## Skills Catalogue
 
+The Iris Shell foundation is included by default in every generated project.
+
 | Skill | When to include |
 |---|---|
-| `platform/iris-react-with-shell` | Iris React + app shell, global sidebar, and navigation |
 | `workflow/general` | Core execution rules — always include |
 | `workflow/architecture` | General code structure rules |
 | `workflow/deep-linking` | URL-addressable tree navigation |
@@ -139,6 +138,7 @@ Figma skills or create their slash commands.
 ---
 
 TODO
+
 
 Add ARS-Libraries and concept for other libraries
 What Product is your prototype for? Add New
