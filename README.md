@@ -4,7 +4,7 @@ This repository contains a reusable library of AI prototyping instruction files 
 
 ## Purpose
 
-Copilot agents by default are lazy and incompetent protype builders - they need a whole load of guardrails and explicit instruction to act more like a human Senior Frontend Developer. This skills repo does just that.
+Copilot agents by default are lazy and incompetent prototype builders - they need a whole load of guardrails and explicit instruction to act more like a human Senior Frontend Developer. This skills repo does just that.
 
 The skills in this repository are the **source of truth** for AI vibe prototyping guidance. They are designed to be maintained once and reused everywhere.
 
