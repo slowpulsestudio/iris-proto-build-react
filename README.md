@@ -32,11 +32,11 @@ In the same Copilot chat panel run this prompt and the setup steps will commence
 
 3. Question time
 
-The agent will ask you a bunch of questions to finish the setup and you are done. Depending on what skills you choose, different questions will follow. For more details 
+The agent will ask you a bunch of questions to finish the setup and you are done. Depending on what skills you choose, different questions will follow. For more details on each skill, scroll down to the bottom of this document.
 
 4. Prototype refinement
 
-Now your prototype is setup, you can use this file for some examples of the kind of questions and direction you can give the agent: `example-prompts.md`
+Now your prototype is setup, you can use this file for some examples of the kind of questions and direction you can give the agent: `example-prompts.md`.
 
 
 ---
