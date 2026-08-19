@@ -4,9 +4,11 @@ This repository contains a reusable library of AI prototyping instruction files 
 
 ## Purpose
 
+Copilot agents by default are lazy and incompetent protype builders - they need a whole load of guardrails and explicit instruction to act more like a human Senior Frontend Developer. This skills repo does just that.
+
 The skills in this repository are the **source of truth** for AI vibe prototyping guidance. They are designed to be maintained once and reused everywhere.
 
-Projects should **not** point AI agents directly at individual skill files. Instead, a build step should combine the required skills into a single `master-skills.md` file that becomes the project's authoritative instruction document.
+Instead of cluttered lists of skills, a single `master-skills.md` file that becomes the project's authoritative instruction document.
 
 This approach avoids relying on AI agents to resolve nested imports or follow multiple levels of references, which can produce inconsistent results.
 
@@ -37,14 +39,31 @@ The agent will ask you a bunch of questions to finish the setup and you are done
 Now your prototype is setup, you can use this file for some examples of the kind of questions and direction you can give the agent: `example-prompts.md`
 
 
+---
 
-# Further Details
+
+
+# Detailed Concepts About This Repo
 
 ## UX Research considerations
 
 If you really think about UX Research best practise - we don't want auto-refresh of Iris UI git update imports or fancy branching. When we decide to test a specific prototype - we want to stamp the current state in time and store that as a frozen branch for future reference.
 
-## Repository Structure
+## Design Principles
+
+* One responsibility per skill.
+* Skills are modular and reusable.
+* Shared guidance lives in this repository in one master file
+* Projects contain only project-specific context.
+* AI agents receive a single, flattened instruction file.
+
+## Instruction Files
+
+The agent points both `CLAUDE.md` and `.github/copilot-instructions.md` at the generated `master-skills.md` file so they remain consistent. It also points the `prototype-specific-agent-instructions.md` which you can specific instructions in.
+
+The AI should consume only the generated file.
+
+## This Repository Structure
 
 ```text
 skills/
@@ -65,20 +84,12 @@ skills/
 
 Each file should cover **one topic only** and remain reusable across projects.
 
-## Instruction Files
 
-The agent points both `CLAUDE.md` and `.github/copilot-instructions.md` at the generated `master-skills.md` file so they remain consistent. It also points the `prototype-specific-agent-instructions.md` which you can specific instructions in.
+---
 
-The AI should consume only the generated file.
 
-## Design Principles
 
-* One responsibility per skill.
-* Skills are modular and reusable.
-* Shared guidance lives in this repository.
-* Projects contain only project-specific context.
-* AI agents receive a single, flattened instruction file.
-* Never rely on recursive imports or multi-level instruction chains.
+# Extra Details
 
 ## Skills Catalogue
 
@@ -103,7 +114,9 @@ Install the Figma MCP plugin for the agent, or download the skills from the
 This Up-Skill repository provides project guidance but does not install those
 Figma skills or create their slash commands.
 
+
 ---
+
 
 ## Generated Project Structure
 
