@@ -85,7 +85,7 @@ The AI should consume only the generated file.
 | Skill | When to include |
 |---|---|
 | `platform/iris-react` | React + Vite app using the Iris-UI design system |
-| `platform/iris-react-with-shell` | Iris UI with app shell, global sidebar, and navigation |
+| `platform/iris-react-with-shell` | Iris React + app shell, global sidebar, and navigation |
 | `workflow/general` | Core execution rules — always include |
 | `workflow/architecture` | General code structure rules |
 | `workflow/deep-linking` | URL-addressable tree navigation |
@@ -104,3 +104,21 @@ This Up-Skill repository provides project guidance but does not install those
 Figma skills or create their slash commands.
 
 ---
+
+## Generated Project Structure
+
+After running `/skill-me-up`, a consumer project will contain the following files:
+
+| File | What it's for |
+|---|---|
+| `.github/prompts/skill-me-up.prompt.md` | The setup prompt itself, fetched in Step 1 and self-updating on every run |
+| `.skills` | Pseudo-import list of the skill names selected for this project |
+| `.skill-answers` | Stores answers to setup questions so reruns don't re-ask them |
+| `.figma-url` | The project's Figma file URL, if a Figma workflow skill was selected |
+| `master-skills.md` | The combined, flattened instruction file assembled from the selected skills — the AI's actual source of truth |
+| `example-prompts.md` | Example prompts and direction to give the agent, refreshed from this repo on every run |
+| `.github/copilot-instructions.md` | Points Copilot at `master-skills.md` and `prototype-specific-agent-instructions.md` |
+| `CLAUDE.md` | Points Claude at `master-skills.md` and `prototype-specific-agent-instructions.md` |
+| `prototype-specific-agent-instructions.md` | Project-specific instructions (design decisions, constraints, known issues) — never overwritten by `/skill-me-up` |
+| `README.md` | Created on initial build only — shows the prototype name, description, Figma link, this repo as the upstream generator, and the skills used to assemble `master-skills.md` |
+| bundled skill resources (e.g. `src/iris-ui/`, `src/iris-shell/`) | Files copied in from `skill-resources/` for skills that bundle a library or template, per each skill's `## Resources` mapping |
