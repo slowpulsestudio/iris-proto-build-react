@@ -1,7 +1,7 @@
 ---
 mode: agent
 description: Rebuild master-skills.md by fetching the latest skill files from the up-skill repo on GitHub, and copy any skill-bundled files into this project.
-version: 13
+version: 14
 ---
 
 ## Cross-platform execution guardrails
@@ -86,6 +86,7 @@ The platform is fixed and must always be `platform/poc-iris-react`. Do not ask a
 - [on] `workflow/deep-linking`
 - [on] `workflow/figma-read-from-mcp`
 - [off] `workflow/figma-write-to-canvas`
+- [off] `workflow/figma-update-existing-screen`
 - [on] `workflow/git`
 - [on] `workflow/motion`
 - [on] `workflow/testing`
@@ -290,8 +291,24 @@ Check `.skill-answers` for `vercel-setup`, and whether `.vercel/project.json` ex
 **If `platform/poc-iris-react` is active AND (`workflow/figma-read-from-mcp` or `workflow/figma-write-to-canvas` is active) AND `.figma-url` exists** (ask after the Vercel question is resolved):
 Check `.skill-answers` for `figma-build-prompted`.
 
+Check `.skill-answers` for `figma-build-mode`.
+- **If missing:** ask: *"When we build this screen, should we create a new screen from scratch, or update an existing screen from the `poc-iris-react` base?"*
+- Save one of:
+  - `figma-build-mode = create-new`
+  - `figma-build-mode = update-existing`
+
 - **If it exists:** skip silently.
 - **If missing:** ask: *"You've got a Figma file connected — want me to start building out the design from it now, into the `{shell-page}` page?"*
 - Save `figma-build-prompted = yes` or `figma-build-prompted = no` to `.skill-answers` regardless of the answer (so it's only asked once per project, not every rerun).
-- If yes: proceed to implement using the `figma-read-from-mcp` skill rules, targeting `src/views/` and the page named in `shell-page`.
+- If yes and `figma-build-mode = create-new`: proceed to implement using the `figma-read-from-mcp` skill rules, targeting `src/views/` and the page named in `shell-page`. After implementation, you must:
+  1. Run a local build (`pnpm build`)
+  2. Start or reuse the local dev server (`pnpm dev`)
+  3. Open localhost to the new route and show the generated screen to the user before moving on
+  4. Ask if they are happy with what was created
+- If yes and `figma-build-mode = update-existing`: proceed using both `figma-read-from-mcp` and `figma-update-existing-screen` rules. Build-time flow must be:
+  1. Produce the discrepancy audit table first (current code vs target design, plus check/cross columns for design-system availability and existing local implementation)
+  2. Ask for approval of the audit
+  3. Implement one discrepancy at a time
+  4. Build locally and ask "are you happy with this change?" before moving to the next discrepancy
+  5. Continue until all discrepancy rows are resolved or explicitly deferred
 - If no: stop there — no further action.

@@ -83,6 +83,7 @@ skills/
         git.md
         figma-read-from-mcp.md
         figma-write-to-canvas.md
+        figma-update-existing-screen.md
         vercel-publish.md
         vercel-password.md
         migrate-non-iris-to-iris.md
@@ -132,6 +133,7 @@ The `poc-iris-react` baseline is manually updated by Ryan from Abhi's shell repo
 | `workflow/deep-linking` | URL-addressable tree navigation |
 | `workflow/figma-read-from-mcp` | If the project uses Figma for design. Automatically gathers your products master library. |
 | `workflow/figma-write-to-canvas` | Writing design frames to Figma canvas from code |
+| `workflow/figma-update-existing-screen` | Audit-first flow for updating existing `poc-iris-react` screens one discrepancy at a time |
 | `workflow/git` | Source control rules |
 | `workflow/motion` | Motion principles, token usage, and reduced-motion requirements |
 | `workflow/testing` | Testing standards |
