@@ -107,7 +107,7 @@ Figma skills or create their slash commands.
 
 ## Generated Project Structure
 
-After running `/skill-me-up`, a consumer project will contain the following files:
+After running `/skill-me-up`, a downstream consumer project will contain the following files:
 
 | File | What it's for |
 |---|---|
@@ -120,5 +120,5 @@ After running `/skill-me-up`, a consumer project will contain the following file
 | `.github/copilot-instructions.md` | Points Copilot at `master-skills.md` and `prototype-specific-agent-instructions.md` |
 | `CLAUDE.md` | Points Claude at `master-skills.md` and `prototype-specific-agent-instructions.md` |
 | `prototype-specific-agent-instructions.md` | Project-specific instructions (design decisions, constraints, known issues) — never overwritten by `/skill-me-up` |
-| `README.md` | Created on initial build only — shows the prototype name, description, Figma link, this repo as the upstream generator, and the skills used to assemble `master-skills.md` |
+| `README.md` | Created only if it doesn't already exist (checked on every run, including reruns) — shows the prototype name, description, Figma link, this repo as the upstream generator, and the skills used to assemble `master-skills.md`. Never overwritten once it exists |
 | bundled skill resources (e.g. `src/iris-ui/`, `src/iris-shell/`) | Files copied in from `skill-resources/` for skills that bundle a library or template, per each skill's `## Resources` mapping |
