@@ -1,10 +1,10 @@
-# AI Skills
+# AI Prototyping Skills
 
-This repository contains a reusable library of AI instruction files ("skills") that can be shared across multiple software projects.
+This repository contains a reusable library of AI prototyping instruction files ("skills") that can be shared across multiple software projects.
 
 ## Purpose
 
-The skills in this repository are the **source of truth** for AI coding guidance. They are designed to be maintained once and reused everywhere.
+The skills in this repository are the **source of truth** for AI vibe prototyping guidance. They are designed to be maintained once and reused everywhere.
 
 Projects should **not** point AI agents directly at individual skill files. Instead, a build step should combine the required skills into a single `master-skills.md` file that becomes the project's authoritative instruction document.
 
