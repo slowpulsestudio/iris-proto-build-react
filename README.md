@@ -9,6 +9,8 @@ It is the recommended approach for UX Research at One Identity as this prototype
 
 ## Purpose
 
+This is for quick turnaround, hi-fidelity, fully interaction prototyping for research purposes.
+
 Copilot agents by default are lazy and incompetent prototype builders - they need a whole load of guardrails and explicit instruction to act more like a human Senior Frontend Developer. This skills repo does just that.
 
 The skills in this repository are the **source of truth** for AI vibe prototyping guidance. They are designed to be maintained once and reused everywhere.
