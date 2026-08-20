@@ -2,7 +2,7 @@
 
 When you want to transform your Figma design into a fully interactive code prototype using Iris UI - use this setup wizard to get your design built, published and ready to refine, share, and user-test.
 
-This repository contains a reusable library of AI prototyping instruction files ("skills") that can be shared across multiple prototype projects.
+This repository contains a reusable library of AI prototyping instruction files ("skills") and a wizard to get your prototype set up.
 
 It is the recommended approach for UX Research at One Identity as this prototype framework has been optimised for UX Tweak.
 
