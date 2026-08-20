@@ -27,7 +27,7 @@ This approach avoids relying on AI agents to resolve nested imports or follow mu
 
 This pulls components and tokens directly from the Iris Figma libraries, the specific product master libraries, but also the actual code from the `poc-iris-react` repo where it exists.
 
-Eventually this will automatically refresh with the latest Iris code but for now Ryan manually updates the Iris files so Teams Chat him if something is missing that you really need: ryan.harte@oneidentity.com.
+Eventually this will automatically refresh with the latest Iris code but for now Ryan manually updates the Iris files. If something you really need from Iris UI is missing, get in touch: `ryan.harte@oneidentity.com`.
 
 
 ## Setup Steps
