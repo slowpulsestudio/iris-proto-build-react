@@ -4,7 +4,7 @@ When you want to transform your Figma design into a fully interactive code proto
 
 This repository contains a reusable library of AI prototyping instruction files ("skills") and a wizard to get your prototype set up.
 
-It is the recommended approach for UX Research at One Identity as this prototype framework has been optimised for UX Tweak.
+It is the recommended approach for UX Research at One Identity as this prototype framework has been optimised for UX Tweak and our UX Research strategy.
 
 
 ## Purpose
