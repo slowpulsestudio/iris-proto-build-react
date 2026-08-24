@@ -10,8 +10,8 @@ Read `master-skills.md` for your operating instructions before doing anything el
 Before touching any code, audit the existing codebase:
 
 - List every component in the project that is not already using Iris-UI
-- For each component, identify its Iris-UI equivalent in `src/iris-ui/Components/` (or note that none exists)
-- List all hardcoded colour, spacing, and typography values that should be replaced with Iris tokens from `src/iris-ui/Tokens/`
+- For each component, identify its Iris-UI equivalent in `src/iris-shell/src/components/` (or note that none exists)
+- List all hardcoded colour, spacing, and typography values that should be replaced with Iris tokens from `src/iris-shell/src/tokens/`
 
 Present the full audit as a structured list and wait for the human to confirm before starting any migration.
 
