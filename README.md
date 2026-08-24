@@ -151,7 +151,7 @@ The `poc-iris-react` baseline is manually updated by Ryan from Abhi's shell repo
 | `workflow/git` | Source control rules |
 | `workflow/motion` | Motion principles, token usage, and reduced-motion requirements |
 | `workflow/testing` | Testing standards |
-| `workflow/windows` | Windows and PowerShell-safe execution guidance |
+| `workflow/microsoft` | Windows and PowerShell-safe execution guidance |
 | `workflow/migrate-non-iris-to-iris` | Migrating a non-Iris app to Iris-UI |
 | `workflow/vercel-publish` | If the project deploys to Vercel |
 | `workflow/vercel-password` | Password gate for Vercel preview deployments |

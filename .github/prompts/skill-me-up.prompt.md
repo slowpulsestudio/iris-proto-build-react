@@ -1,7 +1,7 @@
 ---
 mode: agent
 description: Rebuild master-skills.md by fetching the latest skill files from the up-skill repo on GitHub, and copy any skill-bundled files into this project.
-version: 16
+version: 17
 ---
 
 ## Cross-platform execution guardrails
@@ -92,7 +92,7 @@ The platform is fixed and must always be `platform/poc-iris-react`. Do not ask a
 | on | `git` | Git workflow support is needed |
 | on | `motion` | Motion principles, token usage, and reduced-motion checks are needed |
 | on | `testing` | Testing standards and verification guidance are needed |
-| off | `windows` | The user/team uses Microsoft Windows OS or PowerShell |
+| off | `microsoft` | The user/team uses Microsoft Windows OS or PowerShell |
 | on | `vercel-publish` | Project will deploy to Vercel |
 | off | `migrate-non-iris-to-iris` | Migrating a non-Iris app to Iris |
 | off | `vercel-password` | Vercel preview password-gating is required |
