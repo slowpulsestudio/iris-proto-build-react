@@ -1,7 +1,7 @@
 ---
 mode: agent
 description: Rebuild master-skills.md by fetching the latest skill files from the up-skill repo on GitHub, and copy any skill-bundled files into this project.
-version: 15
+version: 16
 ---
 
 ## Cross-platform execution guardrails
@@ -88,11 +88,11 @@ The platform is fixed and must always be `platform/poc-iris-react`. Do not ask a
 | on | `deep-linking` | URL-addressable navigation is needed |
 | on | `figma-read-from-mcp` | Building screens from Figma designs |
 | off | `figma-write-to-canvas` | Writing generated results back to Figma canvas |
-| off | `figma-update-existing-screen` | Updating an existing `poc-iris-react` screen via audit-first flow |
+| off | `figma-update-existing-screen` | Redesign an existing screen in the POC |
 | on | `git` | Git workflow support is needed |
 | on | `motion` | Motion principles, token usage, and reduced-motion checks are needed |
 | on | `testing` | Testing standards and verification guidance are needed |
-| off | `windows` | The user/team uses Windows or PowerShell |
+| off | `windows` | The user/team uses Microsoft Windows OS or PowerShell |
 | on | `vercel-publish` | Project will deploy to Vercel |
 | off | `migrate-non-iris-to-iris` | Migrating a non-Iris app to Iris |
 | off | `vercel-password` | Vercel preview password-gating is required |
