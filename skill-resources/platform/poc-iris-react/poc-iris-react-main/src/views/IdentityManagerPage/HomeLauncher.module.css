@@ -1,0 +1,119 @@
+.wrap {
+  position: relative;
+  width: 48rem;
+  max-width: 100%;
+}
+
+.beam {
+  display: block;
+  border-radius: var(--oi-border-radius-max);
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  height: 48px;
+  padding: 0 var(--oi-spacing-s) 0 var(--oi-spacing-l);
+  background-color: var(--oi-background-color-secondary);
+  border: 0.5px var(--oi-border-style-solid) var(--oi-border-color-muted);
+  border-radius: var(--oi-border-radius-max);
+  transition: border-color var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.fieldFocused {
+  border-color: var(--oi-border-color-default);
+}
+
+.leadIcon {
+  flex-shrink: 0;
+  color: var(--oi-content-color-tertiary);
+}
+
+.input {
+  flex: 1 1 auto;
+  min-width: 0;
+  appearance: none;
+  border: none;
+  background: transparent;
+  outline: none;
+  color: var(--oi-content-color-primary);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+}
+
+.input:focus,
+.input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.input::placeholder {
+  color: var(--oi-content-color-tertiary);
+}
+
+/* ── Inline options panel (replaces the ⌘K modal for the launcher) ── */
+.panel {
+  position: absolute;
+  top: calc(100% + var(--oi-spacing-s));
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  padding: var(--oi-spacing-xs);
+  background-color: var(--oi-background-color-primary);
+  border: 0.5px var(--oi-border-style-solid) var(--oi-border-color-default);
+  border-radius: var(--oi-border-radius-l);
+  box-shadow: var(--oi-shadow-low);
+  max-height: 320px;
+  overflow: auto;
+  text-align: left;
+}
+
+.sectionLabel {
+  padding: var(--oi-spacing-xs) var(--oi-spacing-s);
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  color: var(--oi-content-color-tertiary);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  width: 100%;
+  padding: var(--oi-spacing-s);
+  background: none;
+  border: none;
+  border-radius: var(--oi-border-radius-default);
+  cursor: pointer;
+  color: var(--oi-content-color-primary);
+  text-align: left;
+}
+
+.option:hover {
+  background-color: var(--oi-background-color-tertiary);
+}
+
+.optIcon {
+  flex-shrink: 0;
+  color: var(--oi-content-color-secondary);
+}
+
+.optLabel {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+}
+
+.optMeta {
+  flex-shrink: 0;
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  color: var(--oi-content-color-tertiary);
+}

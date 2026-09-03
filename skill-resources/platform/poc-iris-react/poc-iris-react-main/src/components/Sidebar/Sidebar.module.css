@@ -1,13 +1,63 @@
 .sidebar {
+  position: relative;
+  width: var(--directory-sidebar-width, 254px);
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+.sidebarSurface {
   display: flex;
   flex-direction: column;
-  width: 254px;
-  flex-shrink: 0;
+  height: 100%;
   background-color: var(--oi-background-color-primary);
   border-radius: var(--oi-border-radius-l);
   border: var(--oi-border-width-default) var(--oi-border-style-solid)
     var(--oi-border-color-muted);
   overflow: hidden;
+}
+
+.resizeHandle {
+  --dir-sidebar-resize-hit-width: 10px;
+  --dir-sidebar-resize-line-width: 1.5px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: calc(var(--dir-sidebar-resize-hit-width) / -2);
+  z-index: 3;
+  width: var(--dir-sidebar-resize-hit-width);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  cursor: col-resize;
+  touch-action: none;
+  outline: none;
+}
+
+.resizeHandleGrip {
+  width: var(--dir-sidebar-resize-line-width);
+  height: calc(100% - 16px);
+  background-color: transparent;
+  transition: background-color var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.resizeHandle:hover .resizeHandleGrip,
+.resizeHandle:focus-visible .resizeHandleGrip {
+  background-color: var(--oi-border-color-strong);
+}
+
+.resizeHandle.resizeHandleDragging .resizeHandleGrip {
+  background-color: var(--oi-button-background-primary, var(--oi-base-color-brand));
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .resizeHandle,
+  .resizeHandleGrip {
+    transition: none;
+  }
 }
 
 .viewSwitch {
@@ -57,8 +107,8 @@
   border-radius: var(--oi-border-radius-default);
   transform: translateY(0);
   transition:
-    transform var(--oi-motion-duration-default) cubic-bezier(0.22, 1, 0.36, 1),
-    height var(--oi-motion-duration-default) cubic-bezier(0.22, 1, 0.36, 1);
+    transform var(--oi-motion-duration-default) var(--oi-motion-ease-emphasized),
+    height var(--oi-motion-duration-default) var(--oi-motion-ease-emphasized);
   pointer-events: none;
 }
 

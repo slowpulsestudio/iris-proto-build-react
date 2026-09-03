@@ -3,6 +3,7 @@
 body.theme-ayu {
   /* backgrounds */
   --oi-background-color-primary: #0D1017;
+  --oi-background-color-blanket: rgba(0, 0, 0, 0.55);
   --oi-background-color-secondary: #10141C;
   --oi-background-color-tertiary: #141821;
   --oi-background-color-brand: rgba(230, 180, 80, 0.16);

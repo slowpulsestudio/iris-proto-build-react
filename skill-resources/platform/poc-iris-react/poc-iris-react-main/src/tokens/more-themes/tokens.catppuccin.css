@@ -3,6 +3,7 @@
 body.theme-catppuccin {
   /* backgrounds */
   --oi-background-color-primary: #1E1E2E;
+  --oi-background-color-blanket: rgba(0, 0, 0, 0.55);
   --oi-background-color-secondary: #313244;
   --oi-background-color-tertiary: #45475A;
   --oi-background-color-brand: rgba(137, 180, 250, 0.16);

@@ -3,6 +3,7 @@
 body.theme-dracula {
   /* backgrounds */
   --oi-background-color-primary: #282A36;
+  --oi-background-color-blanket: rgba(0, 0, 0, 0.55);
   --oi-background-color-secondary: #343746;
   --oi-background-color-tertiary: #424450;
   --oi-background-color-brand: rgba(189, 147, 249, 0.16);

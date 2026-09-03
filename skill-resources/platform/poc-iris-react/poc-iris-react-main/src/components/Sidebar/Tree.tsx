@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type MouseEvent } from 'react';
+import { useEffect, useRef, useState, type DragEvent, type MouseEvent } from 'react';
 import { cx } from '../../lib/cx.js';
 import { navigate, useRoute } from '../../lib/router.js';
 import { useDirectory } from '../../lib/directoryStore.js';
@@ -53,13 +53,16 @@ function selectedNodeId(routeName: string, params: Record<string, string>): stri
  * the route so deep-links and drill-in stay in sync.
  */
 export function Tree() {
-  const { nodeTree, getPath } = useDirectory();
+  const { nodeTree, getPath, moveNode, canMoveNode } = useDirectory();
   const route = useRoute();
   const selectedId = selectedNodeId(route.name, route.params as Record<string, string>);
 
   const [menuPos, setMenuPos] = useState<{ x: number; y: number } | null>(null);
   // Fully unfurled by default; users can still collapse individual nodes.
   const [expanded, setExpanded] = useState<Set<string>>(() => new Set(ALL_NODE_IDS));
+  // Drag-and-drop reparenting state.
+  const [draggingId, setDraggingId] = useState<string | null>(null);
+  const [dropTargetId, setDropTargetId] = useState<string | null>(null);
 
   // Auto-expand the ancestors of the selected node (deep-link + drill-in).
   useEffect(() => {
@@ -79,6 +82,40 @@ export function Tree() {
       else next.add(id);
       return next;
     });
+
+  const handleDragStart = (e: DragEvent, id: string) => {
+    e.dataTransfer.setData('text/plain', id);
+    e.dataTransfer.effectAllowed = 'move';
+    setDraggingId(id);
+  };
+
+  const handleDragEnd = () => {
+    setDraggingId(null);
+    setDropTargetId(null);
+  };
+
+  const handleDragOver = (e: DragEvent, targetId: string) => {
+    if (!draggingId) return;
+    if (!canMoveNode(draggingId, targetId)) {
+      e.dataTransfer.dropEffect = 'none';
+      if (dropTargetId === targetId) setDropTargetId(null);
+      return;
+    }
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if (dropTargetId !== targetId) setDropTargetId(targetId);
+  };
+
+  const handleDrop = (e: DragEvent, targetId: string) => {
+    e.preventDefault();
+    const sourceId = draggingId ?? e.dataTransfer.getData('text/plain');
+    if (sourceId && moveNode(sourceId, targetId)) {
+      // Reveal the moved node under its new parent.
+      setExpanded((prev) => new Set(prev).add(targetId));
+    }
+    setDraggingId(null);
+    setDropTargetId(null);
+  };
 
   const openContextMenu = (e: MouseEvent) => {
     e.preventDefault();
@@ -105,6 +142,12 @@ export function Tree() {
             expanded={expanded}
             onToggle={toggle}
             onContextMenu={openContextMenu}
+            draggingId={draggingId}
+            dropTargetId={dropTargetId}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
             separatorBefore={node.id === 'managed-directories'}
           />
         ))}
@@ -129,6 +172,12 @@ interface TreeNodeViewProps {
   expanded: Set<string>;
   onToggle: (id: string) => void;
   onContextMenu: (e: MouseEvent) => void;
+  draggingId: string | null;
+  dropTargetId: string | null;
+  onDragStart: (e: DragEvent, id: string) => void;
+  onDragEnd: () => void;
+  onDragOver: (e: DragEvent, targetId: string) => void;
+  onDrop: (e: DragEvent, targetId: string) => void;
   separatorBefore?: boolean;
 }
 
@@ -139,11 +188,19 @@ function TreeNodeView({
   expanded,
   onToggle,
   onContextMenu,
+  draggingId,
+  dropTargetId,
+  onDragStart,
+  onDragEnd,
+  onDragOver,
+  onDrop,
   separatorBefore,
 }: TreeNodeViewProps) {
   const hasChildren = node.hasChildren;
   const open = expanded.has(node.id);
   const isSelected = node.id === selectedId;
+  const isDragging = node.id === draggingId;
+  const isDropTarget = node.id === dropTargetId;
   const rowRef = useRef<HTMLDivElement | null>(null);
 
   // Reveal the selected node (e.g. on deep-link) once its ancestors expand.
@@ -159,8 +216,18 @@ function TreeNodeView({
       <li>
         <div
           ref={rowRef}
-          className={cx(styles.row, isSelected && styles.rowSelected)}
+          className={cx(
+            styles.row,
+            isSelected && styles.rowSelected,
+            isDragging && styles.rowDragging,
+            isDropTarget && styles.rowDropTarget,
+          )}
           style={{ paddingLeft: `calc(${depth} * var(--oi-spacing-m))` }}
+          draggable
+          onDragStart={(e) => onDragStart(e, node.id)}
+          onDragEnd={onDragEnd}
+          onDragOver={(e) => onDragOver(e, node.id)}
+          onDrop={(e) => onDrop(e, node.id)}
           onContextMenu={onContextMenu}
         >
           {hasChildren ? (
@@ -209,6 +276,12 @@ function TreeNodeView({
                 expanded={expanded}
                 onToggle={onToggle}
                 onContextMenu={onContextMenu}
+                draggingId={draggingId}
+                dropTargetId={dropTargetId}
+                onDragStart={onDragStart}
+                onDragEnd={onDragEnd}
+                onDragOver={onDragOver}
+                onDrop={onDrop}
               />
             ))}
           </ul>

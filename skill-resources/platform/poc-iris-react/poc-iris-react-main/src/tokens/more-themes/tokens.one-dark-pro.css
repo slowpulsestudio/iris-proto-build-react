@@ -3,6 +3,7 @@
 body.theme-one-dark-pro {
   /* backgrounds */
   --oi-background-color-primary: #282C34;
+  --oi-background-color-blanket: rgba(0, 0, 0, 0.55);
   --oi-background-color-secondary: #2C313A;
   --oi-background-color-tertiary: #353B45;
   --oi-background-color-brand: rgba(97, 175, 239, 0.16);

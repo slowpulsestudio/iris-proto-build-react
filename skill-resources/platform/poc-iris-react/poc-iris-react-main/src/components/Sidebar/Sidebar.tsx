@@ -1,10 +1,18 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type PointerEvent as ReactPointerEvent,
+} from 'react';
 import { cx } from '../../lib/cx.js';
 import { navigate } from '../../lib/router.js';
 import { useFavorites } from '../../lib/useFavorites.js';
 import { SegmentedControl } from '../SegmentedControl/SegmentedControl.js';
 import { MultiSelect, type MultiSelectOption } from '../MultiSelect/MultiSelect.js';
 import { NavItem } from '../NavItem/NavItem.js';
+import { Tooltip } from '../Tooltip/Tooltip.js';
 import { Tree } from './Tree.js';
 import styles from './Sidebar.module.css';
 
@@ -22,6 +30,12 @@ export interface SidebarProps {
   /** Active directory-view segment (Flat/Tree/Favourites), derived from route. */
   view: string;
   onViewChange: (value: string) => void;
+  /** Rail width in px. Falls back to the CSS default when omitted. */
+  width?: number;
+  /** Active-drag styling for the resize handle. */
+  dragging?: boolean;
+  /** When provided, renders a drag-to-resize handle on the right edge. */
+  onResizePointerDown?: (e: ReactPointerEvent<HTMLButtonElement>) => void;
   className?: string;
 }
 
@@ -99,6 +113,9 @@ export function Sidebar({
   directoryLabel,
   view,
   onViewChange,
+  width,
+  dragging = false,
+  onResizePointerDown,
   className,
 }: SidebarProps) {
   const [directories, setDirectories] = useState<Set<string>>(
@@ -150,49 +167,80 @@ export function Sidebar({
   }, []);
 
   return (
-    <aside className={cx(styles.sidebar, className)} aria-label="Directory">
-      <div className={styles.viewSwitch}>
-        <SegmentedControl
-          items={VIEW_OPTIONS}
-          value={view}
-          onChange={onViewChange}
-          ariaLabel="Directory view"
-        />
-      </div>
+    <aside
+      className={cx(styles.sidebar, className)}
+      style={width ? ({ '--directory-sidebar-width': `${width}px` } as CSSProperties) : undefined}
+      aria-label="Directory"
+    >
+      {onResizePointerDown &&
+        (dragging ? (
+          <button
+            type="button"
+            aria-label="Resize sidebar"
+            className={cx(styles.resizeHandle, styles.resizeHandleDragging)}
+            onPointerDown={onResizePointerDown}
+            onClick={(e) => e.preventDefault()}
+          >
+            <span className={styles.resizeHandleGrip} aria-hidden="true" />
+          </button>
+        ) : (
+          <Tooltip label="Drag to resize" placement="bottom" delay={150} followCursor>
+            <button
+              type="button"
+              aria-label="Resize sidebar"
+              className={styles.resizeHandle}
+              onPointerDown={onResizePointerDown}
+              onClick={(e) => e.preventDefault()}
+            >
+              <span className={styles.resizeHandleGrip} aria-hidden="true" />
+            </button>
+          </Tooltip>
+        ))}
 
-      {view === 'tree' ? (
-        <Tree />
-      ) : view === 'favourites' ? (
-        <FavouritesBody />
-      ) : (
-        <>
-          <div className={styles.selectBlock}>
-            <MultiSelect
-              label={directoryLabel}
-              ariaLabel="Filter by directory"
-              searchPlaceholder="Search directories"
-              options={DIRECTORIES}
-              selected={directories}
-              onSelectionChange={setDirectories}
-              className={styles.directorySelect}
-            />
-          </div>
+      <div className={styles.sidebarSurface}>
+        <div className={styles.viewSwitch}>
+          <SegmentedControl
+            items={VIEW_OPTIONS}
+            value={view}
+            onChange={onViewChange}
+            ariaLabel="Directory view"
+          />
+        </div>
 
-          <nav ref={navRef} className={styles.nav} aria-label="Directory entities">
-            <span ref={indicatorRef} aria-hidden="true" className={styles.navIndicator} />
-            {navItems.map((item) => (
-              <NavItem
-                key={item.value}
-                icon={item.icon}
-                label={item.label}
-                selected={item.value === activeNav}
-                hideIndicator
-                onClick={() => onNavChange?.(item.value)}
+        {view === 'tree' ? (
+          <Tree />
+        ) : view === 'favourites' ? (
+          <FavouritesBody />
+        ) : (
+          <>
+            <div className={styles.selectBlock}>
+              <MultiSelect
+                label={directoryLabel}
+                ariaLabel="Filter by directory"
+                searchPlaceholder="Search directories"
+                options={DIRECTORIES}
+                selected={directories}
+                onSelectionChange={setDirectories}
+                className={styles.directorySelect}
               />
-            ))}
-          </nav>
-        </>
-      )}
+            </div>
+
+            <nav ref={navRef} className={styles.nav} aria-label="Directory entities">
+              <span ref={indicatorRef} aria-hidden="true" className={styles.navIndicator} />
+              {navItems.map((item) => (
+                <NavItem
+                  key={item.value}
+                  icon={item.icon}
+                  label={item.label}
+                  selected={item.value === activeNav}
+                  hideIndicator
+                  onClick={() => onNavChange?.(item.value)}
+                />
+              ))}
+            </nav>
+          </>
+        )}
+      </div>
     </aside>
   );
 }

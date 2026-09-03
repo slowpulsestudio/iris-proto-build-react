@@ -16,7 +16,7 @@
      trigger menu aligned to its right edge flips to top-right below. */
   transform-origin: top left;
   animation: oi-menu-in var(--oi-motion-duration-default)
-    cubic-bezier(0.22, 1, 0.36, 1);
+    var(--oi-motion-ease-emphasized);
 }
 
 .menu[data-align='end'] {

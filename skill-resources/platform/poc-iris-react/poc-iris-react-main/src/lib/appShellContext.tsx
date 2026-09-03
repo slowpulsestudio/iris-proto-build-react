@@ -2,6 +2,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type Dispatch,
@@ -9,6 +10,18 @@ import {
   type SetStateAction,
 } from 'react';
 import type { AiContextItem } from './aiContext.js';
+import { isRoleId, type RoleId } from './identityNav.js';
+
+const IDENTITY_ROLE_STORAGE_KEY = 'ars.identity.role';
+
+function readInitialIdentityRole(): RoleId {
+  try {
+    const raw = localStorage.getItem(IDENTITY_ROLE_STORAGE_KEY);
+    return isRoleId(raw) ? raw : 'all';
+  } catch {
+    return 'all';
+  }
+}
 
 export interface AppShellContextValue {
   aiOpen: boolean;
@@ -42,6 +55,17 @@ export interface AppShellContextValue {
    */
   setAiContext: Dispatch<SetStateAction<AiContextItem[]>>;
   clearAiContext: () => void;
+  /**
+   * One-shot prompt used to open the AI panel with its composer pre-filled
+   * (but unsent). Set by a caller (e.g. the Identity Home suggestion pills)
+   * alongside `setAiOpen(true)`; the AiPanel seeds its input from this and
+   * clears it back to `null`.
+   */
+  pendingAiPrompt: string | null;
+  setPendingAiPrompt: Dispatch<SetStateAction<string | null>>;
+  /** Identity Manager "Preview as" role. Scopes the IdM sidebar + Home cards. */
+  identityRole: RoleId;
+  setIdentityRole: (role: RoleId) => void;
 }
 
 /**
@@ -71,6 +95,16 @@ export function AppShellProvider({ children }: AppShellProviderProps) {
   const [activeNav, setActiveNav] = useState('users');
   const [aiContext, setAiContext] = useState<AiContextItem[]>([]);
   const clearAiContext = useCallback(() => setAiContext([]), []);
+  const [pendingAiPrompt, setPendingAiPrompt] = useState<string | null>(null);
+  const [identityRole, setIdentityRole] = useState<RoleId>(readInitialIdentityRole);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(IDENTITY_ROLE_STORAGE_KEY, identityRole);
+    } catch {
+      /* storage unavailable — silently ignore */
+    }
+  }, [identityRole]);
 
   const value = useMemo<AppShellContextValue>(
     () => ({
@@ -83,8 +117,12 @@ export function AppShellProvider({ children }: AppShellProviderProps) {
       aiContext,
       setAiContext,
       clearAiContext,
+      pendingAiPrompt,
+      setPendingAiPrompt,
+      identityRole,
+      setIdentityRole,
     }),
-    [aiOpen, searchOpen, activeNav, aiContext, clearAiContext],
+    [aiOpen, searchOpen, activeNav, aiContext, clearAiContext, pendingAiPrompt, identityRole],
   );
 
   return <AppShellContext.Provider value={value}>{children}</AppShellContext.Provider>;

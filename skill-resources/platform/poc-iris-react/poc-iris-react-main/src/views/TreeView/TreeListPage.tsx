@@ -27,6 +27,7 @@ import { ActionBar } from '../../components/ActionBar/ActionBar.js';
 import type { Crumb } from '../../components/AppHeader/AppHeader.js';
 import { ResetPasswordModal } from '../UserDetailPage/ResetPasswordModal/ResetPasswordModal.js';
 import { DeleteUserModal } from '../UserDetailPage/DeleteUserModal/DeleteUserModal.js';
+import { CreateObjectModal } from '../UsersPage/CreateObjectModal/CreateObjectModal.js';
 import styles from './TreeView.module.css';
 
 const PAGE_SIZE_OPTIONS = [15, 30, 50, 100];
@@ -81,6 +82,8 @@ export function TreeListPage({ nodeId }: TreeListPageProps) {
   const [selected, setSelected] = useState<Set<RowKey>>(() => new Set());
   const [resetTarget, setResetTarget] = useState<DirectoryObject | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<DirectoryObject | null>(null);
+  // Which object type the Create flow is building. `null` = closed.
+  const [createTarget, setCreateTarget] = useState<{ type: string; icon: string } | null>(null);
   const [activeFilters, setActiveFilters] = useState<ActiveFilter[]>([]);
   const [filterMenuOpen, setFilterMenuOpen] = useState(false);
   const filterIdRef = useRef(0);
@@ -130,6 +133,16 @@ export function TreeListPage({ nodeId }: TreeListPageProps) {
       onSelect: supported ? () => addFilter(f.id) : undefined,
     };
   });
+
+  // Create-menu entries wired to open the shared multi-step create modal.
+  const createMenuItems: MenuEntry[] = CREATE_MENU_ITEMS.map((entry) =>
+    entry.kind === 'item'
+      ? {
+          ...entry,
+          onSelect: () => setCreateTarget({ type: entry.label, icon: entry.icon ?? 'User' }),
+        }
+      : entry,
+  );
 
   const nodeName = getNodeName(nodeId);
   const known = isContainer(nodeId);
@@ -337,7 +350,7 @@ export function TreeListPage({ nodeId }: TreeListPageProps) {
             <Menu
               ariaLabel="Create options"
               align="end"
-              items={CREATE_MENU_ITEMS}
+              items={createMenuItems}
               trigger={({ ref, onClick, expanded }) => (
                 <Button
                   ref={ref as React.Ref<HTMLButtonElement>}
@@ -460,6 +473,15 @@ export function TreeListPage({ nodeId }: TreeListPageProps) {
       )}
       {deleteTarget && (
         <DeleteUserModal open onClose={() => setDeleteTarget(null)} user={{ name: deleteTarget.name }} />
+      )}
+      {createTarget && (
+        <CreateObjectModal
+          open
+          onClose={() => setCreateTarget(null)}
+          objectType={createTarget.type}
+          icon={createTarget.icon}
+          location={`Directory Management / ${nodeName}`}
+        />
       )}
     </AppShell>
   );

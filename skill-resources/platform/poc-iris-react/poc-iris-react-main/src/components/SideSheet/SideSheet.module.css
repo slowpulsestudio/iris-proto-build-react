@@ -9,12 +9,12 @@
   display: flex;
   justify-content: flex-end;
   background-color: rgba(2, 6, 24, 0);
-  transition: background-color var(--oi-motion-duration-default)
-    var(--oi-motion-ease-default);
+  transition: background-color var(--oi-motion-duration-long)
+    var(--oi-motion-ease-drawer);
 }
 
 .rootOpen {
-  background-color: rgba(2, 6, 24, 0.4);
+  background-color: var(--oi-background-color-blanket, rgba(2, 6, 24, 0.4));
 }
 
 .panel {
@@ -31,8 +31,8 @@
   box-shadow: var(--oi-shadow-mid);
   overflow: hidden;
   transform: translateX(calc(100% + 6px));
-  transition: transform var(--oi-motion-duration-default)
-    var(--oi-motion-ease-default);
+  transition: transform var(--oi-motion-duration-long)
+    var(--oi-motion-ease-drawer);
 }
 
 .panelOpen {
@@ -114,5 +114,13 @@
   }
   .panelOpen {
     transform: translateX(0);
+  }
+}
+
+/* Reduced motion: drop the slide; the backdrop still fades so the overlay
+   change stays legible. */
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    transition: none;
   }
 }

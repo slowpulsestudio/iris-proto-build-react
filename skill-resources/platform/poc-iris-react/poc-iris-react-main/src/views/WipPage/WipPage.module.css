@@ -4,9 +4,7 @@
   justify-content: center;
   min-height: 16rem;
   padding: var(--oi-spacing-xl);
-}
-
-.wipCode {
+}.wipCode {
   font-family: var(--oi-font-family-code, 'IBM Plex Mono', monospace);
   font-size: var(--oi-text-body-m-font-size);
   line-height: var(--oi-text-body-m-line-height);

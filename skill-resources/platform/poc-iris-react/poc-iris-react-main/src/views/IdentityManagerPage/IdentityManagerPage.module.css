@@ -1,14 +1,267 @@
 .page {
   flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: var(--oi-spacing-l);
+  gap: var(--oi-spacing-xl);
+  padding: var(--oi-spacing-xxl) var(--oi-spacing-l);
+  min-width: 0;
 }
 
-.placeholder {
+/* ── Hero: greeting + launcher + chips ── */
+.hero {
+  width: 100%;
+  max-width: 936px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--oi-spacing-xl);
+  padding-top: var(--oi-spacing-xl);
+  padding-bottom: var(--oi-spacing-s);
+  text-align: center;
+}
+
+.greeting {
   margin: 0;
+  font-size: var(--oi-font-size-m);
+  line-height: var(--oi-line-height-m);
+  font-weight: var(--oi-font-weight-400);
+  color: var(--oi-content-color-primary);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--oi-spacing-s);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+  padding: var(--oi-spacing-xs) var(--oi-spacing-s);
+  background: none;
+  border: 0.5px var(--oi-border-style-solid) var(--oi-border-color-muted);
+  border-radius: var(--oi-border-radius-max);
+  box-shadow: none;
+  cursor: pointer;
+  color: var(--oi-content-color-tertiary);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  transition:
+    color var(--oi-motion-duration-short) var(--oi-motion-ease-default),
+    border-color var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.chip:hover {
+  color: var(--oi-content-color-primary);
+  border-color: var(--oi-border-color-default);
+}
+
+.chip:focus-visible {
+  outline: none;
+  box-shadow: var(--oi-focus-ring);
+  border-radius: var(--oi-border-radius-s);
+}
+
+.divider {
+  width: 100%;
+  max-width: 936px;
+  margin: 0;
+  border: none;
+  border-top: 0.5px var(--oi-border-style-solid) var(--oi-border-color-default);
+}
+
+/* ── Stat tiles + info cards share the same 3-col grid ── */
+.tileGrid,
+.cardGrid {
+  width: 100%;
+  max-width: 936px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--oi-spacing-xl);
+}
+
+/* ── Quick actions section (title + card grid) ── */
+.cardSection {
+  width: 100%;
+  max-width: 936px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-l);
+  text-align: left;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: var(--oi-text-heading-05-font-size);
+  line-height: var(--oi-text-heading-05-line-height);
+  font-weight: var(--oi-text-heading-05-font-weight);
+  color: var(--oi-content-color-primary);
+}
+
+/* ── Stat tile: label + menu on top, value, then a full-bleed sparkline ── */
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-xs);
+  min-height: 124px;
+  padding: var(--oi-spacing-m) var(--oi-spacing-l) 0;
+  overflow: hidden;
+  background-color: var(--oi-background-color-primary);
+  border: 0.5px var(--oi-border-style-solid) var(--oi-border-color-default);
+  border-radius: var(--oi-border-radius-l);
+  box-shadow: var(--oi-shadow-low);
+}
+
+.tileHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--oi-spacing-m);
+}
+
+.tileValue {
+  font-family: var(--oi-font-family-code);
+  font-size: var(--oi-text-heading-04-font-size);
+  line-height: var(--oi-text-heading-04-line-height);
+  font-weight: var(--oi-font-weight-600);
+  color: var(--oi-content-color-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.tileLabel {
+  min-width: 0;
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  color: var(--oi-content-color-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Dummy sparkline: full-bleed to the tile's side + bottom edges. */
+.spark {
+  width: calc(100% + 2 * var(--oi-spacing-l));
+  height: 56px;
+  margin: auto calc(-1 * var(--oi-spacing-l)) 0;
+  display: block;
+  overflow: visible;
+}
+
+.sparkLine {
+  fill: none;
+  stroke: var(--oi-content-color-link);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: sparkDraw 800ms var(--oi-motion-ease-default) forwards;
+}
+
+.sparkFill {
+  fill: var(--oi-content-color-link);
+  opacity: 0;
+  stroke: none;
+  animation: sparkFade 800ms var(--oi-motion-ease-default) forwards;
+}
+
+@keyframes sparkDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes sparkFade {
+  to {
+    opacity: 0.08;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sparkLine {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .sparkFill {
+    animation: none;
+    opacity: 0.08;
+  }
+}
+
+/* ── Info / action card ── */
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--oi-spacing-m);
+  min-height: 124px;
+  padding: var(--oi-spacing-m) var(--oi-spacing-l);
+  background-color: var(--oi-background-color-secondary);
+  border-radius: var(--oi-border-radius-l);
+  text-decoration: none;
+}
+
+.card:focus-visible {
+  outline: none;
+  box-shadow: var(--oi-focus-ring);
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-xs);
+  min-width: 0;
+}
+
+.cardTitle {
+  font-size: var(--oi-text-body-s-strong-font-size);
+  line-height: var(--oi-text-body-s-strong-line-height);
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+  color: var(--oi-content-color-primary);
+}
+
+.cardDesc {
   font-size: var(--oi-text-body-s-font-size);
   line-height: var(--oi-text-body-s-line-height);
   color: var(--oi-content-color-tertiary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+  color: var(--oi-content-color-link);
+}
+
+.card:hover .cardLink {
+  color: var(--oi-content-color-link-hover);
+}
+
+@media (max-width: 1100px) {
+  .tileGrid,
+  .cardGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .tileGrid,
+  .cardGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

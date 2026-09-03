@@ -144,6 +144,15 @@ function indexTree(nodes: RawNode[], parentId: string | null): void {
 }
 indexTree(TREE, null);
 
+/** Rebuild the id/parent indexes + derived views after a structural change. */
+function reindex(): void {
+  nodeById.clear();
+  parentIdByNode.clear();
+  indexTree(TREE, null);
+  NODE_TREE = TREE.map(toNodeView);
+  ALL_NODE_IDS = computeAllNodeIds();
+}
+
 export interface DirectoryNodeView {
   id: string;
   name: string;
@@ -163,13 +172,12 @@ function toNodeView(n: RawNode): DirectoryNodeView {
 }
 
 /** The node tree shaped for rendering the sidebar `Tree`. */
-export const NODE_TREE: DirectoryNodeView[] = TREE.map(toNodeView);
+export let NODE_TREE: DirectoryNodeView[] = TREE.map(toNodeView);
 
 /** The first (top-of-tree) node — the default selection for the Tree view. */
 export const FIRST_NODE_ID: string = NODE_TREE[0].id;
 
-/** Every container node id, depth-first — used to fully unfurl the tree. */
-export const ALL_NODE_IDS: string[] = (() => {
+function computeAllNodeIds(): string[] {
   const ids: string[] = [];
   const walk = (nodes: DirectoryNodeView[]): void => {
     for (const n of nodes) {
@@ -179,7 +187,79 @@ export const ALL_NODE_IDS: string[] = (() => {
   };
   walk(NODE_TREE);
   return ids;
-})();
+}
+
+/** Every container node id, depth-first — used to fully unfurl the tree. */
+export let ALL_NODE_IDS: string[] = computeAllNodeIds();
+
+/* ------------------------------------------------------------------ */
+/*  Mutations (drag-and-drop reparenting) + change subscription       */
+/* ------------------------------------------------------------------ */
+
+let treeVersion = 0;
+const listeners = new Set<() => void>();
+
+/** Subscribe to structural tree changes (for `useSyncExternalStore`). */
+export function subscribeDirectory(cb: () => void): () => void {
+  listeners.add(cb);
+  return () => listeners.delete(cb);
+}
+
+/** Monotonic version bumped on every structural change. */
+export function getTreeVersion(): number {
+  return treeVersion;
+}
+
+/** True when `candidateId` is `ancestorId` or nested somewhere beneath it. */
+function isSelfOrDescendant(candidateId: string, ancestorId: string): boolean {
+  if (candidateId === ancestorId) return true;
+  let cur: string | null | undefined = parentIdByNode.get(candidateId) ?? null;
+  while (cur) {
+    if (cur === ancestorId) return true;
+    cur = parentIdByNode.get(cur) ?? null;
+  }
+  return false;
+}
+
+/**
+ * Whether `nodeId` may be reparented under `newParentId` (`null` = top level).
+ * Rejects no-ops and moving a node into itself or one of its descendants.
+ */
+export function canMoveNode(nodeId: string, newParentId: string | null): boolean {
+  if (!nodeById.has(nodeId)) return false;
+  if (newParentId !== null && !nodeById.has(newParentId)) return false;
+  if (newParentId !== null && isSelfOrDescendant(newParentId, nodeId)) return false;
+  const currentParentId = parentIdByNode.get(nodeId) ?? null;
+  return currentParentId !== newParentId;
+}
+
+/**
+ * Reparent `nodeId` under `newParentId` (`null` = top level). Returns whether
+ * the move happened. Mutates the raw tree in place, reindexes, and notifies
+ * subscribers so the sidebar re-renders.
+ */
+export function moveNode(nodeId: string, newParentId: string | null): boolean {
+  if (!canMoveNode(nodeId, newParentId)) return false;
+  const node = nodeById.get(nodeId)!;
+  const currentParentId = parentIdByNode.get(nodeId) ?? null;
+
+  const oldSiblings = currentParentId ? (nodeById.get(currentParentId)!.children ?? []) : TREE;
+  const idx = oldSiblings.findIndex((n) => n.id === nodeId);
+  if (idx === -1) return false;
+  oldSiblings.splice(idx, 1);
+
+  if (newParentId) {
+    const parent = nodeById.get(newParentId)!;
+    (parent.children ??= []).push(node);
+  } else {
+    TREE.push(node);
+  }
+
+  reindex();
+  treeVersion += 1;
+  listeners.forEach((l) => l());
+  return true;
+}
 
 export function getNode(nodeId: string): RawNode | undefined {
   return nodeById.get(nodeId);

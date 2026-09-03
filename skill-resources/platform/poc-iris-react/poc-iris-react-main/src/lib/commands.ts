@@ -8,6 +8,7 @@
  */
 
 import type { User } from '../views/UsersPage/mockUsers.js';
+import { IDENTITY_NAV_GROUPS } from './identityNav.js';
 
 /** Which slice of results the palette is scoped to. */
 export type CommandScope = 'all' | 'users' | 'pages';
@@ -58,6 +59,23 @@ export const PAGE_ITEMS: CommandItem[] = [
     keywords: 'catalog extensions apps',
   },
 ];
+
+/** Identity Manager destinations — one item per grouped section leaf. Used to
+ *  scope the command palette to the Identity Manager shell (its taxonomy),
+ *  replacing the global page/user pools while that vertical is active. */
+export const IDENTITY_COMMAND_ITEMS: CommandItem[] = IDENTITY_NAV_GROUPS.flatMap((group) =>
+  group.items.map(
+    (item): CommandItem => ({
+      id: `idm-${group.id}-${item.value}`,
+      kind: 'page',
+      label: item.label,
+      icon: item.icon,
+      secondary: group.label,
+      keywords: `${group.label} identity manager`,
+      hash: item.route,
+    }),
+  ),
+);
 
 /** Map directory users into palette items linking to their detail page. */
 export function buildUserItems(users: User[]): CommandItem[] {

@@ -3,6 +3,7 @@
 body.theme-tokyo-night {
   /* backgrounds */
   --oi-background-color-primary: #1A1B26;
+  --oi-background-color-blanket: rgba(0, 0, 0, 0.55);
   --oi-background-color-secondary: #1F2335;
   --oi-background-color-tertiary: #292E42;
   --oi-background-color-brand: rgba(122, 162, 247, 0.16);

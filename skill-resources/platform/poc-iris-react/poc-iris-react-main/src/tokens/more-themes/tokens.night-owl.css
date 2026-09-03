@@ -3,6 +3,7 @@
 body.theme-night-owl {
   /* backgrounds */
   --oi-background-color-primary: #011627;
+  --oi-background-color-blanket: rgba(0, 0, 0, 0.55);
   --oi-background-color-secondary: #0B253A;
   --oi-background-color-tertiary: #0E2942;
   --oi-background-color-brand: rgba(126, 87, 194, 0.20);

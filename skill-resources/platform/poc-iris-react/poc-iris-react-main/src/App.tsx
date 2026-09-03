@@ -15,6 +15,9 @@ import { WipPage } from './views/WipPage/WipPage.js';
 import { InsightsPage } from './views/InsightsPage/InsightsPage.js';
 import { ServicesPage } from './views/ServicesPage/ServicesPage.js';
 import { IdentityManagerPage } from './views/IdentityManagerPage/IdentityManagerPage.js';
+import { IdentityInsightsPage } from './views/IdentityManagerPage/IdentityInsightsPage.js';
+import { IdentityPlaceholder } from './views/IdentityManagerPage/IdentityPlaceholder.js';
+import { IdentitySectionPage } from './views/IdentityManagerPage/IdentitySectionPage.js';
 import { SafeguardPage } from './views/SafeguardPage/SafeguardPage.js';
 
 export default function App() {
@@ -48,6 +51,16 @@ export default function App() {
           {route.name === 'insights' && <InsightsPage />}
           {route.name === 'services' && <ServicesPage />}
           {route.name === 'identityHome' && <IdentityManagerPage />}
+          {route.name === 'identityInsights' && <IdentityInsightsPage />}
+          {route.name === 'identitySettings' && (
+            <IdentityPlaceholder title="Settings" icon="GearFine" activeItem="#/identity/settings" />
+          )}
+          {route.name === 'identityHelp' && (
+            <IdentityPlaceholder title="Help with" icon="Question" activeItem="#/identity/help" />
+          )}
+          {route.name === 'identitySection' && (
+            <IdentitySectionPage groupId={route.params.group} itemValue={route.params.item} />
+          )}
           {route.name === 'safeguardHome' && <SafeguardPage />}
           <CommandPalette />
           <Toast message={toast.message} onDismiss={toast.dismiss} />

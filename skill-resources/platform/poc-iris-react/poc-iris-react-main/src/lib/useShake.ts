@@ -11,7 +11,7 @@ import { useCallback, useRef } from 'react';
  * 80/80/60/60ms (280ms total) with a per-segment ease. Honors
  * `prefers-reduced-motion` and no-ops where the Web Animations API is absent.
  */
-const SHAKE_EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
+const SHAKE_EASE = 'cubic-bezier(0.23, 1, 0.32, 1)';
 
 export function useShake<T extends HTMLElement = HTMLElement>() {
   const ref = useRef<T>(null);

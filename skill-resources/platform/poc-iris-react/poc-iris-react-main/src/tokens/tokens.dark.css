@@ -1,5 +1,6 @@
 body.theme-dark {
   --oi-background-color-primary: #020618;
+  --oi-background-color-blanket: rgba(0, 0, 0, 0.55);
   --oi-background-color-secondary: #0F172B;
   --oi-background-color-tertiary: #1D293D;
   --oi-background-color-brand: #052F4A;

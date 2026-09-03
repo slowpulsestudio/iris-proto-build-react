@@ -17,6 +17,7 @@ body.theme-hc-dark {
   --oi-spacing-xxl: 32px;
   --oi-spacing-xxxl: 48px;
   --oi-background-color-primary: #0D0D0D;
+  --oi-background-color-blanket: rgba(0, 0, 0, 0.7);
   --oi-background-color-secondary: #161616;
   --oi-background-color-tertiary: #363636;
   --oi-background-color-brand: #00598A;
@@ -83,8 +84,9 @@ body.theme-hc-dark {
   --oi-motion-duration-default: 200ms;
   --oi-motion-duration-long: 280ms;
   --oi-motion-duration-loop: 1000ms;
-  --oi-motion-ease-default: ease-out;
-  --oi-motion-ease-enter: ease-out;
-  --oi-motion-ease-exit: ease-in;
+  --oi-motion-ease-default: cubic-bezier(0.23, 1, 0.32, 1);
+  --oi-motion-ease-enter: cubic-bezier(0.23, 1, 0.32, 1);
+  --oi-motion-ease-exit: cubic-bezier(0.23, 1, 0.32, 1);
+  --oi-motion-ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
   --oi-motion-ease-none: linear;
 }

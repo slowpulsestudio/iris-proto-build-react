@@ -1,4 +1,5 @@
 import { BorderBeam } from 'border-beam';
+import type { ReactNode } from 'react';
 import { cx } from '../../lib/cx.js';
 import { useTheme } from '../../lib/useTheme.js';
 import { IconButton } from '../IconButton/IconButton.js';
@@ -47,6 +48,9 @@ export interface AppHeaderProps {
   aiActive?: boolean;
   /** Called when the search button is clicked (opens the command palette). */
   onSearch?: () => void;
+  /** Optional control rendered at the start of the right cluster (e.g. the
+   *  Identity Manager "Preview as" role switcher). */
+  roleSwitcher?: ReactNode;
   className?: string;
 }
 
@@ -65,6 +69,7 @@ export function AppHeader({
   onAskAi,
   aiActive = false,
   onSearch,
+  roleSwitcher,
   className,
 }: AppHeaderProps) {
   const { theme, setTheme, themes } = useTheme();
@@ -261,6 +266,7 @@ export function AppHeader({
       </div>
 
       <div className={styles.right}>
+        {roleSwitcher}
         <Tooltip label="Search" shortcut={['⌘', 'K']}>
           <IconButton icon="MagnifyingGlass" ariaLabel="Search" onClick={onSearch} />
         </Tooltip>

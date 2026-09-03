@@ -65,6 +65,7 @@
 /* Peek mode has no internal header — add top padding so nav doesn't kiss the edge. */
 .rootPeek .inner {
   padding-top: var(--oi-spacing-s);
+  padding-right: var(--oi-spacing-s);
 }
 
 /* ------------------------------------------------------------------ */
@@ -232,6 +233,86 @@
 }
 
 /* ------------------------------------------------------------------ */
+/*  Collapsible nav groups                                            */
+
+.navGroup {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Group header reuses .item; the caret is the only extra. */
+.groupHeader {
+  margin-top: var(--oi-spacing-xs);
+}
+
+.groupCaret {
+  flex-shrink: 0;
+  color: var(--oi-content-color-tertiary);
+  transition: transform var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.groupCaretOpen {
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .groupCaret {
+    transition: none;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Tree children (indented, connected by tree lines)                 */
+
+.treeList {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.treeItem {
+  position: relative;
+}
+
+/* Rounded elbow: incoming vertical (row top → centre) curving into the
+   horizontal branch. z-index keeps the line above row hover/active fills. */
+.treeItem::before {
+  content: '';
+  position: absolute;
+  left: var(--oi-spacing-l);
+  top: 0;
+  height: 50%;
+  width: var(--oi-spacing-m);
+  border-left: var(--oi-border-width-default) solid var(--oi-border-color-default);
+  border-bottom: var(--oi-border-width-default) solid var(--oi-border-color-default);
+  border-bottom-left-radius: var(--oi-border-radius-l);
+  z-index: 1;
+}
+
+/* Vertical continuation to the next sibling (omitted on the last child → └). */
+.treeItem:not(.treeItemLast)::after {
+  content: '';
+  position: absolute;
+  left: var(--oi-spacing-l);
+  top: 50%;
+  bottom: 0;
+  width: var(--oi-border-width-default);
+  background-color: var(--oi-border-color-default);
+  z-index: 1;
+}
+
+.treeLinkActive {
+  background-color: var(--oi-background-color-tertiary);
+  color: var(--oi-content-color-primary);
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+}
+
+/* ------------------------------------------------------------------ */
 /*  Section header ("Other")                                           */
 
 .sectionHeader {
@@ -243,41 +324,4 @@
   line-height: var(--oi-text-caption-line-height);
   font-weight: var(--oi-text-body-s-font-weight);
   color: var(--oi-content-color-tertiary);
-}
-
-/* ------------------------------------------------------------------ */
-/*  Footer help text                                                  */
-
-.footer {
-  flex-shrink: 0;
-  padding: var(--oi-spacing-s) var(--oi-spacing-s) var(--oi-spacing-m);
-  border-top: var(--oi-border-width-default) var(--oi-border-style-solid)
-    var(--oi-border-color-muted);
-}
-
-.footerHint {
-  margin: 0;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 4px;
-  font-size: var(--oi-text-caption-font-size);
-  line-height: var(--oi-text-caption-line-height);
-  font-weight: var(--oi-text-body-s-font-weight);
-  color: var(--oi-content-color-tertiary);
-}
-
-.footerKbd {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 4px;
-  border-radius: var(--oi-border-radius-s);
-  background-color: var(--oi-background-color-tertiary);
-  color: var(--oi-content-color-tertiary);
-  font-family: inherit;
-  font-size: var(--oi-text-caption-font-size);
-  line-height: 1;
 }

@@ -1,0 +1,431 @@
+/* ------------------------------------------------------------------ */
+/*  CreateObjectModal — 980px "New object" template                    */
+/* ------------------------------------------------------------------ */
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--oi-spacing-l);
+  background-color: rgba(2, 6, 24, 0);
+  transition: background-color var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.scrimOpen {
+  background-color: var(--oi-background-color-blanket, rgba(2, 6, 24, 0.4));
+  transition: background-color var(--oi-motion-duration-long) var(--oi-motion-ease-default);
+}
+
+.dialog {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 980px;
+  max-width: 100%;
+  max-height: calc(100vh - var(--oi-spacing-xl) * 2);
+  background-color: var(--oi-background-color-primary);
+  border-radius: var(--oi-border-radius-l);
+  box-shadow: var(--oi-shadow-mid);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(8px) scale(0.96);
+  transition:
+    opacity var(--oi-motion-duration-short) var(--oi-motion-ease-default),
+    transform var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.dialogOpen {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition:
+    opacity var(--oi-motion-duration-long) var(--oi-motion-ease-default),
+    transform var(--oi-motion-duration-long) var(--oi-motion-ease-default);
+}
+
+/* ---------- header ---------- */
+
+.header {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--oi-spacing-m);
+  padding: var(--oi-spacing-l);
+  flex-shrink: 0;
+}
+
+.featuredIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--oi-content-color-secondary);
+}
+
+.headerText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-xs);
+  flex: 1 1 auto;
+  min-width: 0;
+  padding-right: var(--oi-spacing-xl);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--oi-text-heading-05-font-size);
+  line-height: var(--oi-text-heading-05-line-height);
+  font-weight: var(--oi-text-heading-05-font-weight);
+  color: var(--oi-content-color-primary);
+  word-break: break-word;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  color: var(--oi-content-color-secondary);
+  word-break: break-word;
+}
+
+.closeBtn {
+  position: absolute;
+  top: var(--oi-spacing-m);
+  right: var(--oi-spacing-m);
+}
+
+/* ---------- stepper strip ---------- */
+
+.stepperWrap {
+  flex-shrink: 0;
+  padding-inline: var(--oi-spacing-xl);
+  border-top: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-default);
+}
+
+/* Pull the steps up so their connector borders sit on the strip's top
+   divider (dark under reached steps, otherwise the strip's light line). */
+.stepper {
+  margin-top: calc(-1 * var(--oi-border-width-default));
+}
+
+/* ---------- body ---------- */
+
+.body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--oi-spacing-xl);
+}
+
+.bodyRow {
+  display: grid;
+  grid-template-columns: minmax(0, 614px) minmax(0, 272px);
+  justify-content: space-between;
+  align-items: start;
+}
+
+.content {
+  min-width: 0;
+}
+
+/* Both step panels are stacked in one grid cell so the column always sizes to
+   the taller (General) step — keeping the modal height constant — and the two
+   can cross-slide. */
+.pages {
+  display: grid;
+}
+
+.page {
+  grid-area: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-l);
+  min-width: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(var(--page-from-x, 0));
+  filter: blur(3px);
+  transition:
+    opacity var(--oi-motion-duration-default) var(--oi-motion-ease-emphasized),
+    transform var(--oi-motion-duration-default) var(--oi-motion-ease-emphasized),
+    filter var(--oi-motion-duration-default) var(--oi-motion-ease-emphasized);
+  will-change: opacity, transform, filter;
+}
+
+/* Step 1 exits left, step 2 enters from the right. */
+.page[data-page-id='0'] {
+  --page-from-x: -8px;
+}
+
+.page[data-page-id='1'] {
+  --page-from-x: 8px;
+}
+
+.pages[data-page='0'] .page[data-page-id='0'],
+.pages[data-page='1'] .page[data-page-id='1'] {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+  filter: blur(0);
+}
+
+/* Absolutely positioned within the dialog so it starts at the stepper's top
+   edge (header height) and isn't clipped by the scrolling body or hidden
+   behind the stepper strip. `left` centers it in the gutter between the
+   614px content and 272px sidebar columns: 50% + (614 - 272) / 2. */
+.bodyDivider {
+  position: absolute;
+  top: calc(
+    var(--oi-spacing-l) * 2 + var(--oi-text-heading-05-line-height) +
+      var(--oi-spacing-xs) + var(--oi-text-body-s-line-height)
+  );
+  left: calc(50% + 178px);
+  width: var(--oi-border-width-default);
+  height: 240px;
+  background: linear-gradient(
+    to bottom,
+    var(--oi-border-color-default),
+    transparent
+  );
+  pointer-events: none;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-xs);
+  min-width: 0;
+  padding-inline: var(--oi-spacing-l);
+}
+
+.sidebarTitle {
+  margin: 0;
+  font-size: var(--oi-text-body-s-strong-font-size);
+  line-height: var(--oi-text-body-s-strong-line-height);
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+  color: var(--oi-content-color-primary);
+}
+
+.sidebarText {
+  margin: 0;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  color: var(--oi-content-color-tertiary);
+}
+
+/* ---------- form rows ---------- */
+
+.row {
+  display: flex;
+  gap: var(--oi-spacing-xl);
+  align-items: flex-start;
+  width: 100%;
+}
+
+.rowFull {
+  display: flex;
+  width: 100%;
+}
+
+.col {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.colFull {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* ---------- password field (custom label + reveal toggle) ---------- */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-s);
+  width: 100%;
+}
+
+.fieldLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-6);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+}
+
+.labelName {
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+  color: var(--oi-content-color-primary);
+}
+
+.labelReq {
+  font-weight: var(--oi-text-body-s-font-weight);
+  color: var(--oi-content-color-secondary);
+}
+
+.passwordControl {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+
+.passwordInput {
+  padding-right: var(--oi-spacing-xl);
+}
+
+.eyeBtn {
+  position: absolute;
+  top: 50%;
+  right: var(--oi-spacing-xs);
+  transform: translateY(-50%);
+}
+
+/* Eye ↔ EyeClosed cross-fade (icon swap): both icons share one cell. */
+.iconSwap {
+  display: grid;
+  place-items: center;
+}
+
+.iconSwapLayer {
+  grid-area: 1 / 1;
+  display: inline-flex;
+  transition:
+    opacity var(--oi-motion-duration-default) ease-in-out,
+    transform var(--oi-motion-duration-default) ease-in-out,
+    filter var(--oi-motion-duration-default) ease-in-out;
+}
+
+.iconSwap .iconSwapLayer:nth-child(2) {
+  opacity: 0;
+  transform: scale(0.5);
+  filter: blur(2px);
+}
+
+.iconSwap[data-alt='true'] .iconSwapLayer:nth-child(1) {
+  opacity: 0;
+  transform: scale(0.5);
+  filter: blur(2px);
+}
+
+.iconSwap[data-alt='true'] .iconSwapLayer:nth-child(2) {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+.fieldHint {
+  margin: 0;
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  font-weight: var(--oi-text-caption-font-weight);
+  color: var(--oi-content-color-secondary);
+}
+
+/* ---------- account options ---------- */
+
+.optionsGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-s);
+  width: 348px;
+}
+
+.optionsLabel {
+  font-size: var(--oi-text-body-s-strong-font-size);
+  line-height: var(--oi-text-body-s-strong-line-height);
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+  color: var(--oi-content-color-primary);
+}
+
+.optionsList {
+  display: flex;
+  flex-direction: column;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  padding: var(--oi-spacing-xs);
+  cursor: pointer;
+}
+
+.optionText {
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  color: var(--oi-content-color-primary);
+}
+
+/* ---------- footer ---------- */
+
+.footer {
+  flex-shrink: 0;
+  padding-top: var(--oi-spacing-l);
+}
+
+.footerInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--oi-spacing-m);
+  padding: var(--oi-spacing-l);
+  border-top: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-default);
+}
+
+.stepCounter {
+  font-family: var(--oi-font-family-code);
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  color: var(--oi-content-color-secondary);
+}
+
+/* Text swap-in for the step counter + CTA label (keyed remount replays it). */
+.swapIn {
+  display: inline-block;
+  animation: swapTextIn var(--oi-motion-duration-short) ease-in-out both;
+}
+
+@keyframes swapTextIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrim,
+  .scrimOpen,
+  .dialog,
+  .dialogOpen,
+  .page,
+  .iconSwapLayer {
+    transition: none;
+  }
+
+  .swapIn {
+    animation: none;
+  }
+}
+
+/* Below the full 980px layout the columns start to collapse; the decorative
+   divider would misalign, so hide it. */
+@media (max-width: 980px) {
+  .bodyDivider {
+    display: none;
+  }
+}

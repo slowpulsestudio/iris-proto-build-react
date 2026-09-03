@@ -4,6 +4,7 @@
 body.theme-monokai {
   /* backgrounds */
   --oi-background-color-primary: #272822;
+  --oi-background-color-blanket: rgba(0, 0, 0, 0.55);
   --oi-background-color-secondary: #34352D;
   --oi-background-color-tertiary: #414339;
   --oi-background-color-brand: rgba(249, 38, 114, 0.16);

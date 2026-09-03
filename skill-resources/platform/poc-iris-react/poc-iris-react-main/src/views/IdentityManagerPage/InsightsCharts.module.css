@@ -1,0 +1,90 @@
+.svg {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-s);
+}
+
+.axisLabel {
+  font-family: var(--oi-font-family-default);
+  font-size: 10px;
+  fill: var(--oi-content-color-tertiary);
+}
+
+.gridline {
+  stroke: var(--oi-border-color-muted);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+
+/* ── Gauge ── */
+.gaugeWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gaugeSvg {
+  width: 176px;
+  max-width: 100%;
+  height: auto;
+}
+
+.gaugeValue {
+  font-family: var(--oi-font-family-code);
+  font-size: 34px;
+  font-weight: var(--oi-font-weight-400);
+  fill: var(--oi-content-color-primary);
+}
+
+.gaugeCaption {
+  font-size: 12px;
+  fill: var(--oi-content-color-tertiary);
+}
+
+/* ── HBars ── */
+.rowLabel {
+  font-family: var(--oi-font-family-default);
+  font-size: 12px;
+  fill: var(--oi-content-color-secondary);
+}
+
+.rowValue {
+  font-family: var(--oi-font-family-code);
+  font-size: 12px;
+  fill: var(--oi-content-color-primary);
+}
+
+/* ── Legend ── */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--oi-spacing-m);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legendLabel {
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  color: var(--oi-content-color-secondary);
+}

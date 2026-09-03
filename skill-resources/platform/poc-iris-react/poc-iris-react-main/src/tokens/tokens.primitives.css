@@ -129,6 +129,8 @@
   --oi-motion-ease-linear: linear;
   --oi-motion-ease-out: ease-out;
   --oi-motion-ease-in: ease-in;
+  --oi-motion-ease-emphasized: cubic-bezier(0.23, 1, 0.32, 1);
+  --oi-motion-ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
   --oi-motion-duration-0: 0ms;
   --oi-motion-duration-120: 120ms;
   --oi-motion-duration-200: 200ms;

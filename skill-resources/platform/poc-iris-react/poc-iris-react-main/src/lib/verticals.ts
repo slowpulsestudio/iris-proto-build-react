@@ -1,6 +1,12 @@
 import { useRoute, type Route, type RouteName } from './router.js';
 import type { ProductIconName } from '../components/ProductIcon/ProductIcon.js';
 import type { SidebarNavItem } from '../components/Sidebar/Sidebar.js';
+import {
+  IDENTITY_HOME_ITEM,
+  IDENTITY_INSIGHTS_ITEM,
+  IDENTITY_NAV_GROUPS,
+  IDENTITY_OTHER_NAV,
+} from './identityNav.js';
 
 /**
  * Vertical — a top-level product surface within the application (e.g. Active
@@ -10,12 +16,32 @@ import type { SidebarNavItem } from '../components/Sidebar/Sidebar.js';
  */
 export type VerticalId = 'active-roles' | 'services' | 'identity-manager' | 'safeguard';
 
+/** Delivery status of a nav destination, surfaced as a status dot/badge. */
+export type NavStatus = 'web' | 'fat' | 'planned';
+
 export interface VerticalNavEntry {
   value: string;
   label: string;
   icon: string;
   /** Shown but not interactive (no route wired yet). */
   disabled?: boolean;
+  /** Delivery status badge (grouped nav only). */
+  status?: NavStatus;
+  /** Explicit route hash to navigate to. When absent, `value` is used. */
+  route?: string;
+}
+
+/** A collapsible section of nav entries (grouped-sidebar verticals). */
+export interface VerticalNavGroup {
+  id: string;
+  label: string;
+  /** Optional group glyph (used on Home cards; the sidebar header is text). */
+  icon?: string;
+  /** Optional supporting copy (used on Home cards). */
+  description?: string;
+  /** Optional category caption; a header renders when it changes between groups. */
+  section?: string;
+  items: VerticalNavEntry[];
 }
 
 export interface VerticalSecondarySidebar {
@@ -29,11 +55,6 @@ export interface Vertical {
   id: VerticalId;
   /** Display name in the product chooser and global sidebar header. */
   label: string;
-  /**
-   * Product-specific Figma sub-library URL for this vertical.
-   * This is additive to `IRIS_GLOBAL_LIBRARIES`, not a replacement.
-   */
-  subLibraryUrl?: string;
   /** Glyph used by the product chooser entry for this vertical. */
   productIcon: ProductIconName;
   /** Route hash to navigate to when this vertical is selected. */
@@ -44,31 +65,13 @@ export interface Vertical {
   mainNav: VerticalNavEntry[];
   /** OTHER-section global-nav items. */
   otherNav: VerticalNavEntry[];
+  /** Optional collapsible nav groups. When present, the sidebar renders these
+   *  (below `mainNav`) instead of the flat `otherNav` section. */
+  navGroups?: VerticalNavGroup[];
   /** Optional secondary-sidebar configuration. Pages can still hide the
    *  rail per-view via `<AppShell showSecondarySidebar={false}>`. */
   secondarySidebar?: VerticalSecondarySidebar;
 }
-
-export interface IrisGlobalLibraries {
-  components: string;
-  icons: string;
-  variables: string;
-  charts: string;
-  /** Optional master URL for motion patterns, when available. */
-  motionPatterns?: string;
-}
-
-/**
- * Global Iris design libraries used across all verticals.
- * Each vertical may also provide `subLibraryUrl` for product-specific additions.
- */
-export const IRIS_GLOBAL_LIBRARIES: IrisGlobalLibraries = {
-  components: 'https://www.figma.com/design/kgmR6KueZaAaS1t9m3WLiQ/Iris-UI--UI-Kit?m=auto',
-  icons: 'https://www.figma.com/design/NOXsUiIDjq0lpRXrAXySLn/Iris-UI--Icons?m=auto&t=7AMUiiJR0qad7aso-1',
-  variables: 'https://www.figma.com/design/QwUAD0F9iGg2ePmEKPk22J/Iris-UI--Variables?m=auto',
-  charts: 'https://www.figma.com/design/udiUmrkIKf7EqwsAfZft0x/Iris-UI--Charts?m=auto&t=7AMUiiJR0qad7aso-6',
-  motionPatterns: 'PENDING: Create Figma motion pattern page',
-};
 
 const COMMON_OTHER_NAV: VerticalNavEntry[] = [
   { value: 'settings', label: 'Settings', icon: 'GearFine', disabled: true },
@@ -78,7 +81,6 @@ const COMMON_OTHER_NAV: VerticalNavEntry[] = [
 export const ACTIVE_ROLES_VERTICAL: Vertical = {
   id: 'active-roles',
   label: 'Active Roles',
-  subLibraryUrl: 'https://www.figma.com/design/IlG4nne9VhqpONzqc0tfKg/ARS---Master?m=auto',
   productIcon: 'active-roles',
   defaultRoute: '#/insights',
   aiTitle: 'Active Roles AI',
@@ -106,7 +108,6 @@ export const ACTIVE_ROLES_VERTICAL: Vertical = {
 export const SERVICES_VERTICAL: Vertical = {
   id: 'services',
   label: 'On Demand Services',
-  subLibraryUrl: 'https://www.figma.com/design/tisOoVX7lkvXqwHGCWdx78/On-Demand---Master?m=auto&t=7AMUiiJR0qad7aso-6',
   productIcon: 'services',
   defaultRoute: '#/services',
   aiTitle: 'On Demand Services AI',
@@ -121,27 +122,17 @@ export const SERVICES_VERTICAL: Vertical = {
 export const IDENTITY_MANAGER_VERTICAL: Vertical = {
   id: 'identity-manager',
   label: 'Identity Manager',
-  subLibraryUrl: 'https://www.figma.com/design/DHXdGN5yW90DCi5a2ga9Yh/IM---Master?m=auto&t=7AMUiiJR0qad7aso-6',
   productIcon: 'identity-manager',
   defaultRoute: '#/identity',
   aiTitle: 'Identity Manager AI',
-  mainNav: [
-    { value: 'home', label: 'Home', icon: 'House' },
-    { value: 'requests', label: 'Requests', icon: 'Bell', disabled: true },
-    { value: 'recertification', label: 'ReCertification', icon: 'SealCheck', disabled: true },
-    { value: 'compliance', label: 'Compliance', icon: 'ShieldCheck', disabled: true },
-    { value: 'responsibilities', label: 'Responsibilities', icon: 'Handshake', disabled: true },
-  ],
-  otherNav: [
-    { value: 'data-administration', label: 'Data administration', icon: 'Stack', disabled: true },
-    { value: 'help', label: 'Help with', icon: 'Question', disabled: true },
-  ],
+  mainNav: [IDENTITY_HOME_ITEM, IDENTITY_INSIGHTS_ITEM],
+  otherNav: IDENTITY_OTHER_NAV,
+  navGroups: IDENTITY_NAV_GROUPS,
 };
 
 export const SAFEGUARD_VERTICAL: Vertical = {
   id: 'safeguard',
   label: 'Safeguard',
-  subLibraryUrl: '',
   productIcon: 'safeguard',
   defaultRoute: '#/safeguard',
   aiTitle: 'Safeguard AI',
@@ -157,7 +148,13 @@ export const SAFEGUARD_VERTICAL: Vertical = {
 const SERVICES_ROUTES: ReadonlySet<RouteName> = new Set<RouteName>(['services']);
 
 /** Route names that belong to the Identity Manager vertical. */
-const IDENTITY_ROUTES: ReadonlySet<RouteName> = new Set<RouteName>(['identityHome']);
+const IDENTITY_ROUTES: ReadonlySet<RouteName> = new Set<RouteName>([
+  'identityHome',
+  'identityInsights',
+  'identitySettings',
+  'identityHelp',
+  'identitySection',
+]);
 
 /** Route names that belong to the Safeguard vertical. */
 const SAFEGUARD_ROUTES: ReadonlySet<RouteName> = new Set<RouteName>(['safeguardHome']);

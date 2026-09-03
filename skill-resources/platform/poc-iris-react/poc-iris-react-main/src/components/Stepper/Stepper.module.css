@@ -1,0 +1,181 @@
+.root {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.horizontal {
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.step {
+  display: flex;
+  flex: 0 0 auto;
+  width: 192px;
+  min-width: 0;
+}
+
+.stepInner {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  min-height: 36px;
+  padding: var(--oi-spacing-s) var(--oi-spacing-s) var(--oi-spacing-s) var(--oi-spacing-m);
+  border: 0;
+  border-top: 1px solid var(--oi-content-color-primary);
+  background-color: var(--oi-background-color-primary);
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  transition:
+    background-color var(--oi-motion-duration-short) var(--oi-motion-ease-default),
+    border-color var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+/* Waiting/upcoming steps use the muted connector line. */
+.upcoming .stepInner {
+  border-top-color: var(--oi-border-color-default);
+}
+
+/* Interactive steps (rendered as buttons) show the hover surface across all
+   states; disabled (e.g. not-yet-reached) steps read as non-interactive. */
+button.stepInner {
+  cursor: pointer;
+}
+
+button.stepInner:not(:disabled):hover {
+  background-color: var(--oi-background-color-secondary);
+}
+
+button.stepInner:disabled {
+  cursor: not-allowed;
+}
+
+.isCurrent.error .stepInner {
+  background-color: var(--oi-background-color-secondary);
+}
+
+/* ── Connector line ────────────────────────────────────────────────
+   The top border already draws the track; this element is reserved so
+   the vertical variant can swap it for a left-side line later. */
+.connector {
+  display: none;
+}
+
+/* ── Indicator (16px circle) ───────────────────────────────────────── */
+.indicator {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--oi-border-radius-max);
+  border: 1px solid var(--oi-border-color-strong);
+  background-color: transparent;
+  color: var(--oi-content-color-secondary);
+  transition:
+    background-color var(--oi-motion-duration-short) var(--oi-motion-ease-default),
+    border-color var(--oi-motion-duration-short) var(--oi-motion-ease-default),
+    color var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.num,
+.errorGlyph {
+  font-family: var(--oi-font-family-code);
+  font-size: 9px;
+  line-height: 1;
+  font-weight: var(--oi-font-weight-600);
+}
+
+/* Completed check appears with a fade + rotate + settle (success-check). */
+.checkGlyph {
+  display: inline-flex;
+  transform-origin: center;
+  animation: stepCheckIn var(--oi-motion-duration-long)
+    cubic-bezier(0.34, 1.35, 0.64, 1) both;
+}
+
+@keyframes stepCheckIn {
+  from {
+    opacity: 0;
+    transform: scale(0.3) rotate(-35deg);
+  }
+  60% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+.current .indicator {
+  border-color: var(--oi-base-color-info);
+  background-color: var(--oi-base-color-info);
+  color: var(--oi-content-color-constant);
+}
+
+.error .indicator {
+  border-color: var(--oi-base-color-error);
+  color: var(--oi-content-color-error);
+}
+
+/* The active errored step fills its indicator, like current. */
+.isCurrent.error .indicator {
+  background-color: var(--oi-base-color-error);
+  color: var(--oi-content-color-constant);
+}
+
+/* ── Label ─────────────────────────────────────────────────────────── */
+.label {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  color: var(--oi-content-color-primary);
+}
+
+.completed .label,
+.upcoming .label {
+  color: var(--oi-content-color-secondary);
+}
+
+.current .label {
+  font-weight: var(--oi-text-body-s-strong-font-weight);
+  color: var(--oi-content-color-primary);
+}
+
+.error .label {
+  color: var(--oi-content-color-primary);
+}
+
+.srStatus {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stepInner,
+  .indicator {
+    transition: none;
+  }
+
+  .checkGlyph {
+    animation: none;
+  }
+}

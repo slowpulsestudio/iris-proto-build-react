@@ -48,6 +48,13 @@ const SHOW_DELAY_DEFAULT = 400;
 const TOOLTIP_OFFSET = 6;
 const VIEWPORT_MARGIN = 4;
 
+// Shared across all Tooltip instances: once one tip is showing (or was showing
+// within INSTANT_WINDOW ms), the next trigger opens instantly — no reopen
+// delay, no entrance animation — so scanning a toolbar feels fast.
+let openTooltipCount = 0;
+let lastTooltipHideAt = 0;
+const INSTANT_WINDOW = 300;
+
 /**
  * Tooltip — accessible, portal-rendered hover/focus tip.
  *
@@ -87,6 +94,7 @@ export function Tooltip({
   const clickDismissedRef = useRef(false);
   const pointerPosRef = useRef<{ x: number; y: number } | null>(null);
   const [open, setOpen] = useState(false);
+  const [instant, setInstant] = useState(false);
   const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
 
   const clearShowTimer = () => {
@@ -99,7 +107,10 @@ export function Tooltip({
   const show = useCallback(
     (immediate: boolean) => {
       clearShowTimer();
-      if (immediate || delay <= 0) {
+      const fast =
+        openTooltipCount > 0 || Date.now() - lastTooltipHideAt < INSTANT_WINDOW;
+      setInstant(fast);
+      if (immediate || fast || delay <= 0) {
         setOpen(true);
         return;
       }
@@ -122,6 +133,17 @@ export function Tooltip({
   }, []);
 
   useEffect(() => () => clearShowTimer(), []);
+
+  // Maintain the shared instant-window state: count live tips and stamp the
+  // moment the last one closes so neighbours within the window skip the delay.
+  useEffect(() => {
+    if (!open) return;
+    openTooltipCount += 1;
+    return () => {
+      openTooltipCount -= 1;
+      lastTooltipHideAt = Date.now();
+    };
+  }, [open]);
 
   // Place + reposition on scroll/resize while open. Uses `useLayoutEffect`
   // so the first paint after `open` flips true already has correct coords.
@@ -305,6 +327,7 @@ export function Tooltip({
             id={id}
             role="tooltip"
             className={cx(styles.tooltip, className)}
+            data-instant={instant ? 'true' : undefined}
             // Hide the first frame until layout measures real coords.
             style={
               pos

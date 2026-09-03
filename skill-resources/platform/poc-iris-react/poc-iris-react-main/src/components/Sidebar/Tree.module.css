@@ -32,6 +32,17 @@
   background-color: var(--oi-button-background-secondary-hover);
 }
 
+.rowDragging {
+  opacity: 0.5;
+}
+
+.rowDropTarget {
+  background-color: var(--oi-button-background-secondary-hover);
+  outline: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-focus);
+  outline-offset: -1px;
+}
+
 .separator {
   height: 0;
   margin: var(--oi-spacing-s) 0;

@@ -89,7 +89,7 @@
     var(--oi-motion-ease-default);
 }
 .peekBlanketOpen {
-  background-color: rgba(2, 6, 24, 0.4);
+  background-color: var(--oi-background-color-blanket, rgba(2, 6, 24, 0.4));
 }
 
 @media (prefers-reduced-motion: reduce) {

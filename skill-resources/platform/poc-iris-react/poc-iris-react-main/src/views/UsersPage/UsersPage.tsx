@@ -26,6 +26,7 @@ import { Pagination } from '../../components/Pagination/Pagination.js';
 import { ActionBar } from '../../components/ActionBar/ActionBar.js';
 import { ResetPasswordModal } from '../UserDetailPage/ResetPasswordModal/ResetPasswordModal.js';
 import { DeleteUserModal } from '../UserDetailPage/DeleteUserModal/DeleteUserModal.js';
+import { CreateObjectModal } from './CreateObjectModal/CreateObjectModal.js';
 import type { User } from './mockUsers.js';
 import styles from './UsersPage.module.css';
 
@@ -250,6 +251,8 @@ export function UsersPage() {
   // Which user (if any) has a row-action modal open. `null` = closed.
   const [resetUser, setResetUser] = useState<User | null>(null);
   const [deleteUser, setDeleteUser] = useState<User | null>(null);
+  // Which object type the Create flow is building. `null` = closed.
+  const [createTarget, setCreateTarget] = useState<{ type: string; icon: string } | null>(null);
 
   /* ---- ⌘⇧F / Ctrl+Shift+F opens the Add filter menu ---- */
   useEffect(() => {
@@ -279,6 +282,17 @@ export function UsersPage() {
   const removeFilter = (id: string) =>
     setActiveFilters((prev) => prev.filter((f) => f.id !== id));
   const clearFilters = () => setActiveFilters([]);
+
+  // Create-menu entries wired to open the multi-step create modal, keyed off
+  // each item's label + icon.
+  const createMenuItems: MenuEntry[] = ADD_USER_MENU_ITEMS.map((entry) =>
+    entry.kind === 'item'
+      ? {
+          ...entry,
+          onSelect: () => setCreateTarget({ type: entry.label, icon: entry.icon ?? 'User' }),
+        }
+      : entry,
+  );
 
   const filterMenuItems: MenuEntry[] = FILTER_FIELDS.map((f) => {
     // Fields without a value-selection UI would produce a chip the user can't
@@ -401,7 +415,7 @@ export function UsersPage() {
             <Menu
               ariaLabel="Create options"
               align="end"
-              items={ADD_USER_MENU_ITEMS}
+              items={createMenuItems}
               trigger={({ ref, onClick, expanded }) => (
                 <Button
                   ref={ref as React.Ref<HTMLButtonElement>}
@@ -539,6 +553,14 @@ export function UsersPage() {
       )}
       {deleteUser && (
         <DeleteUserModal open onClose={() => setDeleteUser(null)} user={deleteUser} />
+      )}
+      {createTarget && (
+        <CreateObjectModal
+          open
+          onClose={() => setCreateTarget(null)}
+          objectType={createTarget.type}
+          icon={createTarget.icon}
+        />
       )}
     </AppShell>
   );

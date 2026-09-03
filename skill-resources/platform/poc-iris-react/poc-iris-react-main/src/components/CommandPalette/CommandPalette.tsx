@@ -10,9 +10,11 @@ import { cx } from '../../lib/cx.js';
 import { navigate } from '../../lib/router.js';
 import { useUsers } from '../../lib/usersStore.js';
 import { useAppShell } from '../../lib/appShellContext.js';
+import { useVertical } from '../../lib/verticals.js';
 import { useTheme, THEMES, type ThemeValue } from '../../lib/useTheme.js';
 import {
   PAGE_ITEMS,
+  IDENTITY_COMMAND_ITEMS,
   buildUserItems,
   filterItems,
   type CommandItem,
@@ -91,6 +93,11 @@ export function CommandPalette() {
   const { searchOpen, setSearchOpen, setAiOpen } = useAppShell();
   const { theme, setTheme, themes } = useTheme();
   const { users } = useUsers();
+
+  // Scope results to the active shell: inside Identity Manager the palette
+  // searches the IdM taxonomy only (not global pages or directory users), and
+  // its scope tabs are hidden (a single flat list).
+  const isIdM = useVertical().id === 'identity-manager';
 
   const [mounted, setMounted] = useState(searchOpen);
   const [query, setQuery] = useState('');
@@ -232,18 +239,24 @@ export function CommandPalette() {
     const q = query.trim();
     const result: Section[] = [];
 
+    // In the IdM shell the palette searches the IdM taxonomy only, its scope
+    // tabs are hidden, and scope is forced to 'all' so a previously-selected
+    // pages/users scope can't strand the view or hide the Ask AI row.
+    const effScope: CommandScope = isIdM ? 'all' : scope;
+    const pagePool = isIdM ? IDENTITY_COMMAND_ITEMS : PAGE_ITEMS;
+
     if (q) {
-      const pages = scope === 'users' ? [] : filterItems(PAGE_ITEMS, q);
+      const pages = effScope === 'users' ? [] : filterItems(pagePool, q);
       const usersMatched =
-        scope === 'pages' ? [] : filterItems(userItems, q).slice(0, 6);
-      const actions = scope === 'all' ? filterItems(actionItems, q) : [];
+        isIdM || effScope === 'pages' ? [] : filterItems(userItems, q).slice(0, 6);
+      const actions = effScope === 'all' ? filterItems(actionItems, q) : [];
 
       if (pages.length) result.push({ id: 'pages', title: 'Jump to', rows: pages.map(toRow) });
       if (usersMatched.length)
         result.push({ id: 'users', title: 'Users', rows: usersMatched.map(toRow) });
       if (actions.length)
         result.push({ id: 'actions', title: 'Actions', rows: actions.map(toRow) });
-      if (scope === 'all') {
+      if (effScope === 'all') {
         result.push({
           id: 'ai',
           title: 'Ask AI',
@@ -265,7 +278,7 @@ export function CommandPalette() {
     }
 
     // Empty query → recents + suggestions.
-    if (scope !== 'pages' && recentSearches.length) {
+    if (effScope !== 'pages' && recentSearches.length) {
       result.push({
         id: 'recent-searches',
         title: 'Recent searches',
@@ -286,9 +299,11 @@ export function CommandPalette() {
       });
     }
 
-    const viewable = recentItems.filter(
-      (i) => scope === 'all' || (scope === 'users' ? i.kind === 'user' : i.kind === 'page'),
-    );
+    const viewable = recentItems.filter((i) => {
+      // Inside IdM, only surface recents that belong to the IdM shell.
+      if (isIdM) return i.hash.startsWith('#/identity');
+      return effScope === 'all' || (effScope === 'users' ? i.kind === 'user' : i.kind === 'page');
+    });
     if (viewable.length) {
       result.push({
         id: 'recent-items',
@@ -310,7 +325,7 @@ export function CommandPalette() {
       });
     }
 
-    const suggestions = scope === 'users' ? userItems.slice(0, 5) : PAGE_ITEMS;
+    const suggestions = effScope === 'users' ? userItems.slice(0, 5) : pagePool;
     result.push({
       id: 'suggestions',
       title: 'Try searching',
@@ -320,6 +335,7 @@ export function CommandPalette() {
   }, [
     query,
     scope,
+    isIdM,
     userItems,
     actionItems,
     recentSearches,
@@ -426,18 +442,20 @@ export function CommandPalette() {
           </span>
         </div>
 
-        <div className={styles.scopeRow}>
-          <Tabs
-            items={SCOPES}
-            value={scope}
-            onChange={(value) => {
-              setScope(value as CommandScope);
-              setActive(0);
-            }}
-            ariaLabel="Search scope"
-            className={styles.scopeTabs}
-          />
-        </div>
+        {!isIdM && (
+          <div className={styles.scopeRow}>
+            <Tabs
+              items={SCOPES}
+              value={scope}
+              onChange={(value) => {
+                setScope(value as CommandScope);
+                setActive(0);
+              }}
+              ariaLabel="Search scope"
+              className={styles.scopeTabs}
+            />
+          </div>
+        )}
 
         <div className={styles.list} id={listId} role="listbox" ref={listRef}>
           {flatRows.length === 0 ? (

@@ -17,6 +17,7 @@ body.theme-hc-light {
   --oi-spacing-xxl: 32px;
   --oi-spacing-xxxl: 48px;
   --oi-background-color-primary: #FFFFFF;
+  --oi-background-color-blanket: rgba(2, 6, 24, 0.5);
   --oi-background-color-secondary: #F2F2F2;
   --oi-background-color-tertiary: #D3D3D3;
   --oi-background-color-brand: #74D4FF;
@@ -83,8 +84,9 @@ body.theme-hc-light {
   --oi-motion-duration-default: 200ms;
   --oi-motion-duration-long: 280ms;
   --oi-motion-duration-loop: 1000ms;
-  --oi-motion-ease-default: ease-out;
-  --oi-motion-ease-enter: ease-out;
-  --oi-motion-ease-exit: ease-in;
+  --oi-motion-ease-default: cubic-bezier(0.23, 1, 0.32, 1);
+  --oi-motion-ease-enter: cubic-bezier(0.23, 1, 0.32, 1);
+  --oi-motion-ease-exit: cubic-bezier(0.23, 1, 0.32, 1);
+  --oi-motion-ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
   --oi-motion-ease-none: linear;
 }

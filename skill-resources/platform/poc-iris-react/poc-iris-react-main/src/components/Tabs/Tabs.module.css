@@ -40,8 +40,8 @@
   background-color: var(--oi-border-color-focus);
   transform: translateX(0);
   transition:
-    transform var(--oi-motion-duration-default) cubic-bezier(0.22, 1, 0.36, 1),
-    width var(--oi-motion-duration-default) cubic-bezier(0.22, 1, 0.36, 1);
+    transform var(--oi-motion-duration-default) var(--oi-motion-ease-emphasized),
+    width var(--oi-motion-duration-default) var(--oi-motion-ease-emphasized);
   will-change: transform, width;
   pointer-events: none;
 }

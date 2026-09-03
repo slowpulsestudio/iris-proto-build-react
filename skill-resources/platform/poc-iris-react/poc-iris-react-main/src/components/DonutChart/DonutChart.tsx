@@ -17,23 +17,25 @@ export interface DonutSegment {
 
 export interface DonutChartProps {
   segments: DonutSegment[];
+  /** Ring thickness in viewBox units. */
+  strokeWidth?: number;
   className?: string;
 }
 
 /**
  * DonutChart — minimal SVG donut + legend.
  */
-export function DonutChart({ segments, className }: DonutChartProps) {
+export function DonutChart({ segments, strokeWidth = 22, className }: DonutChartProps) {
   const VB = 160; // viewBox is square
   const R = 60;
-  const STROKE = 22;
+  const STROKE = strokeWidth;
 
   const makeArc = useMemo(
     () =>
       arc<PieArcDatum<DonutSegment>>()
         .innerRadius(R - STROKE / 2)
         .outerRadius(R + STROKE / 2),
-    [],
+    [STROKE],
   );
 
   const { arcs, total } = useMemo<{ arcs: PieArcDatum<DonutSegment>[]; total: number }>(() => {

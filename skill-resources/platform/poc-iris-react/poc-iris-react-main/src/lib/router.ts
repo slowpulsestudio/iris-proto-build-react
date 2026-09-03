@@ -26,6 +26,10 @@ export type Route =
   | { name: 'insights'; params: Record<string, never> }
   | { name: 'services'; params: Record<string, never> }
   | { name: 'identityHome'; params: Record<string, never> }
+  | { name: 'identityInsights'; params: Record<string, never> }
+  | { name: 'identitySettings'; params: Record<string, never> }
+  | { name: 'identityHelp'; params: Record<string, never> }
+  | { name: 'identitySection'; params: { group: string; item: string } }
   | { name: 'safeguardHome'; params: Record<string, never> };
 
 export type RouteName = Route['name'];
@@ -51,6 +55,10 @@ const ROUTES: RouteDef[] = [
   { name: 'managementUnits', pattern: /^#\/management-units$/, keys: [] },
   { name: 'insights', pattern: /^#\/insights$/, keys: [] },
   { name: 'services', pattern: /^#\/services$/, keys: [] },
+  { name: 'identityInsights', pattern: /^#\/identity\/insights$/, keys: [] },
+  { name: 'identitySettings', pattern: /^#\/identity\/settings$/, keys: [] },
+  { name: 'identityHelp', pattern: /^#\/identity\/help$/, keys: [] },
+  { name: 'identitySection', pattern: /^#\/identity\/([^/]+)\/([^/]+)$/, keys: ['group', 'item'] },
   { name: 'identityHome', pattern: /^#\/identity$/, keys: [] },
   { name: 'safeguardHome', pattern: /^#\/safeguard$/, keys: [] },
 ];
