@@ -1,7 +1,7 @@
 ---
 mode: agent
 description: Rebuild master-skills.md by fetching the latest skill files from the up-skill repo on GitHub, and copy any skill-bundled files into this project.
-version: 17
+version: 18
 ---
 
 ## Cross-platform execution guardrails
@@ -25,7 +25,7 @@ https://raw.githubusercontent.com/slowpulsestudio/iris-proto-build-react/main/.g
 Compare the fetched `version:` frontmatter field to the `version:` field in the current `.github/prompts/skill-me-up.prompt.md` in this project. If the version field is missing from either file, fall back to comparing full file contents instead.
 
 - **If the versions (or full contents, when falling back) are identical:** continue to Step 0.
-- **If they differ:** tell the user: *"There are updates available for the skill-me-up prompt. Would you like me to update it now? You'll need to run `/skill-me-up` again after."*
+- **If they differ:** ask, with clickable Yes/No buttons: *"There are updates available for the skill-me-up prompt. Would you like me to update it now? You'll need to run `/skill-me-up` again after."*
   - If yes: overwrite `.github/prompts/skill-me-up.prompt.md` with the fetched version and stop. Do not continue setup.
   - If no: continue to Step 0 with the current version.
 
@@ -72,6 +72,10 @@ For every question below, check whether its key already exists in `.skill-answer
 
 After all questions are resolved, write any newly collected answers to `.skill-answers`.
 
+### Question UX
+
+Any question in this prompt (here or in later steps) that has a fixed set of possible answers — yes/no, single-select from a list, or multi-select from a list — must be asked using an interactive tool that renders real clickable buttons or checkboxes, never a plain chat message listing options as text to type back. Many users answering these are new to AI agent chat and won't know free-text typing is even an option, so a visible clickable choice must always be present. Freeform text can stay enabled alongside the buttons when a typed answer also makes sense (e.g. a URL or a custom name), but never present a bare text box with no clickable alternative when a reasonable default/skip choice exists. Only genuinely open-ended questions with no natural fixed alternative (e.g. project name, project description) are plain text with no buttons required.
+
 ### Questions
 
 **`project-name`** — *"What is the name of this prototype?"*
@@ -80,7 +84,7 @@ After all questions are resolved, write any newly collected answers to `.skill-a
 
 The platform is fixed and must always be `platform/poc-iris-react`. Do not ask a platform-selection question.
 
-**`workflow-skills`** — *"`workflow/general` is always included. Select from the table below. Skill names are shown without the `workflow/` prefix for readability."*
+**`workflow-skills`** — *"`workflow/general` is always included. Select from the table below. Skill names are shown without the `workflow/` prefix for readability."* Present this as a clickable multi-select (checkboxes), pre-toggled to match the `Default` column below — don't make the user retype skill names.
 
 | Default | Skill | When to include |
 |---|---|---|
@@ -99,11 +103,13 @@ The platform is fixed and must always be `platform/poc-iris-react`. Do not ask a
 
 When saving to `.skills`, always expand selected entries to full names with the `workflow/` prefix (for example `motion` -> `workflow/motion`).
 
-**`git-remote`** — only if `workflow/git` was selected: *"What is the GitHub repo URL for this project?"*
+**`git-remote`** — only if `workflow/git` was selected: ask *"What is the GitHub repo URL for this project?"* with a clickable *"I'll add this later"* button alongside the free-text input.
+- If the user pastes/types a URL now — use it in Step 0b below.
+- If the user clicks *"I'll add this later"* — skip Step 0b's remote setup for now and continue; save `git-remote = skipped` to `.skill-answers` so it isn't re-asked every run.
 
-**`figma-url`** — only if `workflow/figma-read-from-mcp` or `workflow/figma-write-to-canvas` was selected: *"What is the Figma file URL for this project?"* Give the user two options:
-- Paste the URL now — save it to `.figma-url` in the project root
-- *"I'll paste it in this chat when I have it"* — reply: *"No problem — paste the Figma URL in this chat whenever you're ready and I'll save it to `.figma-url`."* then continue setup. When the user later pastes a URL starting with `https://www.figma.com/`, write it to `.figma-url`.
+**`figma-url`** — only if `workflow/figma-read-from-mcp` or `workflow/figma-write-to-canvas` was selected: ask *"What is the Figma file URL for this project?"* using an interactive question tool that renders a real clickable button option, not a plain chat message. Many users answering this are new to AI agent chat and won't know they're allowed to type something other than a URL, so never present a bare text box with no visible alternative — there must always be a clickable button labeled *"I'll paste it later"* right next to the input, even if freeform typing is also technically accepted.
+- If the user pastes/types a URL now — save it to `.figma-url` in the project root
+- If the user clicks *"I'll paste it later"* — reply: *"No problem — paste the Figma URL in this chat whenever you're ready and I'll save it to `.figma-url`."* then continue setup. When the user later pastes a URL starting with `https://www.figma.com/`, write it to `.figma-url`.
 
 Once all questions are resolved, write the `.skills` file if it doesn't exist yet, using the standard comment header followed by the chosen skills, one per line. Always include `platform/poc-iris-react` as the platform entry and `workflow/general` as the first workflow entry:
 
@@ -128,7 +134,8 @@ If `workflow/git` is in the skills list, check whether a git remote is already c
   1. Run `git init` if the folder is not already a git repository
   2. Run `git remote add origin {url}`
   3. Confirm the remote was set successfully before continuing
-- If **no remote is set** and no URL was provided, ask: *"What is the GitHub repo URL for this project?"* then follow the steps above.
+- If **no remote is set** and `git-remote = skipped` in `.skill-answers`, skip this step silently — don't re-ask.
+- If **no remote is set**, no URL was provided in Step 0, and no skip was recorded, ask *"What is the GitHub repo URL for this project?"* with a clickable *"I'll add this later"* button (same pattern as `git-remote` above), then follow the steps above or save `git-remote = skipped`.
 
 Do not proceed to the next step until this is resolved.
 
@@ -271,7 +278,7 @@ Ask the following questions one at a time, only for the skills that are active. 
 
 **If `workflow/git` is active:**
 Check whether any files were actually changed or created during this run (e.g. `master-skills.md` was overwritten, new bundled files were copied, or instruction files were created).
-- **If files were changed/created:** ask exactly: *"Would you like me to commit and push these changes to GitHub?"* — do NOT say "initial setup"; this may be a rerun.
+- **If files were changed/created:** ask exactly, with clickable Yes/No buttons: *"Would you like me to commit and push these changes to GitHub?"* — do NOT say "initial setup"; this may be a rerun.
   - If yes: stage all changed/new files, write a commit message that summarises what changed (e.g. `Update master-skills.md and copy bundled resources`), and push to origin.
 - **If nothing changed:** skip — do not ask.
 - If no: skip.
@@ -281,7 +288,7 @@ Check `.skill-answers` for `vercel-setup`, and whether `.vercel/project.json` ex
 
 - **If `vercel-setup = done` in `.skill-answers`, OR `.vercel/project.json` exists:** Vercel is already connected — skip this question entirely.
 - **If `vercel-setup = no` in `.skill-answers`:** user previously declined — skip this question entirely.
-- **Otherwise:** ask: *"Would you like me to walk you through setting up auto-publish from your GitHub repo to Vercel?"*
+- **Otherwise:** ask, with clickable Yes/No buttons: *"Would you like me to walk you through setting up auto-publish from your GitHub repo to Vercel?"*
   - If yes: guide the user through connecting the repo to Vercel via the Vercel dashboard (Import Project → select repo). Once they confirm it's connected:
     1. Tell them to turn off **Vercel Authentication** (also called "Require Login") under Project Settings → Deployment Protection (`/~/settings/deployment-protection`) — otherwise preview/snapshot URLs will require a Vercel login to view, blocking Designers and stakeholders who don't have one.
     2. Point them to the project's **Deployments** tab in the Vercel dashboard — this is where they'll find build status, logs, and the URL for every push going forward.
@@ -292,13 +299,13 @@ Check `.skill-answers` for `vercel-setup`, and whether `.vercel/project.json` ex
 Check `.skill-answers` for `figma-build-prompted`.
 
 Check `.skill-answers` for `figma-build-mode`.
-- **If missing:** ask: *"When we build this screen, should we create a new screen from scratch, or update an existing screen from the `poc-iris-react` base?"*
+- **If missing:** ask, with clickable buttons for each option: *"When we build this screen, should we create a new screen from scratch, or update an existing screen from the `poc-iris-react` base?"*
 - Save one of:
   - `figma-build-mode = create-new`
   - `figma-build-mode = update-existing`
 
 - **If it exists:** skip silently.
-- **If missing:** ask: *"You've got a Figma file connected — want me to start building out the design from it now, into the `{shell-page}` page?"*
+- **If missing:** ask, with clickable Yes/No buttons: *"You've got a Figma file connected — want me to start building out the design from it now, into the `{shell-page}` page?"*
 - Save `figma-build-prompted = yes` or `figma-build-prompted = no` to `.skill-answers` regardless of the answer (so it's only asked once per project, not every rerun).
 - If yes and `figma-build-mode = create-new`: proceed to implement using the `figma-read-from-mcp` skill rules, targeting `src/views/` and the page named in `shell-page`. After implementation, you must:
   1. Run a local build (`pnpm build`)

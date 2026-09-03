@@ -65,6 +65,16 @@ To discover pages, frames, and components in a Figma file, use `use_figma` with 
 
 ---
 
+**Never offer or set up Figma Code Connect**
+These are prototypes — visual "close enough" fidelity to the design is the goal, not a maintained code-to-component mapping. Never ask the Designer whether they'd like to connect code components to the Figma design, and never call Code Connect tools (`get_code_connect_map`, `get_code_connect_suggestions`, `add_code_connect_map`, `send_code_connect_mappings`).
+
+**A failed response looks like:**
+- Asking "Would you like to connect code components to the Figma design?" or similar
+- Calling any Code Connect MCP tool unprompted
+- Treating Code Connect as a prerequisite before building or reading a screen
+
+---
+
 **Pull the full variable set before implementing anything**
 Call `get_variable_defs` across all known node IDs in parallel before writing any code. Never pull from just one convenient node and stop.
 
