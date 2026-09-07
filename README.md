@@ -132,6 +132,25 @@ After running `/skill-me-up`, a downstream consumer project will contain the fol
 | bundled skill resources (e.g. `src/iris-shell/`) | Files copied in from `skill-resources/` for skills that bundle a library or template, per each skill's `## Resources` mapping |
 
 
+## Setup Questions Reference
+
+Every fixed-choice question below is asked with real clickable buttons, never a plain-text list to type back. Answers are stored as `key = value` pairs in `.skill-answers` so reruns don't re-ask — remove a line from that file to force a question to be asked again.
+
+| `.skill-answers` key | Question | Asked when |
+|---|---|---|
+| *(none — prompt self-update)* | "There are updates available for the skill-me-up prompt. Would you like me to update it now?" | Every run, only if a newer `skill-me-up.prompt.md` version exists upstream |
+| `project-name` | "What is the name of this prototype?" | First-time setup (free text) |
+| `project-description` | "In a sentence or two, describe what you're trying to test…" | First-time setup (free text) |
+| `workflow-skills` | Multi-select checkbox list of optional skills | First-time setup |
+| `git-remote` | "What is the GitHub repo URL for this project?" | `workflow/git` selected and no git remote configured yet |
+| `figma-url` | "What is the Figma file URL for this project?" | `workflow/figma-read-from-mcp` or `workflow/figma-write-to-canvas` selected |
+| `shell-product` / `shell-mode` | "What product is your prototype for?" (fork between Iris Navigation Shell products and Standalone/no-shell products), followed by a Yes/No confirmation of the inferred shell mode | `platform/poc-iris-react` active (always, since it's mandatory) |
+| `shell-page` | "Where should we build your design? In an existing left-navigation page, or a new one?" | `shell-mode = shell` |
+| *(none — commit/push)* | "Would you like me to commit and push these changes to GitHub?" | `workflow/git` active and files were changed/created this run |
+| `vercel-setup` | "Would you like me to walk you through setting up auto-publish from your GitHub repo to Vercel?" | `workflow/vercel-publish` active and not already connected |
+| `figma-build-mode` | "When we build this screen, should we create a new screen from scratch, or update an existing screen from the `poc-iris-react` base?" | `platform/poc-iris-react` + a Figma workflow skill active + `.figma-url` exists |
+| `figma-build-prompted` | "You've got a Figma file connected — want me to start building out the design from it now?" | Same as above |
+| `migrate-prompted` | "Do you want to migrate the current project to the Iris prototype platform now?" | `workflow/migrate-non-iris-to-iris` active |
 
 
 ## Skills Catalogue
