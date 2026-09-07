@@ -1,7 +1,7 @@
 ---
 mode: agent
 description: Rebuild master-skills.md by fetching the latest skill files from the up-skill repo on GitHub, and copy any skill-bundled files into this project.
-version: 21
+version: 22
 ---
 
 ## Cross-platform execution guardrails
@@ -337,6 +337,15 @@ Check `.skill-answers` for `figma-build-mode`.
   4. Build locally and ask "are you happy with this change?" before moving to the next discrepancy
   5. Continue until all discrepancy rows are resolved or explicitly deferred
 - If no: stop there — no further action.
+
+**If `workflow/migrate-non-iris-to-iris` is active** (ask after the Figma build question is resolved):
+Check `.skill-answers` for `migrate-prompted`.
+
+- **If it exists:** skip silently.
+- **If missing:** ask, with clickable Yes/No buttons: *"Do you want to migrate the current project to the Iris prototype platform now?"*
+  - Save `migrate-prompted = yes` or `migrate-prompted = no` to `.skill-answers` regardless of the answer (so it's only asked once per project, not every rerun).
+  - If yes: follow the `migrate-non-iris-to-iris` rules in `master-skills.md` — audit the existing codebase first, present the audit for review, then migrate one component at a time only after confirmation.
+  - If no: skip — the user can ask to migrate a component at any later time and the same rules apply.
 
 ## Step 6 — Final local run handoff (always)
 

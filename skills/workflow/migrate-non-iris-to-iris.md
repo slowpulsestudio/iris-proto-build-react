@@ -4,12 +4,22 @@ These rules apply when migrating an existing React + Vite codebase to the Iris-U
 
 ---
 
+**Source of truth when onboarding an existing project**
+When the project being migrated already has a live GitHub repo and/or Vercel deployment, those are the source of truth for current behaviour, content, and layout — not any Figma file. Only consult Figma (a Figma Make file or an original design file) to pull a specific component's exact spec (colours, spacing, typography, states) when the running code doesn't make that decision clear. Never treat a Figma file as more authoritative than the actual running code/deployment, and never let a stale original design file override what the live code/deployment already does.
+
+**A failed response looks like:**
+- Rebuilding a screen to match a Figma file instead of the existing running code/deployment
+- Treating an out-of-date original design file as authoritative over the live GitHub/Vercel version
+- Pulling whole-screen layout or content from Figma when the existing code already defines it
+
+---
+
 **Read before touching anything**
 Before changing a single component, audit the existing codebase: catalogue every component, identify its Iris-UI equivalent (or note that none exists), and map out the token replacements for colours, spacing, and typography. Present this audit to the human for review before starting.
 
 **A failed response looks like:**
 - Starting to swap components before completing an audit
-- Assuming a component has an Iris-UI equivalent without checking `src/iris-ui/Components/` first
+- Assuming a component has an Iris-UI equivalent without checking `src/iris-shell/src/components/` first
 - Presenting the audit and starting migration in the same response without waiting for confirmation
 
 ---
