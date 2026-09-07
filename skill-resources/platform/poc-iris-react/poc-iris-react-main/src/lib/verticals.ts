@@ -14,7 +14,7 @@ import {
  * (header + global sidebar + Ask AI panel) but supply their own copy and
  * navigation entries. The current vertical is derived from the active route.
  */
-export type VerticalId = 'active-roles' | 'services' | 'identity-manager' | 'safeguard';
+export type VerticalId = 'active-roles' | 'services' | 'identity-manager' | 'safeguard' | 'onelogin';
 
 /** Delivery status of a nav destination, surfaced as a status dot/badge. */
 export type NavStatus = 'web' | 'fat' | 'planned';
@@ -142,6 +142,22 @@ export const SAFEGUARD_VERTICAL: Vertical = {
     { value: 'activity', label: 'Activity', icon: 'Pulse', disabled: true },
   ],
   otherNav: COMMON_OTHER_NAV,
+};
+
+/**
+ * OneLogin — a recognised product identity that doesn't fit into the main
+ * Iris POC left nav (no `mainNav`/`otherNav` items). Pages for this product
+ * are built standalone, without the Iris shell chrome — see the
+ * `platform/poc-iris-react` skill's "Standalone pages (no shell)" rule.
+ */
+export const ONELOGIN_VERTICAL: Vertical = {
+  id: 'onelogin',
+  label: 'OneLogin',
+  productIcon: 'onelogin',
+  defaultRoute: '#/onelogin',
+  aiTitle: 'OneLogin AI',
+  mainNav: [],
+  otherNav: [],
 };
 
 /** Route names that belong to the Services vertical. */

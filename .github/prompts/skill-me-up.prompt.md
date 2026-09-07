@@ -1,7 +1,7 @@
 ---
 mode: agent
 description: Rebuild master-skills.md by fetching the latest skill files from the up-skill repo on GitHub, and copy any skill-bundled files into this project.
-version: 18
+version: 21
 ---
 
 ## Cross-platform execution guardrails
@@ -213,15 +213,33 @@ After all files are copied, if `project-name` is known from `.skill-answers`, fi
 
 If `platform/poc-iris-react` is active, this must be resolved before continuing to Step 3, since it determines where the design gets built and what loads by default. This step happens after Step 2 so `src/lib/verticals.ts` actually exists in the project to read.
 
-Check `.skill-answers` for `shell-page`.
+Check `.skill-answers` for `shell-product` and `shell-mode`.
+
+- **If both exist:** skip silently.
+- **If missing:** read `src/lib/verticals.ts` and ask *"What product is your prototype for?"* as a single question with two clickable option groups (a fork in the road — every product either fully uses the Iris Navigation Shell or none of it, no in-between):
+  - **"Iris Navigation Shell"** section: every vertical whose `mainNav` is non-empty (currently Active Roles, On Demand Services, Identity Manager, Safeguard) — label each with its `label` field.
+  - **"Standalone / no navigation shell"** section: every vertical whose `mainNav` is empty (currently OneLogin), plus a final **"New product"** option.
+  - Picking anything in the **Iris Navigation Shell** group sets `shell-mode = shell` and `shell-product = {that vertical's id}`.
+  - Picking an existing standalone vertical (e.g. OneLogin) sets `shell-mode = standalone` and `shell-product = {that vertical's id}`.
+  - Picking **"New product"** asks for the new product's name, sets `shell-mode = standalone` and `shell-product = {the typed name}`. Do not create a `verticals.ts` entry for it — standalone products don't need one (see below).
+  - **Confirm the inferred default** with a clickable Yes/No follow-up before saving:
+    - If `shell-mode = shell`: *"So because you chose {product label}, I assume you want to include the Iris top bar and left navigation in your prototype?"*
+    - If `shell-mode = standalone`: *"So because you selected {product label}, I assume you do NOT want the standard Iris top bar and left navigation included in your prototype?"*
+    - If the answer confirms the default: keep `shell-mode` as inferred.
+    - If the answer contradicts the default: flip `shell-mode` to the other value (`shell` <-> `standalone`), keeping the same `shell-product`.
+  - Save `shell-mode` and `shell-product` to `.skill-answers`.
+- **If `.skill-answers` has a `shell-page` value but no `shell-mode`/`shell-product` keys** (project set up before this question existed): treat as `shell-mode = shell` and skip silently — don't re-ask.
+
+**If `shell-mode = standalone`:** skip the rest of this step entirely — no page selection, no `verticals.ts` edits. Build screens as bare pages using Iris UI components and tokens directly (no `AppShell`, `GlobalSidebar`, `AppHeader`, or vertical nav model). Do not save a `shell-page` value.
+
+**If `shell-mode = shell`:** check `.skill-answers` for `shell-page`.
 
 - **If it exists:** skip silently.
 - **If missing:**
-  1. Read `src/lib/verticals.ts` to find the available products. Ask: *"What product is your prototype for?"* listing each vertical's `label` as an option. Save the choice as `shell-product` in `.skill-answers`.
-  2. Read that vertical's `mainNav` entries. Ask: *"Where should we build your design? In an existing left-navigation page, or a new one?"* List every existing `mainNav` entry for that product (including disabled/placeholder pages) as options, plus an **"Add new page"** option.
-  3. If an existing page is picked, use its `value` as `shell-page`.
-  4. If "Add new page" is picked, ask for the new page's name and use it as `shell-page`. Add it as a new `mainNav` entry in that vertical in `verticals.ts` — no need to explain the mechanics of `verticals.ts`, product chooser, or routing to the Designer, just do it.
-  5. Update that vertical's `defaultRoute` to the route for `shell-page`, so this screen is what loads by default when the product is opened.
+  1. Read the `mainNav` entries for the vertical matching `shell-product`. Ask: *"Where should we build your design? In an existing left-navigation page, or a new one?"* List every existing `mainNav` entry for that product (including disabled/placeholder pages) as options, plus an **"Add new page"** option.
+  2. If an existing page is picked, use its `value` as `shell-page`.
+  3. If "Add new page" is picked, ask for the new page's name and use it as `shell-page`. Add it as a new `mainNav` entry in that vertical in `verticals.ts` — no need to explain the mechanics of `verticals.ts`, product chooser, or routing to the Designer, just do it.
+  4. Update that vertical's `defaultRoute` to the route for `shell-page`, so this screen is what loads by default when the product is opened.
 - Save the answer as `shell-page = {value}` in `.skill-answers`.
 
 ## Step 3 — Create AI instruction files
@@ -305,9 +323,9 @@ Check `.skill-answers` for `figma-build-mode`.
   - `figma-build-mode = update-existing`
 
 - **If it exists:** skip silently.
-- **If missing:** ask, with clickable Yes/No buttons: *"You've got a Figma file connected — want me to start building out the design from it now, into the `{shell-page}` page?"*
+- **If missing:** ask, with clickable Yes/No buttons: *"You've got a Figma file connected — want me to start building out the design from it now{, into the `{shell-page}` page if shell-mode = shell}?"* (omit the page reference entirely when `shell-mode = standalone`).
 - Save `figma-build-prompted = yes` or `figma-build-prompted = no` to `.skill-answers` regardless of the answer (so it's only asked once per project, not every rerun).
-- If yes and `figma-build-mode = create-new`: proceed to implement using the `figma-read-from-mcp` skill rules, targeting `src/views/` and the page named in `shell-page`. After implementation, you must:
+- If yes and `figma-build-mode = create-new`: proceed to implement using the `figma-read-from-mcp` skill rules, targeting `src/views/` and (when `shell-mode = shell`) the page named in `shell-page`. When `shell-mode = standalone`, build the screen as a bare page with no `AppShell`/shell chrome. After implementation, you must:
   1. Run a local build (`pnpm build`)
   2. Start or reuse the local dev server (`pnpm dev`)
   3. Open localhost to the new route and show the generated screen to the user before moving on

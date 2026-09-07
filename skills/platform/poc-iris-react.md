@@ -23,6 +23,17 @@ Four layers, each only depending on the layer below:
 
 ---
 
+## Standalone pages (no shell)
+
+Not every product uses the Iris multi-product shell. When `shell-mode = standalone` in `.skill-answers` (set during `/skill-me-up`), build the page as bare content — tokens and components from `src/iris-shell/src/components/**` are still fair game, but do not wrap it in `AppShell`, and do not add `AppHeader`, `GlobalSidebar`, `Sidebar`, or `AiPanel` chrome, or a `verticals.ts` entry. OneLogin is a known example of a product with no shell chrome.
+
+**A failed response looks like:**
+- Wrapping a standalone page in `AppShell` "for consistency" when `shell-mode = standalone`
+- Adding a `verticals.ts` vertical/nav entry for a standalone-mode product
+- Assuming every prototype needs the header + global sidebar chrome
+
+---
+
 ## Adding a vertical (product)
 
 A vertical is one record in `src/iris-shell/src/lib/verticals.ts` plus one route. That single record drives the product chooser, global sidebar, AI panel title, and optional secondary sidebar. Do not hardcode product chrome in individual views.

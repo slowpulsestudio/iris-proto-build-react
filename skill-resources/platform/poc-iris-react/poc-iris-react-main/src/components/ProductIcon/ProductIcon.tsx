@@ -12,7 +12,8 @@ export type ProductIconName =
   | 'identity-manager'
   | 'active-roles'
   | 'safeguard'
-  | 'services';
+  | 'services'
+  | 'onelogin';
 
 export interface ProductIconProps {
   name: ProductIconName;
@@ -85,6 +86,20 @@ export function ProductIcon({
           stroke="currentColor"
           strokeWidth={1.5}
           d="M14 15h-4m4 0a1.5 1.5 0 1 0 1.033-1.426M14 15a1.5 1.5 0 0 1 1.033-1.426m-6.066 0a1.5 1.5 0 1 1-.936 2.852 1.5 1.5 0 0 1 .936-2.852Zm0 0 2.112-3.89m3.954 3.89-2.112-3.89m-1.842 0c.254.198.574.316.921.316s.667-.118.921-.316a1.5 1.5 0 1 0-1.842 0Zm10.614 1.236q.615 1.08 0 2.16l-3.926 6.84Q17.153 21 15.915 21h-7.83q-1.239 0-1.852-1.08l-3.926-6.84q-.615-1.08 0-2.16l3.926-6.84Q6.847 3 8.085 3h7.83q1.239 0 1.852 1.08z"
+        />
+      </svg>
+    );
+  }
+
+  if (name === 'onelogin') {
+    return (
+      <svg {...common}>
+        <path
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={1.5}
+          d="M12 15.75a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm0 0v2.25M7.5 11.25V7.5a4.5 4.5 0 1 1 9 0v3.75m-11.25 0h13.5a1.5 1.5 0 0 1 1.5 1.5v6a1.5 1.5 0 0 1-1.5 1.5H4.5a1.5 1.5 0 0 1-1.5-1.5v-6a1.5 1.5 0 0 1 1.5-1.5Z"
         />
       </svg>
     );
