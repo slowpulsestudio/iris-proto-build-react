@@ -143,8 +143,8 @@ Every fixed-choice question below is asked with real clickable buttons, never a 
 | `project-description` | "In a sentence or two, describe what you're trying to test…" | First-time setup (free text) |
 | `workflow-skills` | Multi-select checkbox list of optional skills | First-time setup |
 | `git-remote` | "What is the GitHub repo URL for this project?" | `workflow/git` selected and no git remote configured yet |
-| `figma-url` | "What is the Figma file URL for this project?" | `workflow/figma-read-from-mcp` or `workflow/figma-write-to-canvas` selected |
-| `shell-product` / `shell-mode` | "What product is your prototype for?" (fork between Iris Navigation Shell products and Standalone/no-shell products), followed by a Yes/No confirmation of the inferred shell mode | `platform/poc-iris-react` active (always, since it's mandatory) |
+| `figma-url` / `figma-stale` | "What is the Figma file URL for this project?" with an *"I'll paste it later"* button and a *"This Figma is stale (I vibe-coded it / used Figma Make)"* button | `workflow/figma-read-from-mcp` or `workflow/figma-write-to-canvas` selected |
+| `shell-product` / `shell-mode` | "What product is your prototype for?" (flat list of product names, no shell/standalone grouping), followed by a Yes/No confirmation of the inferred shell mode with the default pre-selected | `platform/poc-iris-react` active (always, since it's mandatory) |
 | `shell-page` | "Where should we build your design? In an existing left-navigation page, or a new one?" | `shell-mode = shell` |
 | *(none — commit/push)* | "Would you like me to commit and push these changes to GitHub?" | `workflow/git` active and files were changed/created this run |
 | `vercel-setup` | "Would you like me to walk you through setting up auto-publish from your GitHub repo to Vercel?" | `workflow/vercel-publish` active and not already connected |

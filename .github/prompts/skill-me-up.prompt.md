@@ -1,7 +1,7 @@
 ---
 mode: agent
 description: Rebuild master-skills.md by fetching the latest skill files from the up-skill repo on GitHub, and copy any skill-bundled files into this project.
-version: 22
+version: 23
 ---
 
 ## Cross-platform execution guardrails
@@ -107,9 +107,12 @@ When saving to `.skills`, always expand selected entries to full names with the 
 - If the user pastes/types a URL now — use it in Step 0b below.
 - If the user clicks *"I'll add this later"* — skip Step 0b's remote setup for now and continue; save `git-remote = skipped` to `.skill-answers` so it isn't re-asked every run.
 
-**`figma-url`** — only if `workflow/figma-read-from-mcp` or `workflow/figma-write-to-canvas` was selected: ask *"What is the Figma file URL for this project?"* using an interactive question tool that renders a real clickable button option, not a plain chat message. Many users answering this are new to AI agent chat and won't know they're allowed to type something other than a URL, so never present a bare text box with no visible alternative — there must always be a clickable button labeled *"I'll paste it later"* right next to the input, even if freeform typing is also technically accepted.
-- If the user pastes/types a URL now — save it to `.figma-url` in the project root
+**`figma-url`** — only if `workflow/figma-read-from-mcp` or `workflow/figma-write-to-canvas` was selected: ask *"What is the Figma file URL for this project?"* using an interactive question tool that renders real clickable button options, not a plain chat message. Many users answering this are new to AI agent chat and won't know they're allowed to type something other than a URL, so never present a bare text box with no visible alternative — there must always be two clickable buttons right next to the input, even if freeform typing is also technically accepted:
+- *"I'll paste it later"*
+- *"This Figma is stale (I vibe-coded it / used Figma Make)"*
+- If the user pastes/types a URL now — save it to `.figma-url` in the project root.
 - If the user clicks *"I'll paste it later"* — reply: *"No problem — paste the Figma URL in this chat whenever you're ready and I'll save it to `.figma-url`."* then continue setup. When the user later pastes a URL starting with `https://www.figma.com/`, write it to `.figma-url`.
+- If the user clicks *"This Figma is stale"* — save `figma-stale = yes` to `.skill-answers`. They may still optionally paste a URL now (or later) for pulling specific component specs only — save it to `.figma-url` if given, but never treat it as the primary source of truth for this project (see the migrate question in Step 5 and the `migrate-non-iris-to-iris` skill rules).
 
 Once all questions are resolved, write the `.skills` file if it doesn't exist yet, using the standard comment header followed by the chosen skills, one per line. Always include `platform/poc-iris-react` as the platform entry and `workflow/general` as the first workflow entry:
 
@@ -141,7 +144,7 @@ Do not proceed to the next step until this is resolved.
 
 ## Step 0c — Connect Figma MCP (if applicable)
 
-If `workflow/figma-read-from-mcp` or `workflow/figma-write-to-canvas` is in the skills list, the Figma MCP server must be connected before continuing. If both skills are selected, this only needs to happen once — do not repeat it.
+If `workflow/figma-read-from-mcp` or `workflow/figma-write-to-canvas` is in the skills list, the Figma MCP server must be connected before continuing, regardless of `figma-stale` — even a stale Figma file may still be referenced later for individual component designs. If both skills are selected, this only needs to happen once — do not repeat it.
 
 First check whether it's already connected: call `get_metadata` on the file in `.figma-url` (or a lightweight `use_figma` read). If real data comes back, the connection already works — report the connected Figma account email address (if available from the MCP response) and skip the walkthrough below. If the call fails, report the exact error message the tool returned (don't paraphrase or invent a different cause) and tell the user the Figma MCP is not connected before proceeding to the walkthrough.
 
@@ -216,15 +219,12 @@ If `platform/poc-iris-react` is active, this must be resolved before continuing 
 Check `.skill-answers` for `shell-product` and `shell-mode`.
 
 - **If both exist:** skip silently.
-- **If missing:** read `src/lib/verticals.ts` and ask *"What product is your prototype for?"* as a single question with two clickable option groups (a fork in the road — every product either fully uses the Iris Navigation Shell or none of it, no in-between):
-  - **"Iris Navigation Shell"** section: every vertical whose `mainNav` is non-empty (currently Active Roles, On Demand Services, Identity Manager, Safeguard) — label each with its `label` field.
-  - **"Standalone / no navigation shell"** section: every vertical whose `mainNav` is empty (currently OneLogin), plus a final **"New product"** option.
-  - Picking anything in the **Iris Navigation Shell** group sets `shell-mode = shell` and `shell-product = {that vertical's id}`.
-  - Picking an existing standalone vertical (e.g. OneLogin) sets `shell-mode = standalone` and `shell-product = {that vertical's id}`.
-  - Picking **"New product"** asks for the new product's name, sets `shell-mode = standalone` and `shell-product = {the typed name}`. Do not create a `verticals.ts` entry for it — standalone products don't need one (see below).
-  - **Confirm the inferred default** with a clickable Yes/No follow-up before saving:
-    - If `shell-mode = shell`: *"So because you chose {product label}, I assume you want to include the Iris top bar and left navigation in your prototype?"*
-    - If `shell-mode = standalone`: *"So because you selected {product label}, I assume you do NOT want the standard Iris top bar and left navigation included in your prototype?"*
+- **If missing:** read `src/lib/verticals.ts` and ask *"What product is your prototype for?"* as a single flat clickable list of product names — every known vertical by its `label` field (currently Active Roles, On Demand Services, Identity Manager, Safeguard, OneLogin), plus a final **"New product"** option. Do not group or label options by shell/standalone — that distinction is confusing to a Designer picking a product for the first time, and is resolved by the confirmation follow-up below instead, not by the initial picker.
+  - Picking an existing vertical whose `mainNav` is non-empty infers `shell-mode = shell`. Picking one whose `mainNav` is empty (e.g. OneLogin) infers `shell-mode = standalone`. Either way, set `shell-product = {that vertical's id}`.
+  - Picking **"New product"** asks for the new product's name, infers `shell-mode = standalone` (new/unknown products default to no shell until confirmed otherwise), and sets `shell-product = {the typed name}`. Do not create a `verticals.ts` entry for it — standalone products don't need one (see below).
+  - **Confirm the inferred default** with a clickable Yes/No follow-up before saving, pre-selecting/marking the inferred answer as the recommended option:
+    - If `shell-mode = shell`: *"So because you chose {product label}, I assume you want to include the Iris top bar and left navigation in your prototype?"* (Yes is the recommended/pre-selected button)
+    - If `shell-mode = standalone`: *"So because you selected {product label}, I assume you do NOT want the standard Iris top bar and left navigation included in your prototype?"* (Yes is the recommended/pre-selected button)
     - If the answer confirms the default: keep `shell-mode` as inferred.
     - If the answer contradicts the default: flip `shell-mode` to the other value (`shell` <-> `standalone`), keeping the same `shell-product`.
   - Save `shell-mode` and `shell-product` to `.skill-answers`.
@@ -344,7 +344,7 @@ Check `.skill-answers` for `migrate-prompted`.
 - **If it exists:** skip silently.
 - **If missing:** ask, with clickable Yes/No buttons: *"Do you want to migrate the current project to the Iris prototype platform now?"*
   - Save `migrate-prompted = yes` or `migrate-prompted = no` to `.skill-answers` regardless of the answer (so it's only asked once per project, not every rerun).
-  - If yes: follow the `migrate-non-iris-to-iris` rules in `master-skills.md` — audit the existing codebase first, present the audit for review, then migrate one component at a time only after confirmation.
+  - If yes: follow the `migrate-non-iris-to-iris` rules in `master-skills.md` — audit the existing codebase first, present the audit for review, then migrate one component at a time only after confirmation. If `figma-stale = yes` in `.skill-answers`, the audit must be based on the current codebase already in this project (and its live deployment, if any) — do not ask for a separate prototype URL, and do not treat the stale Figma file as a source of truth for layout/content, only for specific component specs if needed.
   - If no: skip — the user can ask to migrate a component at any later time and the same rules apply.
 
 ## Step 6 — Final local run handoff (always)

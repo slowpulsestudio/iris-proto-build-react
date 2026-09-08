@@ -5,7 +5,7 @@ These rules apply when migrating an existing React + Vite codebase to the Iris-U
 ---
 
 **Source of truth when onboarding an existing project**
-When the project being migrated already has a live GitHub repo and/or Vercel deployment, those are the source of truth for current behaviour, content, and layout — not any Figma file. Only consult Figma (a Figma Make file or an original design file) to pull a specific component's exact spec (colours, spacing, typography, states) when the running code doesn't make that decision clear. Never treat a Figma file as more authoritative than the actual running code/deployment, and never let a stale original design file override what the live code/deployment already does.
+When the project being migrated already has a live GitHub repo and/or Vercel deployment, those are the source of truth for current behaviour, content, and layout — not any Figma file. Only consult Figma (a Figma Make file or an original design file) to pull a specific component's exact spec (colours, spacing, typography, states) when the running code doesn't make that decision clear. Never treat a Figma file as more authoritative than the actual running code/deployment, and never let a stale original design file override what the live code/deployment already does. If `figma-stale = yes` is set in `.skill-answers` (the Designer flagged the Figma file as stale during setup), this rule always applies: base the migration audit on the codebase already present in this project, not on the Figma file.
 
 **A failed response looks like:**
 - Rebuilding a screen to match a Figma file instead of the existing running code/deployment
