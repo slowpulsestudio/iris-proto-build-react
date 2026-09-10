@@ -1,7 +1,7 @@
 ---
 mode: agent
 description: Rebuild master-skills.md by fetching the latest skill files from the up-skill repo on GitHub, and copy any skill-bundled files into this project.
-version: 23
+version: 24
 ---
 
 ## Cross-platform execution guardrails
@@ -234,13 +234,18 @@ Check `.skill-answers` for `shell-product` and `shell-mode`.
 
 **If `shell-mode = shell`:** check `.skill-answers` for `shell-page`.
 
-- **If it exists:** skip silently.
+- **If it exists:** skip the page-selection question silently, then check `.skill-answers` for `shell-default-page`:
+  - **If it exists:** skip silently.
+  - **If missing:** no first-screen location is being chosen in this run, so ask the open form: *"What default page (navigation link) do you want this prototype to load on default?"* as a single flat clickable list of every `mainNav` entry for `shell-product`. Update that vertical's `defaultRoute` to the chosen entry's route, and save `shell-default-page = {route}`.
 - **If missing:**
   1. Read the `mainNav` entries for the vertical matching `shell-product`. Ask: *"Where should we build your design? In an existing left-navigation page, or a new one?"* List every existing `mainNav` entry for that product (including disabled/placeholder pages) as options, plus an **"Add new page"** option.
   2. If an existing page is picked, use its `value` as `shell-page`.
   3. If "Add new page" is picked, ask for the new page's name and use it as `shell-page`. Add it as a new `mainNav` entry in that vertical in `verticals.ts` — no need to explain the mechanics of `verticals.ts`, product chooser, or routing to the Designer, just do it.
-  4. Update that vertical's `defaultRoute` to the route for `shell-page`, so this screen is what loads by default when the product is opened.
-- Save the answer as `shell-page = {value}` in `.skill-answers`.
+  4. A location for the first screen was just chosen above, so ask the default-page question as a confirmation instead of the open form: *"You are building {shell-page label} first — would you like the prototype to open this screen on load as the default?"* (Yes is the recommended/pre-selected button).
+     - If yes: the default route is `shell-page`'s route.
+     - If no: ask *"What default page (navigation link) do you want this prototype to load on default?"* as a single flat clickable list of every `mainNav` entry for this product, and the default route is the chosen entry's route instead.
+  5. Update that vertical's `defaultRoute` to the resolved default route from step 4.
+- Save the answer as `shell-page = {value}` in `.skill-answers`, and the resolved default route as `shell-default-page = {route}`.
 
 ## Step 3 — Create AI instruction files
 

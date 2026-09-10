@@ -122,7 +122,8 @@ After running `/skill-me-up`, a downstream consumer project will contain the fol
 | `.github/prompts/skill-me-up.prompt.md` | The setup prompt itself, fetched in Step 1 and self-updating on every run |
 | `.skills` | Pseudo-import list of the skill names selected for this project |
 | `.skill-answers` | Stores answers to setup questions so reruns don't re-ask them |
-| `.figma-url` | The project's Figma file URL, if a Figma workflow skill was selected |
+| `.figma-url` | The project's Figma file URL, if a Figma workflow skill was selected — read-direction reference only |
+| `.figma-code-to-canvas-destination` | The '🤖'-prefixed Figma page URL locked in as the code-to-canvas write destination, if `figma-write-to-canvas` is in use — never the same file as `.figma-url` |
 | `master-skills.md` | The combined, flattened instruction file assembled from the selected skills — the AI's actual source of truth |
 | `example-prompts.md` | Example prompts and direction to give the agent, refreshed from this repo on every run |
 | `.github/copilot-instructions.md` | Points Copilot at `master-skills.md` and `prototype-specific-agent-instructions.md` |

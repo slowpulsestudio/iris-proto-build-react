@@ -99,6 +99,10 @@ I have an existing screen that isn't using the Iris design system yet. Audit it 
 Make sure every link in this breadcrumb can be linked to directly with a URL, so I can start my UX Tweak tasks from a specific place & situation
 ```
 
+```
+Change the prototype's default loading page to [page/screen name].
+```
+
 ---
 
 ## Publishing and sharing for review

@@ -25,13 +25,34 @@ When referring to any object on the Figma canvas in a message to the Designer, g
 
 ---
 
-**Only the page linked in `.figma-url` is in scope**
-Read the `.figma-url` file at the project root before any Figma MCP work. The file key and page/node in that URL are the only page in scope for edits. Every other page in the file is off-limits — do not create, delete, or modify anything outside that page, even for temporary reference material.
+**Figma canvas: page scope + destination lock (hard constraint)**
+This rule applies ONLY to the code-to-canvas write direction (pushing a running prototype/component INTO Figma via `use_figma` or `generate_figma_design`). It is unrelated to `.figma-url`, which is the read-direction reference file used by `figma-read-from-mcp` for pulling designs INTO code — never conflate the two, and never store this destination in `.figma-url` or any other generically-named file.
+
+You may ONLY create, edit, or delete content on a Figma page whose name starts with the '🤖' prefix. This overrides any node/page referenced in `.figma-url` or elsewhere — if that page does not have the '🤖' prefix, it is off-limits for writes, including temporary/reference-only material.
+
+**Before any `use_figma` or `generate_figma_design` write call, every time:**
+
+1. Check whether `.figma-code-to-canvas-destination` exists in the project root. (Note the explicit name — this file exists ONLY to record the code-to-canvas write target, and must never be confused with or substituted by `.figma-url`.)
+   - Exists: read it, extract the page name, confirm it still starts with '🤖'. If yes, use it as the write destination — skip re-asking. If the prefix is gone (page renamed), treat as missing and go to step 2.
+   - Missing: go to step 2.
+2. Ask the Designer: *"Before I write anything TO Figma (code-to-canvas), what's the destination page URL? It must be a page whose name starts with the 🤖 emoji — that's the only kind of page I'm allowed to write to. (This is separate from the Figma file you gave me for reading designs — this one is only for writing code output into Figma.)"*
+3. Resolve the page name for the given URL/node (e.g. `get_metadata` or a lightweight `use_figma` read).
+   - Name does NOT start with '🤖': tell the Designer to add the prefix, save nothing, do not write anything, and wait for them to confirm it's done before checking again.
+   - Name starts with '🤖': save the URL to `.figma-code-to-canvas-destination` (create/overwrite), confirm back with the page's name + a clickable link, then proceed.
+4. Re-validate the '🤖' prefix against `.figma-code-to-canvas-destination` before every subsequent write in this project — never rely on a past check.
+
+**Always speak in names and clickable Figma URLs, never bare node IDs** (`https://www.figma.com/design/<fileKey>/<name>?node-id=<id>`) — the Designer can't read or click a raw ID like `844:2951`.
 
 **A failed response looks like:**
-- Creating or editing frames on a page other than the one in `.figma-url`
-- Assuming any page in the file is fair game because it shares the same file key
-- Not checking `.figma-url` before starting Figma MCP work
+- Storing this destination in `.figma-url` or any other ambiguously-named file instead of the explicit `.figma-code-to-canvas-destination`
+- Treating `.figma-url`'s page as in-scope for writes without checking its '🤖' prefix
+- Writing before asking for the destination page URL
+- Creating the '🤖'-prefixed page yourself instead of asking the Designer
+- "Temporary"/"rough reference" writes on a non-prefixed page
+- Skipping re-validation because a prior check already passed
+- Mentioning a bare node ID instead of a clickable named link
+
+This stacks with — does not replace — "Confirm before deleting or modifying anything on the canvas": page scope, the '🤖' prefix, and explicit destructive-edit go-ahead are three independent checks, all required.
 
 ---
 
@@ -39,7 +60,7 @@ Read the `.figma-url` file at the project root before any Figma MCP work. The fi
 
 | Goal | Figma skill |
 | --- | --- |
-| Put a running local prototype into Figma | No dedicated skill for this exact workflow — trigger Figma's `generate_figma_design` tool ("code to canvas") with a plain-language prompt, e.g. "Start a local server for my app and capture the UI in this Figma file: `<URL>`" |
+| Put a running local prototype into Figma | No dedicated skill for this exact workflow — trigger Figma's `generate_figma_design` tool ("code to canvas") with a plain-language prompt, e.g. "Start a local server for my app and capture the UI on this Figma page: `<🤖-prefixed destination page URL>`" |
 | Put coded screens and tokens into Figma | `/figma-generate-design` and `/figma-generate-library` |
 | Explore a design direction from a problem statement | `/figma-use` |
 
@@ -53,7 +74,7 @@ Before starting any capture, state the plan to the Designer in one short sentenc
 
 Then follow these steps, in order:
 
-1. **Capture a rough reference** — prompt Figma's `generate_figma_design` tool in plain language to capture the running prototype pixel-for-pixel (e.g. "Start a local server for my app and capture the UI in this Figma file: `<URL>`"). This is raw DOM/CSS, disconnected from the design system, and exists only as a temporary visual reference.
+1. **Capture a rough reference** — resolve the destination page per "Figma canvas: page scope + destination lock" above, then prompt Figma's `generate_figma_design` tool in plain language to capture the running prototype pixel-for-pixel on that page (e.g. "Start a local server for my app and capture the UI on this Figma page: `<🤖-prefixed destination page URL>`"). This is raw DOM/CSS, disconnected from the design system, and exists only as a temporary visual reference.
 2. **Look for an existing screen to clone** — before building anything from scratch, search the target Figma file/page for a screen that's already structurally close to the target. Cloning and adapting real, already-composed component instances (auto-layout, bound variables) is far more reliable than assembling one from `search_design_system` results component-by-component.
 3. **Rebuild using the Iris design system** — always real Iris UI components and Iris UI Variables (tokens), never disconnected colours, shapes, or hardcoded text styling. Detach nested instances only where a structural change is required (column reorder, re-parenting children) — Figma blocks structural edits on instance descendants.
 4. **Refine one section at a time** — screenshot after each section (header, table, action bar, etc.) before moving to the next, and fix issues one at a time rather than making sweeping changes across the whole screen at once.
@@ -80,14 +101,14 @@ Then follow these steps, in order:
 Start the local app. Then include all of the following in the prompt:
 
 - The local app URL, or the screens/problem statement if using a skill instead
-- The target Figma file URL
+- The '🤖'-prefixed destination page URL, resolved via `.figma-code-to-canvas-destination` (never `.figma-url`)
 - The screens, components, and token constraints to follow
 
 Example:
 
 ```text
-Start a local server for my app and capture the UI at http://localhost:5173 into this Figma file:
-<Figma file URL>
+Start a local server for my app and capture the UI at http://localhost:5173 onto this Figma page:
+<🤖-prefixed destination page URL>
 
 Include every unique screen. Use the existing design-system components and map
 the project's tokens where possible.
@@ -98,7 +119,7 @@ The result is a starting point for review. Refine spacing, layout, and visual de
 ---
 
 **Verify the Figma MCP connection before relying on it**
-Connection is set up once during `/skill-me-up` (Figma's Dev Mode → MCP → Clients → **Get Figma integration** — never manual `mcp.json` edits or "Add MCP Server"). If both `figma-read-from-mcp` and `figma-write-to-canvas` are in use, that setup only happens once. Before doing any Figma MCP work in a session, confirm the connection still works with a real tool call (e.g. `get_metadata` on the file in `.figma-url`) rather than assuming it from a prior setup.
+Connection is set up once during `/skill-me-up` (Figma's Dev Mode → MCP → Clients → **Get Figma integration** — never manual `mcp.json` edits or "Add MCP Server"). If both `figma-read-from-mcp` and `figma-write-to-canvas` are in use, that setup only happens once. Before doing any Figma MCP work in a session, confirm the connection still works with a real tool call (e.g. `get_metadata` on the file in `.figma-url` or `.figma-code-to-canvas-destination`, whichever is relevant to the direction of work) rather than assuming it from a prior setup.
 
 **A failed response looks like:**
 - Giving manual `mcp.json` JSON snippets or "Add MCP Server" command-palette steps instead of pointing back to the Dev Mode → MCP → Clients flow
