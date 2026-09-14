@@ -105,6 +105,22 @@ Change the prototype's default loading page to [page/screen name].
 
 ---
 
+## Adding realistic content
+
+1. First ask our OI Interna AI Agent 'Bob' this...
+
+```
+I need your help to generate some realistic user content for a protoype. Give me a metaprompt to provide my CoPilot agent for Vibe coded prototype. I am about to start user testing for my [purpose of solution].  The content is for the [screen name] screen, and the fields/columns are: 
+[list all fields/columns]
+
+Provide me a table with 5 examples of each piece of content.
+
+Make the metaprompt all in one easy to copy format for me to paste in to my CoPilot AI agent to initiate filling out the details
+```
+2. Now, copy the response and paste into your CoPilot chat.
+
+---
+
 ## Publishing and sharing for review
 
 ```
