@@ -41,6 +41,10 @@ Add these tabs and fields to the side-sheet: [url to Figma component with varian
 "Do you see the motion tokens in Iris?  If so, add smooth but sharp motion the enter/exit tokens so the filter side-sheet smoothly slides in and out"
 ```
 
+```
+"when column header filters get added, and the number badge appears on the filter icon next to the search bar, give it a bit of 'emphasis' using the Iris tokens
+```
+
 ---
 
 
