@@ -46,6 +46,10 @@ Add these tabs and fields to the side-sheet: [url to Figma component with varian
 If the Iris emphasis token isn't in the project yet (as it is newly created), use this hardcoded value for now: cubic-bezier(0.34, 1.56, 0.64, 1) easing
 ```
 
+```
+"the motion token used is too fast, use a slower one. Also, it is only happening on exit, not entry, add that too"
+```
+
 ---
 
 
