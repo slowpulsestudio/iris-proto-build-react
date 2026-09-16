@@ -12,15 +12,6 @@ Do a full audit on the discrepancies between my Figma screen and the built proto
 
 ---
 
-## Push your refined prototype, back into a Figma design with all the Iris components and tokens connected
-
-```
-Push my prototype back into this Figma file: <Figma file URL>. Follow the figma-write-to-canvas skill.
-```
-
-
----
-
 ## Building new screens from Figma
 
 ```
@@ -32,6 +23,22 @@ Place it inside the existing app shell (top bar + left nav), under the [product 
 
 Use the wired Figma prototype links to get the basic interactivity and we can refine later.
 
+```
+
+---
+
+## Creating your side-sheet tabs and fields
+
+```
+Add these tabs and fields to the side-sheet: [url to Figma component with variants for each tab]
+```
+
+---
+
+## Adding motion to things
+
+```
+"Do you see the motion tokens in Iris?  If so, add smooth but sharp motion the enter/exit tokens so the filter side-sheet smoothly slides in and out"
 ```
 
 ---
@@ -138,3 +145,12 @@ I don't know what to call this component. Look in the Iris component library and
 ```
 Something looks wrong on screen but I don't know why. Walk me through it in plain English and tell me the exact fix — no more than 3 steps at a time.
 ```
+
+## Push your refined prototype, back into a Figma design with all the Iris components and tokens connected
+
+```
+Push my prototype back into this Figma file: <Figma file URL>. Follow the figma-write-to-canvas skill.
+```
+
+
+---
