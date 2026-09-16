@@ -42,7 +42,8 @@ Add these tabs and fields to the side-sheet: [url to Figma component with varian
 ```
 
 ```
-"when column header filters get added, and the number badge appears on the filter icon next to the search bar, give it a bit of 'emphasis' using the Iris tokens
+"when column header filters get added, and the number badge appears on the filter icon next to the search bar, give it a bit of 'emphasis' using the Iris tokens.
+If the Iris emphasis token isn't in the project yet (as it is newly created), use this hardcoded value for now: cubic-bezier(0.34, 1.56, 0.64, 1) easing
 ```
 
 ---
