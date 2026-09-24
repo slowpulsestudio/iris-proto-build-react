@@ -144,7 +144,7 @@ Every fixed-choice question below is asked with real clickable buttons, never a 
 | `project-description` | "In a sentence or two, describe what you're trying to test…" | First-time setup (free text) |
 | `workflow-skills` | Multi-select checkbox list of optional skills | First-time setup |
 | `git-remote` | "What is the GitHub repo URL for this project?" | `workflow/git` selected and no git remote configured yet |
-| `figma-url` / `figma-stale` | "What is the Figma file URL for this project?" with an *"I'll paste it later"* button and a *"This Figma is stale (I vibe-coded it / used Figma Make)"* button | `workflow/figma-read-from-mcp` or `workflow/figma-write-to-canvas` selected |
+| `figma-url` / `figma-stale` / `figma-none` | "What is the Figma file URL for this project?" with an *"I'll paste it later"* button, a *"This Figma is stale (I vibe-coded it / used Figma Make)"* button, and a *"There is no Figma, we are migrating an existing site/prototype/app"* button | `workflow/figma-read-from-mcp` or `workflow/figma-write-to-canvas` selected |
 | `shell-product` / `shell-mode` | "What product is your prototype for?" (flat list of product names, no shell/standalone grouping), followed by a Yes/No confirmation of the inferred shell mode with the default pre-selected | `platform/poc-iris-react` active (always, since it's mandatory) |
 | `shell-page` | "Where should we build your design? In an existing left-navigation page, or a new one?" | `shell-mode = shell` |
 | *(none — commit/push)* | "Would you like me to commit and push these changes to GitHub?" | `workflow/git` active and files were changed/created this run |

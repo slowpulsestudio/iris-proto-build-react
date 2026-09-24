@@ -107,12 +107,14 @@ When saving to `.skills`, always expand selected entries to full names with the 
 - If the user pastes/types a URL now — use it in Step 0b below.
 - If the user clicks *"I'll add this later"* — skip Step 0b's remote setup for now and continue; save `git-remote = skipped` to `.skill-answers` so it isn't re-asked every run.
 
-**`figma-url`** — only if `workflow/figma-read-from-mcp` or `workflow/figma-write-to-canvas` was selected: ask *"What is the Figma file URL for this project?"* using an interactive question tool that renders real clickable button options, not a plain chat message. Many users answering this are new to AI agent chat and won't know they're allowed to type something other than a URL, so never present a bare text box with no visible alternative — there must always be two clickable buttons right next to the input, even if freeform typing is also technically accepted:
+**`figma-url`** — only if `workflow/figma-read-from-mcp` or `workflow/figma-write-to-canvas` was selected: ask *"What is the Figma file URL for this project?"* using an interactive question tool that renders real clickable button options, not a plain chat message. Many users answering this are new to AI agent chat and won't know they're allowed to type something other than a URL, so never present a bare text box with no visible alternative — there must always be three clickable buttons right next to the input, even if freeform typing is also technically accepted:
 - *"I'll paste it later"*
 - *"This Figma is stale (I vibe-coded it / used Figma Make)"*
+- *"There is no Figma, we are migrating an existing site/prototype/app"*
 - If the user pastes/types a URL now — save it to `.figma-url` in the project root.
 - If the user clicks *"I'll paste it later"* — reply: *"No problem — paste the Figma URL in this chat whenever you're ready and I'll save it to `.figma-url`."* then continue setup. When the user later pastes a URL starting with `https://www.figma.com/`, write it to `.figma-url`.
 - If the user clicks *"This Figma is stale"* — save `figma-stale = yes` to `.skill-answers`. They may still optionally paste a URL now (or later) for pulling specific component specs only — save it to `.figma-url` if given, but never treat it as the primary source of truth for this project (see the migrate question in Step 5 and the `migrate-non-iris-to-iris` skill rules).
+- If the user clicks *"There is no Figma…"* — save `figma-none = yes` to `.skill-answers`, never create `.figma-url`, and make sure `workflow/migrate-non-iris-to-iris` is in the skills list (add it if the user didn't already tick it, and tell them you've added it). The existing codebase is the source of truth for this project. Don't ask for a Figma URL again on reruns; if the user pastes one later, save it to `.figma-url` for component specs only.
 
 Once all questions are resolved, write the `.skills` file if it doesn't exist yet, using the standard comment header followed by the chosen skills, one per line. Always include `platform/poc-iris-react` as the platform entry and `workflow/general` as the first workflow entry:
 
@@ -145,6 +147,8 @@ Do not proceed to the next step until this is resolved.
 ## Step 0c — Connect Figma MCP (if applicable)
 
 If `workflow/figma-read-from-mcp` or `workflow/figma-write-to-canvas` is in the skills list, the Figma MCP server must be connected before continuing, regardless of `figma-stale` — even a stale Figma file may still be referenced later for individual component designs. If both skills are selected, this only needs to happen once — do not repeat it.
+
+If `figma-none = yes` in `.skill-answers`, skip this step entirely — there is no Figma file to connect to. If the user later provides one, run this step then.
 
 First check whether it's already connected: call `get_metadata` on the file in `.figma-url` (or a lightweight `use_figma` read). If real data comes back, the connection already works — report the connected Figma account email address (if available from the MCP response) and skip the walkthrough below. If the call fails, report the exact error message the tool returned (don't paraphrase or invent a different cause) and tell the user the Figma MCP is not connected before proceeding to the walkthrough.
 
@@ -349,7 +353,7 @@ Check `.skill-answers` for `migrate-prompted`.
 - **If it exists:** skip silently.
 - **If missing:** ask, with clickable Yes/No buttons: *"Do you want to migrate the current project to the Iris prototype platform now?"*
   - Save `migrate-prompted = yes` or `migrate-prompted = no` to `.skill-answers` regardless of the answer (so it's only asked once per project, not every rerun).
-  - If yes: follow the `migrate-non-iris-to-iris` rules in `master-skills.md` — audit the existing codebase first, present the audit for review, then migrate one component at a time only after confirmation. If `figma-stale = yes` in `.skill-answers`, the audit must be based on the current codebase already in this project (and its live deployment, if any) — do not ask for a separate prototype URL, and do not treat the stale Figma file as a source of truth for layout/content, only for specific component specs if needed.
+  - If yes: follow the `migrate-non-iris-to-iris` rules in `master-skills.md` — audit the existing codebase first, present the audit for review, then migrate one component at a time only after confirmation. If `figma-stale = yes` or `figma-none = yes` in `.skill-answers`, the audit must be based on the current codebase already in this project (and its live deployment, if any) — do not ask for a separate prototype URL, and do not treat any Figma file as a source of truth for layout/content, only for specific component specs if needed.
   - If no: skip — the user can ask to migrate a component at any later time and the same rules apply.
 
 ## Step 6 — Final local run handoff (always)
