@@ -50,6 +50,20 @@ If the Iris emphasis token isn't in the project yet (as it is newly created), us
 "the motion token used is too fast, use a slower one. Also, it is only happening on exit, not entry, add that too"
 ```
 
+```
+Review all of the accordion type components in the project. Give me a table of what uses what component, refine all to use the iris one if possible. 
+ 
+Once done... add motion to the open/close of accordions, use Iris motion tokens for entry/exit respectively.
+```
+
+```
+Change the success/failure messages to use Iris toast instead. Add motion with iris tokens for entry/exit for slide up/down from bottom.
+```
+
+```
+Use iris chart UI Kit. if a donut has more than 3 items, then automatically convert it to a bar chart. Use the draw chart motion built into Iris.
+```
+
 ---
 
 
