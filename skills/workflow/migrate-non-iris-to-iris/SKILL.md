@@ -1,3 +1,8 @@
+---
+name: migrate-non-iris-to-iris
+description: Rules for migrating an existing non-Iris React + Vite app to the Iris design system. Read when the user asks to migrate, port, or onboard an existing codebase. Audit first and wait for approval; the existing code and deployment are the source of truth, not Figma.
+---
+
 # Iris-React Migration Rules
 
 These rules apply when migrating an existing React + Vite codebase to the Iris-UI design system. They apply in addition to the standard `project-type/iris-react` rules.

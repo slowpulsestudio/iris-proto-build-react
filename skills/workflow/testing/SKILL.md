@@ -1,3 +1,8 @@
+---
+name: testing
+description: Testing and verification standards — real end-to-end checks before calling work done, stage-by-stage testing, automated structural validation, loud failures. Read before declaring a feature complete or writing tests and validation.
+---
+
 # Testing Rules
 
 ---

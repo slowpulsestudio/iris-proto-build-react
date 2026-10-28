@@ -21,9 +21,15 @@ This is for quick turnaround, hi-fidelity, fully interaction prototyping for res
 
 The skills in this repository are the **source of truth** for AI vibe prototyping guidance. They are designed to be maintained once and reused everywhere.
 
-Instead of cluttered lists of skills, a single `master-skills.md` file that becomes the project's authoritative instruction document.
+Instead of one huge instruction file, each project gets three levels of progressive disclosure, so the agent only reads what the current task needs:
 
-This approach avoids relying on AI agents to resolve nested imports or follow multiple levels of references, which can produce inconsistent results.
+| Level | What | Loaded |
+|---|---|---|
+| 1 | `master-skills.md` — the always-on core rules (`workflow/general`) plus an index of installed skills, each with a one-line "read when" trigger | Every session |
+| 2 | `.agents/skills/{name}/SKILL.md` — the rules for one skill | When the task matches that skill's trigger |
+| 3 | `.agents/skills/{name}/references/*` — long procedures, code templates, and checklists | Only when a `SKILL.md` links to one for the step being performed |
+
+Hard stops that must never depend on a skill being triggered (for example "never push without confirmation") are written into each skill's trigger description, so they sit in the level 1 index.
 
 This pulls components and tokens directly from the Iris Figma libraries, the specific product master libraries, but also the actual code from the `poc-iris-react` repo where it exists.
 
@@ -75,35 +81,39 @@ If you really think about UX Research best practise - we don't want auto-refresh
 
 * One responsibility per skill.
 * Skills are modular and reusable.
-* Shared guidance lives in this repository in one master file
+* Shared guidance lives in this repository in one place.
 * Projects contain only project-specific context.
-* AI agents receive a single, flattened instruction file.
+* AI agents load a small always-on index and pull in skills and references only when needed.
 
 ## Instruction Files
 
 The agent generates `AGENTS.md` pointing at the generated `master-skills.md` file, and a `CLAUDE.md` that imports `AGENTS.md` — this keeps Copilot and Claude Code reading the same shared instructions. It also points the `prototype-specific-agent-instructions.md` which you can specific instructions in.
 
-The AI should consume only the generated file.
+The AI starts from `master-skills.md` and loads individual skills from `.agents/skills/` as tasks require.
 
 ## This Repository Structure
 
 ```text
 skills/
+    platform/
+        poc-iris-react/
+            SKILL.md
+            references/
     workflow/
-        general.md          ← always included in every project
-        architecture.md
-        motion.md
-        testing.md
-        git.md
-        figma-read-from-mcp.md
-        figma-write-to-canvas.md
-        figma-update-existing-screen.md
-        vercel-publish.md
-        vercel-password.md
-        migrate-non-iris-to-iris.md
+        general/            ← always included; its SKILL.md is inlined into master-skills.md
+            SKILL.md
+            references/
+        architecture/
+            SKILL.md
+        figma-write-to-canvas/
+            SKILL.md        ← level 2: rules and trigger
+            references/     ← level 3: detailed procedures, loaded on demand
+        ...                 ← one folder per skill: motion, testing, git, figma-read-from-mcp,
+                              figma-update-existing-screen, deep-linking, vercel-publish,
+                              vercel-password, microsoft, migrate-non-iris-to-iris
 ```
 
-Each file should cover **one topic only** and remain reusable across projects.
+Each skill folder must cover **one topic only** and remain reusable across projects. A `SKILL.md` needs `name` and `description` frontmatter; the description is a trigger ("Read when…") and is copied verbatim into the `master-skills.md` index. Keep `SKILL.md` short and move long procedures, code templates, and checklists into `references/` with a link and a note on when to read each one.
 
 
 ---
@@ -124,13 +134,14 @@ After running `/skill-me-up`, a downstream consumer project will contain the fol
 | `.skill-answers` | Stores answers to setup questions so reruns don't re-ask them |
 | `.figma-url` | The project's Figma file URL, if a Figma workflow skill was selected — read-direction reference only |
 | `.figma-code-to-canvas-destination` | The '🤖'-prefixed Figma page URL locked in as the code-to-canvas write destination, if `figma-write-to-canvas` is in use — never the same file as `.figma-url` |
-| `master-skills.md` | The combined, flattened instruction file assembled from the selected skills — the AI's actual source of truth |
+| `master-skills.md` | Generated level 1 file — the always-on core rules plus an index of installed skills and when to read each. Rebuilt on every run; never edit it |
+| `.agents/skills/{name}/` | Level 2 and 3 — each selected skill's `SKILL.md` and `references/`, overwritten from this repo on every run |
 | `example-prompts.md` | Example prompts and direction to give the agent, refreshed from this repo on every run |
 | `.github/copilot-instructions.md` | No longer generated for new projects as of version 25 — Copilot reads `AGENTS.md` directly. Existing projects keep this file (never overwritten) |
 | `AGENTS.md` | Points Copilot and Claude Code at `master-skills.md` and `prototype-specific-agent-instructions.md` — the shared, harness-agnostic instruction pointer |
 | `CLAUDE.md` | Imports `AGENTS.md` (`@AGENTS.md`), so Claude Code reads the same shared file even in sessions that only read `CLAUDE.md` by default |
 | `prototype-specific-agent-instructions.md` | Project-specific instructions (design decisions, constraints, known issues) — never overwritten by `/skill-me-up` |
-| `README.md` | Created only if it doesn't already exist (checked on every run, including reruns) — shows the prototype name, description, Figma link, this repo as the upstream generator, and the skills used to assemble `master-skills.md`. Never overwritten once it exists |
+| `README.md` | Created only if it doesn't already exist (checked on every run, including reruns) — shows the prototype name, description, Figma link, this repo as the upstream generator, and the skills used to assemble `master-skills.md` and `.agents/skills/`. Never overwritten once it exists |
 | bundled skill resources (e.g. `src/iris-shell/`) | Files copied in from `skill-resources/` for skills that bundle a library or template, per each skill's `## Resources` mapping |
 
 

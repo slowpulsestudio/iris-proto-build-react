@@ -1,3 +1,8 @@
+---
+name: microsoft
+description: Windows and PowerShell rules. Read before writing or running any shell command, path, or setup instruction for a user on Windows — PowerShell-native syntax only, never bash patterns.
+---
+
 # Windows Workflow Rules
 
 Use this skill when at least one downstream user is working on Windows.

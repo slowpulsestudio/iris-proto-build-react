@@ -1,3 +1,8 @@
+---
+name: figma-update-existing-screen
+description: Audit-first workflow for redesigning a screen that already exists in the poc-iris-react base to match a new Figma design. Read when the user asks to update, redesign, or change an existing screen. Never change code before the discrepancy audit is approved.
+---
+
 # Figma Update Existing Screen Rules
 
 Use this workflow when the target already exists in the `poc-iris-react` base and the goal is to update it to a new design state, not build from scratch.

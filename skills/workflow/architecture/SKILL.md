@@ -1,3 +1,8 @@
+---
+name: architecture
+description: Code structure rules — single responsibility, extend don't duplicate, config over hardcoding, external dependencies behind interfaces, no speculative abstraction. Read before creating, splitting, or restructuring files, modules, or shared logic.
+---
+
 # Architecture Rules
 
 ---

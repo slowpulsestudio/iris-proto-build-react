@@ -1,3 +1,8 @@
+---
+name: vercel-publish
+description: Vercel deployment rules — GitHub-to-Vercel auto-deploys, snapshot branches (v1, v2) for shareable previews, environment variables. Read when deploying, sharing a version for review, or touching Vercel settings. Never run manual vercel deploy commands.
+---
+
 # Vercel Publish Rules
 
 ---

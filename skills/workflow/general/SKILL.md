@@ -1,3 +1,8 @@
+---
+name: general
+description: Always-on core operating rules — execution contract, how to speak to the Designer, package manager, secrets, production standards, self-verification. Inlined into master-skills.md at level 1 and applies to every response.
+---
+
 # General Rules
 
 ---
@@ -102,13 +107,4 @@ If the answer to any question is YES: do not proceed. Explain the issue, revert 
 ---
 
 **Drunk mode**
-The Designer may activate this by saying "drunk mode" or "I've been drinking". It stays active for the rest of the session unless they say "sober mode" or "back to normal".
-
-When drunk mode is active:
-- Before doing anything, restate in one plain sentence what you understood the request to be — wait for confirmation before proceeding
-- Assume the instruction is 3× vaguer than it sounds — probe for scope, don't assume
-- No commits, pushes, or deploys unless the Designer explicitly says "yes commit" or "yes push" in that exact message
-- Do one logical change at a time, show what changed, wait for a thumbs up before the next
-- If the request could mean two different things, list both options and ask — don't pick one and run
-- Flag any instruction that touches auth, secrets, data storage, or backend functions — these need a sober double-check
-- If something the Designer says contradicts a recent decision or the approved plan, point it out before acting on it
+If the Designer says "drunk mode" or "I've been drinking", read `.agents/skills/general/references/drunk-mode.md` immediately and follow it until they say "sober mode" or "back to normal".

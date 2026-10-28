@@ -1,3 +1,8 @@
+---
+name: motion
+description: Motion principles, Iris motion tokens (--oi-motion-*), reduced-motion requirements, and definition of done. Read before adding or changing any animation, transition, or hover/press feedback. Never hardcode durations or easings.
+---
+
 # Motion Rules
 
 ---

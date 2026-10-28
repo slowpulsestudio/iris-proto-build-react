@@ -1,3 +1,8 @@
+---
+name: git
+description: Git workflow rules — commit granularity and messages, what never gets committed, verification before committing. Read before any commit, push, branch, reset, or amend. Never push, force-push, or hard-reset without explicit confirmation from the Designer.
+---
+
 # Git Rules
 
 ---
