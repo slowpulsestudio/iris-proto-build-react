@@ -81,7 +81,7 @@ If you really think about UX Research best practise - we don't want auto-refresh
 
 ## Instruction Files
 
-The agent points both `CLAUDE.md` and `.github/copilot-instructions.md` at the generated `master-skills.md` file so they remain consistent. It also points the `prototype-specific-agent-instructions.md` which you can specific instructions in.
+The agent generates `AGENTS.md` pointing at the generated `master-skills.md` file, and a `CLAUDE.md` that imports `AGENTS.md` — this keeps Copilot and Claude Code reading the same shared instructions. It also points the `prototype-specific-agent-instructions.md` which you can specific instructions in.
 
 The AI should consume only the generated file.
 
@@ -126,8 +126,9 @@ After running `/skill-me-up`, a downstream consumer project will contain the fol
 | `.figma-code-to-canvas-destination` | The '🤖'-prefixed Figma page URL locked in as the code-to-canvas write destination, if `figma-write-to-canvas` is in use — never the same file as `.figma-url` |
 | `master-skills.md` | The combined, flattened instruction file assembled from the selected skills — the AI's actual source of truth |
 | `example-prompts.md` | Example prompts and direction to give the agent, refreshed from this repo on every run |
-| `.github/copilot-instructions.md` | Points Copilot at `master-skills.md` and `prototype-specific-agent-instructions.md` |
-| `CLAUDE.md` | Points Claude at `master-skills.md` and `prototype-specific-agent-instructions.md` |
+| `.github/copilot-instructions.md` | No longer generated for new projects as of version 25 — Copilot reads `AGENTS.md` directly. Existing projects keep this file (never overwritten) |
+| `AGENTS.md` | Points Copilot and Claude Code at `master-skills.md` and `prototype-specific-agent-instructions.md` — the shared, harness-agnostic instruction pointer |
+| `CLAUDE.md` | Imports `AGENTS.md` (`@AGENTS.md`), so Claude Code reads the same shared file even in sessions that only read `CLAUDE.md` by default |
 | `prototype-specific-agent-instructions.md` | Project-specific instructions (design decisions, constraints, known issues) — never overwritten by `/skill-me-up` |
 | `README.md` | Created only if it doesn't already exist (checked on every run, including reruns) — shows the prototype name, description, Figma link, this repo as the upstream generator, and the skills used to assemble `master-skills.md`. Never overwritten once it exists |
 | bundled skill resources (e.g. `src/iris-shell/`) | Files copied in from `skill-resources/` for skills that bundle a library or template, per each skill's `## Resources` mapping |

@@ -1,7 +1,7 @@
 ---
 mode: agent
 description: Rebuild master-skills.md by fetching the latest skill files from the up-skill repo on GitHub, and copy any skill-bundled files into this project.
-version: 24
+version: 25
 ---
 
 ## Cross-platform execution guardrails
@@ -255,15 +255,17 @@ Check `.skill-answers` for `shell-product` and `shell-mode`.
 
 Check for the following files and create them if they don't already exist:
 
-**`.github/copilot-instructions.md`**
+**`AGENTS.md`**
 ```
 Read master-skills.md and prototype-specific-agent-instructions.md for your operating instructions.
 ```
 
 **`CLAUDE.md`**
 ```
-Read master-skills.md and prototype-specific-agent-instructions.md for your operating instructions.
+@AGENTS.md
 ```
+
+Both Copilot and Claude Code now support the open `AGENTS.md` standard, so `AGENTS.md` is the single shared instruction pointer. `CLAUDE.md` only contains an import of it — this guarantees Claude Code reads the same file even on sessions that only read `CLAUDE.md` by default. Do not generate a separate `.github/copilot-instructions.md` — Copilot reads `AGENTS.md` directly.
 
 **`prototype-specific-agent-instructions.md`**
 ```
@@ -297,7 +299,7 @@ When done, report:
 - Whether `example-prompts.md` was created, updated, or already up to date
 - Any skills that failed to fetch (404 or network error)
 - Which bundled files were copied (grouped by skill), and any that were skipped due to conflicts
-- Whether `.github/copilot-instructions.md`, `CLAUDE.md`, `prototype-specific-agent-instructions.md`, and `README.md` were created or already existed
+- Whether `AGENTS.md`, `CLAUDE.md`, `prototype-specific-agent-instructions.md`, and `README.md` were created or already existed
 
 ## Step 5 — Post-setup actions (ask in order, only if applicable)
 
