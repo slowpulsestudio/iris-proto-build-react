@@ -1,6 +1,6 @@
 # AI Prototyping Skills
 
-When you want to transform your Figma design into a fully interactive code prototype using Iris UI - use this setup wizard to get your design built, published and ready to refine, share, and user-test.
+When you want to transform your Figma design into a fully interactive code prototype using Iris UI and/or pull a prototype back into Figma. keeping your components and tokens intact - use this setup wizard to get your design built, published and ready to refine, share, and user-test.
 
 This repository contains a reusable library of AI prototyping instruction files ("skills") and a wizard to get your prototype set up.
 
