@@ -73,6 +73,8 @@ The agent will ask you a bunch of questions to finish the setup and you are done
 
 Now your prototype is setup, you can use this file for some examples of the kind of questions and direction you can give the agent: `example-prompts.md`.
 
+I would recommend running the first example prompt in that file using the Claude - Opus model to get a full review of the Iris connections and fix any issues before iterating. Start with a nice, clean, connected Iris build.
+
 
 ---
 
