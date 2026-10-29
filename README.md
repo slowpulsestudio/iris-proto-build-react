@@ -6,6 +6,10 @@ This repository contains a reusable library of AI prototyping instruction files 
 
 It is the recommended approach for UX Research at One Identity as this prototype framework has been optimised for UX Tweak and our UX Research strategy.
 
+## Two unique use cases
+
+1. **Research prototype:** one per research round, frozen once testing starts.
+2. **Product demo:** one per product, added to over time.
 
 ## The Problem This Repo Solves
 
