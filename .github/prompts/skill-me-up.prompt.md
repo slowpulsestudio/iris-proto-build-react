@@ -1,7 +1,7 @@
 ---
 mode: agent
 description: Install the selected skills from the up-skill repo into .agents/skills/, rebuild the master-skills.md index, and copy any skill-bundled files into this project.
-version: 26
+version: 27
 ---
 
 ## Cross-platform execution guardrails
@@ -55,6 +55,7 @@ Check whether a `.skills` file exists in the root of this project.
 - If `platform/iris-react` is present, replace it with `platform/poc-iris-react`.
 - If `platform/iris-react-with-shell` is present, replace it with `platform/poc-iris-react`.
 - If `platform/poc-iris-react` is missing, add it.
+- If `workflow/update-iris-packages` is missing, add it.
 - If multiple platform entries are present, keep only `platform/poc-iris-react`.
 
 Write the normalized `.skills` file back immediately, then proceed to Answer tracking below — new questions added to the prompt since the project was first set up will be asked now if their key is missing from `.skill-answers`. After resolving any missing answers, skip to Step 0b.
@@ -116,7 +117,7 @@ When saving to `.skills`, always expand selected entries to full names with the 
 - If the user clicks *"This Figma is stale"* — save `figma-stale = yes` to `.skill-answers`. They may still optionally paste a URL now (or later) for pulling specific component specs only — save it to `.figma-url` if given, but never treat it as the primary source of truth for this project (see the migrate question in Step 5 and the `migrate-non-iris-to-iris` skill rules).
 - If the user clicks *"There is no Figma…"* — save `figma-none = yes` to `.skill-answers`, never create `.figma-url`, and make sure `workflow/migrate-non-iris-to-iris` is in the skills list (add it if the user didn't already tick it, and tell them you've added it). The existing codebase is the source of truth for this project. Don't ask for a Figma URL again on reruns; if the user pastes one later, save it to `.figma-url` for component specs only.
 
-Once all questions are resolved, write the `.skills` file if it doesn't exist yet, using the standard comment header followed by the chosen skills, one per line. Always include `platform/poc-iris-react` as the platform entry and `workflow/general` as the first workflow entry:
+Once all questions are resolved, write the `.skills` file if it doesn't exist yet, using the standard comment header followed by the chosen skills, one per line. Always include `platform/poc-iris-react` as the platform entry, `workflow/general` as the first workflow entry, and `workflow/update-iris-packages` (mandatory, not shown in the selection list):
 
 ```
 # This file is only a pseudo-import list for the Up-Skill mechanism — like a
@@ -223,6 +224,10 @@ Take `iris-proto-build-react-main/example-prompts.md` from the same zip, regardl
 - If it already matches, leave it untouched.
 - This comparison and write must happen every run — do not skip it because `master-skills.md` was unchanged, and report its result on its own line in Step 4.
 
+### 1e — Install the /update-iris-packages prompt
+
+Take `iris-proto-build-react-main/.github/prompts/update-iris-packages.prompt.md` from the same zip and write it to `.github/prompts/update-iris-packages.prompt.md` in this project if it's missing or differs. This gives the user a `/update-iris-packages` slash command. Do this every run.
+
 ## Step 2 — Copy skill-bundled files
 
 After installing the skill folders in Step 1, scan each installed `.agents/skills/{name}/SKILL.md` for a `## Resources` section. If a skill has no `## Resources` section, skip this step for that skill.
@@ -236,20 +241,24 @@ source-folder/ -> dest-folder/
 - `source-folder/` is a path relative to `skill-resources/{skill-name}/` in the up-skill repo. `{skill-name}` is the full name including its category folder (e.g. `platform/poc-iris-react`, not just `poc-iris-react`) — use it as-is when building this base directory, never just its last path segment.
 - `dest-folder/` is the destination path relative to this project's root
 
-For each mapping, use the zip already downloaded in Step 1a (download it now only if Step 1 was skipped):
+For `platform/poc-iris-react`, do not use the steps below. Instead ask, with clickable Yes/No buttons, every run: *"Would you like to update the Iris packages to the latest version?"* (or, if `src/iris-shell/` doesn't exist yet: *"Would you like to install the Iris packages?"*). Never run it without asking.
+- If yes: read the installed `.agents/skills/update-iris-packages/SKILL.md` and follow it in full, reusing the zip from Step 1a.
+- If no: leave `src/iris-shell/` untouched. If it doesn't exist, tell the user Step 2b will be skipped until it's installed, and that they can run `/update-iris-packages` any time.
+
+For every other skill's mapping, use the zip already downloaded in Step 1a (download it now only if Step 1 was skipped):
 1. The zip is `https://github.com/slowpulsestudio/iris-proto-build-react/archive/refs/heads/main.zip`.
-2. Extract only the files whose path within the zip starts with `iris-proto-build-react-main/skill-resources/{skill-name}/{source-folder}/` — for example, for the `platform/poc-iris-react` skill with a `poc-iris-react-main/` source folder, the full prefix is `iris-proto-build-react-main/skill-resources/platform/poc-iris-react/poc-iris-react-main/`.
+2. Extract only the files whose path within the zip starts with `iris-proto-build-react-main/skill-resources/{skill-name}/{source-folder}/`.
 3. Write each extracted file to `{project-root}/{dest-folder}/{relative-path}`, where `relative-path` is the portion after the prefix in step 2. Create any necessary directories.
 4. If a file already exists at the destination and its content differs, warn the user and skip it — do not overwrite.
 5. If a mapping matches zero files in the zip, this is an error, not an empty result — stop and report the exact prefix searched so the user can check the archive contents. Do not report it as "nothing to copy".
 
 Reuse the same zip for all resource mappings across all skills.
 
-After all files are copied, if `project-name` is known from `.skill-answers`, find `index.html` in the project (check `src/iris-shell/index.html`, `src/iris-ui/index.html`, then the project root) and update the `<title>` tag to the project name. Skip silently if no `index.html` exists.
+After all files are copied, if `project-name` is known from `.skill-answers`, find `index.html` in the project (check `src/iris-ui/index.html`, then the project root — `src/iris-shell/index.html` is handled by `update-iris-packages`) and update the `<title>` tag to the project name. Skip silently if no `index.html` exists.
 
 ## Step 2b — Shell page selection (if applicable)
 
-If `platform/poc-iris-react` is active, this must be resolved before continuing to Step 3, since it determines where the design gets built and what loads by default. This step happens after Step 2 so `src/lib/verticals.ts` actually exists in the project to read.
+If `platform/poc-iris-react` is active, this must be resolved before continuing to Step 3, since it determines where the design gets built and what loads by default. This step happens after Step 2 so `src/lib/verticals.ts` actually exists in the project to read. If the user declined to install the Iris packages in Step 2 and `src/iris-shell/` doesn't exist, skip this step.
 
 Check `.skill-answers` for `shell-product` and `shell-mode`.
 
@@ -329,7 +338,8 @@ When done, report:
 - The total line count of `master-skills.md`, and whether it was created, updated, or already up to date
 - Whether `example-prompts.md` was created, updated, or already up to date
 - Any skills that failed to install (missing from the zip)
-- Which bundled files were copied (grouped by skill), and any that were skipped due to conflicts
+- Whether the user chose to update the Iris packages, and if so the `update-iris-packages` report for `src/iris-shell/`
+- Which other bundled files were copied (grouped by skill), and any that were skipped due to conflicts
 - Whether `AGENTS.md`, `CLAUDE.md`, `prototype-specific-agent-instructions.md`, and `README.md` were created or already existed
 
 ## Step 5 — Post-setup actions (ask in order, only if applicable)

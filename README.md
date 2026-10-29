@@ -103,6 +103,8 @@ skills/
         general/            ← always included; its SKILL.md is inlined into master-skills.md
             SKILL.md
             references/
+        update-iris-packages/  ← always included; updates src/iris-shell/ when the user says yes
+            SKILL.md
         architecture/
             SKILL.md
         figma-write-to-canvas/
@@ -130,6 +132,7 @@ After running `/skill-me-up`, a downstream consumer project will contain the fol
 | File | What it's for |
 |---|---|
 | `.github/prompts/skill-me-up.prompt.md` | The setup prompt itself, fetched in Step 1 and self-updating on every run |
+| `.github/prompts/update-iris-packages.prompt.md` | The `/update-iris-packages` slash command — runs the `workflow/update-iris-packages` skill on demand. Refreshed on every `/skill-me-up` run |
 | `.skills` | Pseudo-import list of the skill names selected for this project |
 | `.skill-answers` | Stores answers to setup questions so reruns don't re-ask them |
 | `.figma-url` | The project's Figma file URL, if a Figma workflow skill was selected — read-direction reference only |
@@ -142,7 +145,8 @@ After running `/skill-me-up`, a downstream consumer project will contain the fol
 | `CLAUDE.md` | Imports `AGENTS.md` (`@AGENTS.md`), so Claude Code reads the same shared file even in sessions that only read `CLAUDE.md` by default |
 | `prototype-specific-agent-instructions.md` | Project-specific instructions (design decisions, constraints, known issues) — never overwritten by `/skill-me-up` |
 | `README.md` | Created only if it doesn't already exist (checked on every run, including reruns) — shows the prototype name, description, Figma link, this repo as the upstream generator, and the skills used to assemble `master-skills.md` and `.agents/skills/`. Never overwritten once it exists |
-| bundled skill resources (e.g. `src/iris-shell/`) | Files copied in from `skill-resources/` for skills that bundle a library or template, per each skill's `## Resources` mapping |
+| bundled skill resources (e.g. `src/iris-shell/`) | Files copied in from `skill-resources/` for skills that bundle a library or template, per each skill's `## Resources` mapping. `src/iris-shell/` is updated by `workflow/update-iris-packages` when the user says yes to the update question on each `/skill-me-up` run; files edited in the project are never overwritten without asking |
+| `.iris-packages-lock.json` | Records which `src/iris-shell/` files were written and from which upstream version, so reruns can update untouched files and detect local edits |
 
 
 ## Setup Questions Reference
@@ -157,6 +161,7 @@ Every fixed-choice question below is asked with real clickable buttons, never a 
 | `workflow-skills` | Multi-select checkbox list of optional skills | First-time setup |
 | `git-remote` | "What is the GitHub repo URL for this project?" | `workflow/git` selected and no git remote configured yet |
 | `figma-url` / `figma-stale` / `figma-none` | "What is the Figma file URL for this project?" with an *"I'll paste it later"* button, a *"This Figma is stale (I vibe-coded it / used Figma Make)"* button, and a *"There is no Figma, we are migrating an existing site/prototype/app"* button | `workflow/figma-read-from-mcp` or `workflow/figma-write-to-canvas` selected |
+| *(none — Iris packages)* | "Would you like to update the Iris packages to the latest version?" (or "…install the Iris packages?" if `src/iris-shell/` doesn't exist). Yes runs `workflow/update-iris-packages` | Every run |
 | `shell-product` / `shell-mode` | "What product is your prototype for?" (flat list of product names, no shell/standalone grouping), followed by a Yes/No confirmation of the inferred shell mode with the default pre-selected | `platform/poc-iris-react` active (always, since it's mandatory) |
 | `shell-page` | "Where should we build your design? In an existing left-navigation page, or a new one?" | `shell-mode = shell` |
 | *(none — commit/push)* | "Would you like me to commit and push these changes to GitHub?" | `workflow/git` active and files were changed/created this run |
@@ -175,6 +180,7 @@ The `poc-iris-react` baseline is manually updated by Ryan from Abhi's shell repo
 | Skill | When to include |
 |---|---|
 | `workflow/general` | Core execution rules — always include |
+| `workflow/update-iris-packages` | Updates `src/iris-shell/` to the latest `poc-iris-react` when the user says yes on a `/skill-me-up` run, asking before overwriting locally edited files — always included |
 | `workflow/architecture` | General code structure rules |
 | `workflow/deep-linking` | URL-addressable tree navigation |
 | `workflow/figma-read-from-mcp` | If the project uses Figma for design. Automatically gathers your products master library. Includes Iris UI design-style rules (tokens, elevation, themes, accessibility). |
