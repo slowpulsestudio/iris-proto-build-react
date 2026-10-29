@@ -38,7 +38,9 @@ Hard stops that must never depend on a skill being triggered (for example "never
 
 This pulls components and tokens directly from the Iris Figma libraries, the specific product master libraries, but also the actual code from the `poc-iris-react` repo where it exists.
 
-Eventually this will automatically refresh with the latest Iris code but for now Ryan manually updates the Iris files. If something you really need from Iris UI is missing, get in touch: `ryan.harte@oneidentity.com`.
+Eventually this will automatically refresh with the latest Iris code but for now Ryan manually updates the Iris files. If something you really need from Iris UI is missing, get in touch: `ryan.harte@oneidentity.com`. 
+
+Once we get Angular Iris components built, we can make this update the Iris components dynamically in real time.
 
 
 ## Setup Steps
