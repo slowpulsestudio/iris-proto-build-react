@@ -1,5 +1,5 @@
 {
-  "name": "ars",
+  "name": "oi-app-shell",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -21,18 +21,20 @@
     "react-dom": "^19.2.7"
   },
   "devDependencies": {
+    "@lucasmarkes/hairline": "^0.5.1",
     "@types/d3-ease": "^3.0.2",
     "@types/d3-interpolate": "^3.0.4",
     "@types/d3-scale": "^4.0.9",
     "@types/d3-selection": "^3.0.11",
     "@types/d3-shape": "^3.1.8",
     "@types/d3-transition": "^3.0.9",
-    "@types/node": "^25.9.2",
+    "@types/node": "^26.6.5",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.2",
     "border-beam": "^1.3.0",
-    "typescript": "^6.0.3",
+    "bot-avatars": "^0.2.2",
+    "typescript": "^7.0.2",
     "vite": "^8.0.16"
   },
   "pnpm": {

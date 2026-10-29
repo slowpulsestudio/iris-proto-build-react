@@ -1,20 +1,3 @@
-.toolbarSeparator {
-  align-self: center;
-  width: 1px;
-  height: 20px;
-  background: var(--oi-border-color-default);
-  flex-shrink: 0;
-}
-
-.addBtn {
-  gap: var(--oi-button-gap-s);
-}
-
-.addBtn > span:last-child {
-  width: 16px !important;
-  height: 16px !important;
-}
-
 .tableWrap {
   flex: 1 1 auto;
   min-height: 0;

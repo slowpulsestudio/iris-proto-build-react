@@ -1,6 +1,6 @@
 ---
 name: figma-read-from-mcp
-description: Building or reading screens, components, and tokens from a Figma file via the remote Figma MCP (Figma to code). Read before any Figma MCP read or when implementing a design. Figma MCP is the only source of truth for design values; never use Code Connect.
+description: Building or reading screens, components, and tokens from a Figma file via the remote Figma MCP (Figma to code). Read before any Figma MCP read or when implementing a design. Figma MCP is the only source of truth for design values; never use Code Connect. Also holds the Iris UI design-style rules (tokens over hardcoded values, Iris components, type and elevation, themes, accessibility) — read before styling any screen or component.
 ---
 
 # Figma MCP Rules
@@ -32,8 +32,57 @@ All colours, spacing, radii, font sizes, and component structures must come from
 **A failed response looks like:**
 - Opening the Figma link in a browser tab, or using `get_screenshot`, instead of the `get_metadata` / `get_design_context` / `get_variable_defs` MCP tools
 - Treating a blocked or login-walled browser tab as proof that Figma access is broken — the MCP tools are what matter, not the browser
-- Hardcoding a colour, spacing value, radius, font size, or component structure instead of pulling it from Figma
 - Proceeding by estimating or guessing a value when the MCP tools returned nothing, instead of stopping
+
+---
+
+**Tokens over hardcoded values — always**
+Every colour, spacing, size, radius, shadow, and type value has an Iris UI token. Use it — check [references/tokens.md](references/tokens.md) rather than guessing a token name. Prefer semantic tokens (`--oi-background-color-*`, `--oi-content-color-*`, `--oi-border-color-*`, `--oi-base-color-*`) over global primitives (`--oi-color-grey-900`); use the global palette only when no semantic mapping exists. Use component tokens (e.g. `--oi-button-background-primary-hover`) for component states.
+
+**A failed response looks like:**
+- A raw hex, px, or shadow value that "visually matches" a token
+- Using `--oi-color-grey-100` where `--oi-background-color-secondary` exists
+- Hardcoding a component's hover/active colour instead of its component token
+
+---
+
+**Use Iris components — never rebuild them**
+Buttons, tables, modals, inputs, badges, banners, etc. already exist as Iris components. Use them and configure via their props; only build a new one when Iris genuinely lacks it, and then style it entirely with Iris tokens. Check the source default before assuming a variant (e.g. a Button with no variant may be primary).
+
+**A failed response looks like:**
+- A styled `div` that looks like a Button instead of the real component
+- Building a new component without first checking the existing Iris components
+- Assuming the default variant matches the design without checking
+
+---
+
+**Type and elevation through tokens**
+Text uses Iris type tokens (font family, size, line height, weight, letter spacing) — Inter for UI, IBM Plex Mono for code. Elevation uses `--oi-shadow-{none,low,mid,high}`, which carry the correct values for every theme: `none` for canvas/background, `low` for main content, `mid` for dropdowns/menus/tooltips, `high` for side sheets/modals/popovers/toasts.
+
+**A failed response looks like:**
+- Setting font size, line height, or letter spacing as raw values
+- Writing a raw `box-shadow` instead of an `--oi-shadow-*` token
+- Using `--oi-shadow-low` on a modal
+
+---
+
+**Themes come from tokens, not duplicates**
+Light, dark, and high-contrast are theme modes — the same semantic token resolves differently per theme. Reference semantic tokens and let the active theme resolve them.
+
+**A failed response looks like:**
+- Building a separate dark version of a screen or component
+- A value that only works in one theme (e.g. a hardcoded white background)
+- Checking a screen in light mode only
+
+---
+
+**Accessibility is a gate, not a nicety**
+Default themes target WCAG 2.2 AA; high-contrast themes target all levels (2.0 + 2.1 + 2.2, A/AA/AAA). Check contrast in every shipped theme, visible focus on every interactive element, target sizes at or above the `--oi-size-*` component defaults, and that status meaning isn't carried by colour alone. Flag any requested visual that would break AA instead of silently applying it. Details in [references/accessibility.md](references/accessibility.md).
+
+**A failed response looks like:**
+- Overriding a component's tokenised colours with raw values (silently breaks contrast guarantees)
+- Removing or hiding a focus style
+- Status shown by colour only, with no icon or text
 
 ---
 
@@ -142,3 +191,6 @@ After building any screen from a connected Figma file — brand-new or an update
 | File | Contains |
 |---|---|
 | [references/post-build-checklist.md](references/post-build-checklist.md) | Build, ✅/❌ component/token review table, localhost screenshot comparison, and commit/push confirmation steps |
+| [references/tokens.md](references/tokens.md) | Iris UI semantic colour, spacing, size, radius, and component tokens; theming. Read when picking a token |
+| [references/foundations.md](references/foundations.md) | Type scale (spec ↔ code token names), spacing/sizing scales, elevation, icons, breakpoints |
+| [references/accessibility.md](references/accessibility.md) | WCAG targets per theme and what to verify. Read when validating any screen or component |

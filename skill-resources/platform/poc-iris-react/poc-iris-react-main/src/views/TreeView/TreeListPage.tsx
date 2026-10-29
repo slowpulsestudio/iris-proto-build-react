@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
+import { useEffect, useMemo, useState, type MouseEvent } from 'react';
 import { AppShell } from '../AppShell/AppShell.js';
 import { navigate } from '../../lib/router.js';
-import { useAppShell } from '../../lib/appShellContext.js';
 import { isTypingTarget } from '../../lib/keyboard.js';
 import { useDirectory } from '../../lib/directoryStore.js';
 import { OBJECT_TYPE_META, type DirectoryObject } from '../../lib/directoryData.js';
@@ -13,14 +12,15 @@ import { Button } from '../../components/Button/Button.js';
 import { Link } from '../../components/Link/Link.js';
 import { Tooltip } from '../../components/Tooltip/Tooltip.js';
 import { ContentHeader } from '../../components/ContentHeader/ContentHeader.js';
+import { ListToolbarActions } from '../../components/ListToolbarActions/ListToolbarActions.js';
 import { Menu, type MenuEntry } from '../../components/Menu/Menu.js';
 import {
-  Filters,
-  fieldHasValueUi,
-  type ActiveFilter,
-  type FilterFieldConfig,
+  FilterBar,
+  useFilterModel,
   type FilterOption,
-} from '../../components/Filters/Filters.js';
+  type ParameterDef,
+  type ParamCategory,
+} from '../../components/Filters/index.js';
 import { DataTable, type DataTableColumn, type RowKey } from '../../components/DataTable/DataTable.js';
 import { Pagination } from '../../components/Pagination/Pagination.js';
 import { ActionBar } from '../../components/ActionBar/ActionBar.js';
@@ -50,12 +50,18 @@ const OBJECT_TYPE_OPTIONS: FilterOption[] = [
   { value: 'contact', label: 'Contact', icon: 'AddressBook' },
 ];
 
-/** Fields the user can add as filter chips (drives both menus + the chips). */
-const FILTER_FIELDS: FilterFieldConfig[] = [
-  { id: 'name', label: 'Name', placeholder: 'Select value' },
-  { id: 'objectType', label: 'Object Type', placeholder: 'Select type', options: OBJECT_TYPE_OPTIONS },
-  { id: 'location', label: 'Location', placeholder: 'Select location' },
-  { id: 'dateCreated', label: 'Date created', type: 'date' },
+/** Fields the user can filter by (drives the toolbar menu, the builder and the pills). */
+const PARAMETERS: ParameterDef[] = [
+  { id: 'name', label: 'Name', icon: 'TextAa' },
+  { id: 'objectType', label: 'Object type', icon: 'Cube', options: OBJECT_TYPE_OPTIONS },
+  { id: 'location', label: 'Location', icon: 'MapPin' },
+  { id: 'dateCreated', label: 'Date created', icon: 'CalendarDots', date: true },
+];
+
+/** Parameter groupings for the advanced builder's `+ Filter` popover (§3.8). */
+const PARAM_CATEGORIES: ParamCategory[] = [
+  { label: 'Common', parameterIds: ['name', 'objectType', 'location'] },
+  { label: 'User', parameterIds: ['dateCreated'] },
 ];
 
 /** Href for a row: containers drill in; leaves open detail. */
@@ -73,7 +79,6 @@ export interface TreeListPageProps {
  */
 export function TreeListPage({ nodeId }: TreeListPageProps) {
   const { isContainer, getChildren, getPath, getNodeName, getNodeIcon } = useDirectory();
-  const { aiOpen } = useAppShell();
   const { isFavorite, toggle: toggleFavorite } = useFavorites();
 
   const [query, setQuery] = useState('');
@@ -84,17 +89,16 @@ export function TreeListPage({ nodeId }: TreeListPageProps) {
   const [deleteTarget, setDeleteTarget] = useState<DirectoryObject | null>(null);
   // Which object type the Create flow is building. `null` = closed.
   const [createTarget, setCreateTarget] = useState<{ type: string; icon: string } | null>(null);
-  const [activeFilters, setActiveFilters] = useState<ActiveFilter[]>([]);
+  const { root, actions } = useFilterModel();
   const [filterMenuOpen, setFilterMenuOpen] = useState(false);
-  const filterIdRef = useRef(0);
 
   // Reset transient view state when the selected node changes.
   useEffect(() => {
     setQuery('');
     setPage(1);
     setSelected(new Set());
-    setActiveFilters([]);
-  }, [nodeId]);
+    actions.clear();
+  }, [nodeId, actions]);
 
   /* ---- ⌘⇧F / Ctrl+Shift+F opens the Add filter menu ---- */
   useEffect(() => {
@@ -114,25 +118,29 @@ export function TreeListPage({ nodeId }: TreeListPageProps) {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  const addFilter = (fieldId: string) => {
-    filterIdRef.current += 1;
-    setActiveFilters((prev) => [...prev, { id: `f${filterIdRef.current}`, fieldId }]);
+  const addFilter = (parameterId: string) => {
+    actions.addCondition(root.id, { parameterId });
   };
-  const setFilterValue = (id: string, value: string) =>
-    setActiveFilters((prev) => prev.map((f) => (f.id === id ? { ...f, value } : f)));
-  const removeFilter = (id: string) =>
-    setActiveFilters((prev) => prev.filter((f) => f.id !== id));
-  const clearFilters = () => setActiveFilters([]);
+  const addAdvancedFilter = () => {
+    actions.addGroup(root.id);
+  };
 
-  const filterMenuItems: MenuEntry[] = FILTER_FIELDS.map((f) => {
-    const supported = fieldHasValueUi(f);
-    return {
+  // Toolbar Filter menu (§3.6): Advanced filter + parameter quick-adds.
+  const rootGroupCount = root.children.filter((c) => c.kind === 'group').length;
+  const filterMenuItems: MenuEntry[] = [
+    {
       kind: 'item',
-      label: f.label,
-      disabled: !supported,
-      onSelect: supported ? () => addFilter(f.id) : undefined,
-    };
-  });
+      label: 'Advanced filter',
+      icon: 'FunnelSimple',
+      onSelect: addAdvancedFilter,
+      disabled: rootGroupCount >= 6,
+    },
+    { kind: 'divider' },
+    { kind: 'item', label: 'Name', onSelect: () => addFilter('name') },
+    { kind: 'item', label: 'Object type', onSelect: () => addFilter('objectType') },
+    { kind: 'item', label: 'Location', onSelect: () => addFilter('location') },
+    { kind: 'item', label: 'Date created', onSelect: () => addFilter('dateCreated') },
+  ];
 
   // Create-menu entries wired to open the shared multi-step create modal.
   const createMenuItems: MenuEntry[] = CREATE_MENU_ITEMS.map((entry) =>
@@ -324,59 +332,22 @@ export function TreeListPage({ nodeId }: TreeListPageProps) {
           />
         }
         toolbarActions={
-          <>
-            <span className={styles.toolbarSeparator} aria-hidden="true" />
-            <Menu
-              ariaLabel="Filter by"
-              align="end"
-              items={filterMenuItems}
-              open={filterMenuOpen}
-              onOpenChange={setFilterMenuOpen}
-              trigger={({ ref, onClick, expanded }) => (
-                <Tooltip label="Add filter" shortcut={['⌘', '⇧', 'F']}>
-                  <Button
-                    ref={ref as React.Ref<HTMLButtonElement>}
-                    iconLead="FunnelSimple"
-                    variant="secondary"
-                    aria-haspopup="menu"
-                    aria-expanded={expanded}
-                    onClick={onClick}
-                  >
-                    Filter
-                  </Button>
-                </Tooltip>
-              )}
-            />
-            <Menu
-              ariaLabel="Create options"
-              align="end"
-              items={createMenuItems}
-              trigger={({ ref, onClick, expanded }) => (
-                <Button
-                  ref={ref as React.Ref<HTMLButtonElement>}
-                  variant="primary"
-                  iconLead="Plus"
-                  iconTrail="CaretDown"
-                  className={styles.addBtn}
-                  aria-haspopup="menu"
-                  aria-expanded={expanded}
-                  onClick={onClick}
-                >
-                  Create
-                </Button>
-              )}
-            />
-          </>
+          <ListToolbarActions
+            filterMenuItems={filterMenuItems}
+            filterMenuOpen={filterMenuOpen}
+            onFilterOpenChange={setFilterMenuOpen}
+            createMenuItems={createMenuItems}
+            filterActive={root.children.length > 0}
+          />
         }
         filters={
-          activeFilters.length > 0 ? (
-            <Filters
-              filters={activeFilters}
-              fields={FILTER_FIELDS}
-              onAddFilter={addFilter}
-              onValueChange={setFilterValue}
-              onRemove={removeFilter}
-              onClear={clearFilters}
+          root.children.length > 0 ? (
+            <FilterBar
+              root={root}
+              parameters={PARAMETERS}
+              categories={PARAM_CATEGORIES}
+              actions={actions}
+              addMenuItems={filterMenuItems}
             />
           ) : undefined
         }
@@ -449,19 +420,17 @@ export function TreeListPage({ nodeId }: TreeListPageProps) {
             {
               icon: 'SelectionAll',
               label: 'Select all',
-              iconOnly: aiOpen,
               onClick: () => setSelected(new Set(allRows.map((o) => o.id))),
             },
-            { icon: 'Copy', label: 'Copy', iconOnly: aiOpen, onClick: () => undefined },
-            { icon: 'Folder', label: 'Move', iconOnly: aiOpen, onClick: () => undefined },
-            { icon: 'UserList', label: 'Properties', iconOnly: aiOpen, onClick: () => undefined },
+            { icon: 'Copy', label: 'Copy', onClick: () => undefined },
+            { icon: 'Folder', label: 'Move', onClick: () => undefined },
+            { icon: 'UserList', label: 'Properties', onClick: () => undefined },
           ],
           [
             {
               icon: 'Trash',
               label: 'Delete',
               tone: 'danger',
-              iconOnly: aiOpen,
               onClick: () => undefined,
             },
           ],

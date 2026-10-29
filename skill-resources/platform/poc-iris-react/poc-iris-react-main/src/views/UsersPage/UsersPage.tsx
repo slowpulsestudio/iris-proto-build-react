@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
+import { useEffect, useMemo, useState, type MouseEvent } from 'react';
 import { AppShell } from '../AppShell/AppShell.js';
 import { navigate } from '../../lib/router.js';
 import { useUsers } from '../../lib/usersStore.js';
@@ -10,17 +10,18 @@ import { IconButton } from '../../components/IconButton/IconButton.js';
 import { Icon } from '../../components/Icon/Icon.js';
 import { Menu, type MenuEntry } from '../../components/Menu/Menu.js';
 import {
-  Filters,
-  fieldHasValueUi,
-  type ActiveFilter,
-  type FilterFieldConfig,
+  FilterBar,
+  useFilterModel,
   type FilterOption,
-} from '../../components/Filters/Filters.js';
+  type ParameterDef,
+  type ParamCategory,
+} from '../../components/Filters/index.js';
 import { Button } from '../../components/Button/Button.js';
 import { Badge, type BadgeTone } from '../../components/Badge/Badge.js';
 import { Tooltip } from '../../components/Tooltip/Tooltip.js';
 import { Link } from '../../components/Link/Link.js';
 import { ContentHeader } from '../../components/ContentHeader/ContentHeader.js';
+import { ListToolbarActions } from '../../components/ListToolbarActions/ListToolbarActions.js';
 import { DataTable, type DataTableColumn, type RowKey } from '../../components/DataTable/DataTable.js';
 import { Pagination } from '../../components/Pagination/Pagination.js';
 import { ActionBar } from '../../components/ActionBar/ActionBar.js';
@@ -176,7 +177,6 @@ const COLUMNS: DataTableColumn<User>[] = [
     header: 'Object ID',
     icon: 'Tag',
     minWidth: '246px',
-    maxWidth: '360px',
     grow: 1,
     cell: (u) => (
       <span className={styles.objectIdCell}>
@@ -200,14 +200,20 @@ const OBJECT_TYPE_OPTIONS: FilterOption[] = [
   { value: 'gmsa', label: 'Group Management Service Account', icon: 'UserCircle' },
 ];
 
-/** Fields the user can add as filter chips (drives both menus + the chips). */
-const FILTER_FIELDS: FilterFieldConfig[] = [
-  { id: 'displayName', label: 'Display Name', placeholder: 'Select value' },
-  { id: 'objectType', label: 'Object Type', placeholder: 'Select type', options: OBJECT_TYPE_OPTIONS },
-  { id: 'tags', label: 'Tags', placeholder: 'Select tag' },
-  { id: 'location', label: 'Location', placeholder: 'Select location' },
-  { id: 'dateActive', label: 'Date active', type: 'date' },
-  { id: 'dateCreated', label: 'Date created', type: 'date' },
+/** Fields the user can filter by (drives the toolbar menu, the builder and the pills). */
+const PARAMETERS: ParameterDef[] = [
+  { id: 'displayName', label: 'Display name', icon: 'TextAa' },
+  { id: 'objectType', label: 'Object type', icon: 'Cube', options: OBJECT_TYPE_OPTIONS },
+  { id: 'tags', label: 'Tags', icon: 'Tag' },
+  { id: 'location', label: 'Location', icon: 'MapPin' },
+  { id: 'dateActive', label: 'Date active', icon: 'CalendarCheck', date: true },
+  { id: 'dateCreated', label: 'Date created', icon: 'CalendarDots', date: true },
+];
+
+/** Parameter groupings for the advanced builder's `+ Filter` popover (§3.8). */
+const PARAM_CATEGORIES: ParamCategory[] = [
+  { label: 'Common', parameterIds: ['displayName', 'objectType', 'tags', 'location'] },
+  { label: 'User', parameterIds: ['dateActive', 'dateCreated'] },
 ];
 
 /** Page-level actions shown in the heading's overflow menu. */
@@ -239,14 +245,13 @@ const ADD_USER_MENU_ITEMS: MenuEntry[] = [
  */
 export function UsersPage() {
   const { users } = useUsers();
-  const { aiOpen, setAiOpen, setAiContext } = useAppShell();
+  const { setAiOpen, setAiContext } = useAppShell();
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(PAGE_SIZE_OPTIONS[1]);
   const [selected, setSelected] = useState<Set<RowKey>>(() => new Set());
-  const [activeFilters, setActiveFilters] = useState<ActiveFilter[]>([]);
+  const { root, actions } = useFilterModel();
   const [filterMenuOpen, setFilterMenuOpen] = useState(false);
-  const filterIdRef = useRef(0);
 
   // Which user (if any) has a row-action modal open. `null` = closed.
   const [resetUser, setResetUser] = useState<User | null>(null);
@@ -273,15 +278,12 @@ export function UsersPage() {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  const addFilter = (fieldId: string) => {
-    filterIdRef.current += 1;
-    setActiveFilters((prev) => [...prev, { id: `f${filterIdRef.current}`, fieldId }]);
+  const addFilter = (parameterId: string) => {
+    actions.addCondition(root.id, { parameterId });
   };
-  const setFilterValue = (id: string, value: string) =>
-    setActiveFilters((prev) => prev.map((f) => (f.id === id ? { ...f, value } : f)));
-  const removeFilter = (id: string) =>
-    setActiveFilters((prev) => prev.filter((f) => f.id !== id));
-  const clearFilters = () => setActiveFilters([]);
+  const addAdvancedFilter = () => {
+    actions.addGroup(root.id);
+  };
 
   // Create-menu entries wired to open the multi-step create modal, keyed off
   // each item's label + icon.
@@ -294,17 +296,30 @@ export function UsersPage() {
       : entry,
   );
 
-  const filterMenuItems: MenuEntry[] = FILTER_FIELDS.map((f) => {
-    // Fields without a value-selection UI would produce a chip the user can't
-    // configure, so disable them until that UI lands.
-    const supported = fieldHasValueUi(f);
-    return {
+  // Toolbar Filter menu (§3.6): Advanced filter + Display name / Object type /
+  // Location, and Dates as a grouped submenu.
+  const rootGroupCount = root.children.filter((c) => c.kind === 'group').length;
+  const filterMenuItems: MenuEntry[] = [
+    {
       kind: 'item',
-      label: f.label,
-      disabled: !supported,
-      onSelect: supported ? () => addFilter(f.id) : undefined,
-    };
-  });
+      label: 'Advanced filter',
+      icon: 'FunnelSimple',
+      onSelect: addAdvancedFilter,
+      disabled: rootGroupCount >= 6,
+    },
+    { kind: 'divider' },
+    { kind: 'item', label: 'Display name', onSelect: () => addFilter('displayName') },
+    { kind: 'item', label: 'Object type', onSelect: () => addFilter('objectType') },
+    { kind: 'item', label: 'Location', onSelect: () => addFilter('location') },
+    {
+      kind: 'submenu',
+      label: 'Dates',
+      items: [
+        { kind: 'item', label: 'Date active', onSelect: () => addFilter('dateActive') },
+        { kind: 'item', label: 'Date created', onSelect: () => addFilter('dateCreated') },
+      ],
+    },
+  ];
 
   const rows = useMemo<User[]>(() => {
     const q = query.trim().toLowerCase();
@@ -389,59 +404,22 @@ export function UsersPage() {
           />
         }
         toolbarActions={
-          <>
-            <span className={styles.toolbarSeparator} aria-hidden="true" />
-            <Menu
-              ariaLabel="Filter by"
-              align="end"
-              items={filterMenuItems}
-              open={filterMenuOpen}
-              onOpenChange={setFilterMenuOpen}
-              trigger={({ ref, onClick, expanded }) => (
-                <Tooltip label="Add filter" shortcut={['⌘', '⇧', 'F']}>
-                  <Button
-                    ref={ref as React.Ref<HTMLButtonElement>}
-                    iconLead="FunnelSimple"
-                    variant="secondary"
-                    aria-haspopup="menu"
-                    aria-expanded={expanded}
-                    onClick={onClick}
-                  >
-                    Filter
-                  </Button>
-                </Tooltip>
-              )}
-            />
-            <Menu
-              ariaLabel="Create options"
-              align="end"
-              items={createMenuItems}
-              trigger={({ ref, onClick, expanded }) => (
-                <Button
-                  ref={ref as React.Ref<HTMLButtonElement>}
-                  variant="primary"
-                  iconLead="Plus"
-                  iconTrail="CaretDown"
-                  className={styles.addBtn}
-                  aria-haspopup="menu"
-                  aria-expanded={expanded}
-                  onClick={onClick}
-                >
-                  Create
-                </Button>
-              )}
-            />
-          </>
+          <ListToolbarActions
+            filterMenuItems={filterMenuItems}
+            filterMenuOpen={filterMenuOpen}
+            onFilterOpenChange={setFilterMenuOpen}
+            createMenuItems={createMenuItems}
+            filterActive={root.children.length > 0}
+          />
         }
         filters={
-          activeFilters.length > 0 ? (
-            <Filters
-              filters={activeFilters}
-              fields={FILTER_FIELDS}
-              onAddFilter={addFilter}
-              onValueChange={setFilterValue}
-              onRemove={removeFilter}
-              onClear={clearFilters}
+          root.children.length > 0 ? (
+            <FilterBar
+              root={root}
+              parameters={PARAMETERS}
+              categories={PARAM_CATEGORIES}
+              actions={actions}
+              addMenuItems={filterMenuItems}
             />
           ) : undefined
         }
@@ -514,17 +492,18 @@ export function UsersPage() {
             {
               icon: 'SelectionAll',
               label: 'Select all',
-              iconOnly: aiOpen,
               onClick: () => setSelected(new Set(users.map((u) => u.id))),
             },
-            { icon: 'Copy', label: 'Copy', iconOnly: aiOpen, onClick: () => undefined },
-            { icon: 'Folder', label: 'Move', iconOnly: aiOpen, onClick: () => undefined },
-            { icon: 'UserList', label: 'Properties', iconOnly: aiOpen, onClick: () => undefined },
+            { icon: 'Copy', label: 'Copy', onClick: () => undefined },
+            { icon: 'Folder', label: 'Move', onClick: () => undefined },
+            { icon: 'UserList', label: 'Properties', onClick: () => undefined },
             {
               icon: 'Sparkle',
               label: 'Ask AI',
               tone: 'brand',
               beam: true,
+              // Signature action — never auto-collapse to icon-only.
+              iconOnly: false,
               onClick: () => {
                 setAiContext(
                   [...selected].flatMap((id) => {
@@ -541,7 +520,6 @@ export function UsersPage() {
               icon: 'Trash',
               label: 'Delete',
               tone: 'danger',
-              iconOnly: aiOpen,
               onClick: () => undefined,
             },
           ],

@@ -15,6 +15,7 @@ import {
   type TransitionEvent,
 } from 'react';
 import { BorderBeam } from 'border-beam';
+import { BotAvatar } from 'bot-avatars';
 import { cx } from '../../lib/cx.js';
 import { useAppShell } from '../../lib/appShellContext.js';
 import type { AiContextItem } from '../../lib/aiContext.js';
@@ -117,6 +118,8 @@ export interface AiPanelProps {
 
 const AI_PANEL_WIDTH_DEFAULT = 452;
 const AI_PANEL_WIDTH_MAX_CAP = 720;
+// How far past the min width the user must drag inward before the panel closes.
+const AI_PANEL_COLLAPSE_PULL_THRESHOLD = 36;
 
 function getAiPanelMaxWidth() {
   return Math.max(AI_PANEL_WIDTH_DEFAULT, Math.min(window.innerWidth * 0.33, AI_PANEL_WIDTH_MAX_CAP));
@@ -269,6 +272,8 @@ useEffect(() => {
     const previousUserSelect = document.body.style.userSelect;
     const previousRootCursor = document.documentElement.style.cursor;
     let dragged = false;
+    let collapsedDuringDrag = false;
+    let lastDelta = 0;
 
     document.body.style.cursor = 'col-resize';
     document.body.style.userSelect = 'none';
@@ -288,27 +293,52 @@ useEffect(() => {
       resizeCleanupRef.current = null;
     };
 
-    const finish = () => {
+    const collapseNow = () => {
+      if (collapsedDuringDrag) return;
+      collapsedDuringDrag = true;
       cleanup();
-      if (dragged) setPanelDragging(false);
+      setPanelDragging(false);
+      onClose();
+    };
+
+    // `closePanel` true → a plain click (no drag): collapse the panel.
+    const finish = (closePanel: boolean) => {
+      cleanup();
+      if (dragged) {
+        setPanelDragging(false);
+        setPanelWidth(clampAiPanelWidth(startWidth + lastDelta));
+      }
+      if (closePanel) onClose();
     };
 
     const onPointerMove = (event: PointerEvent) => {
+      if (collapsedDuringDrag) return;
       const delta = startX - event.clientX;
+      lastDelta = delta;
       if (!dragged && Math.abs(delta) >= 3) {
         dragged = true;
         setPanelDragging(true);
       }
       if (!dragged) return;
-      setPanelWidth(clampAiPanelWidth(startWidth + delta));
+
+      // Dragging inward (delta < 0) past the min width by the pull threshold
+      // collapses the panel, mirroring the global sidebar's drag-to-collapse.
+      const rawWidth = startWidth + delta;
+      const extraPullPastMin = Math.max(0, AI_PANEL_WIDTH_DEFAULT - rawWidth);
+      if (extraPullPastMin >= AI_PANEL_COLLAPSE_PULL_THRESHOLD) {
+        collapseNow();
+        return;
+      }
+
+      setPanelWidth(clampAiPanelWidth(rawWidth));
     };
 
     const onPointerUp = () => {
-      finish();
+      finish(!dragged);
     };
 
     const onPointerCancel = () => {
-      finish();
+      finish(false);
     };
 
     resizeCleanupRef.current = cleanup;
@@ -816,13 +846,12 @@ useEffect(() => {
     <aside
       className={cx(styles.panel, panelDragging && styles.panelDragging, className)}
       style={panelStyle}
-      role="complementary"
       aria-label={aiTitle}
     >
       {panelDragging ? (
         <button
           type="button"
-          aria-label="Drag to resize"
+          aria-label="Resize or collapse panel"
           className={cx(styles.resizeHandle, styles.resizeHandleDragging)}
           onPointerDown={handleResizePointerDown}
           onClick={(e) => e.preventDefault()}
@@ -830,10 +859,10 @@ useEffect(() => {
           <span className={styles.resizeHandleGrip} aria-hidden="true" />
         </button>
       ) : (
-        <Tooltip label="Drag to resize" placement="bottom" delay={150} followCursor>
+        <Tooltip label={'Click to collapse ⌘/\nDrag to resize'} placement="bottom" delay={150} followCursor>
           <button
             type="button"
-            aria-label="Drag to resize"
+            aria-label="Resize or collapse panel"
             className={styles.resizeHandle}
             onPointerDown={handleResizePointerDown}
             onClick={(e) => e.preventDefault()}
@@ -1438,7 +1467,7 @@ function SourcesBlock({ links }: { links: SourceLink[] }) {
               <Icon name="ArrowSquareOut" size="14px" />
             </a>
           ) : (
-            <span key={i} className={styles.sourcePill} role="link" aria-label={l.label}>
+            <span key={i} className={styles.sourcePill}>
               <span className={styles.sourcePillLabel}>{l.label}</span>
               <Icon name="ArrowSquareOut" size="14px" />
             </span>
@@ -1568,6 +1597,9 @@ interface EmptyStateProps {
 function EmptyState({ aiTitle, prompts, onPick }: EmptyStateProps) {
   return (
     <div className={styles.emptyState}>
+      <div className={cx(styles.emptyAvatar, styles.revealItem)} aria-hidden="true">
+        <BotAvatar type="droid" size={64} />
+      </div>
       <h3 className={cx(styles.emptyHeading, styles.revealItem)}>
         Meet {aiTitle}, <br />your personal AI assistant
       </h3>

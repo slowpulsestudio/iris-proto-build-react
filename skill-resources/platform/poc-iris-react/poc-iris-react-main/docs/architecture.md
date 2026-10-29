@@ -6,7 +6,7 @@ Four layers, each only depends on the layer below:
 |---|---|---|
 | Tokens | `src/tokens/*.css` (compiled from `*.scss`) | `--oi-*` variables, 11 themes, plus chart + more-theme token sets. |
 | Components | `src/components/**` | Stateless UI primitives. Tokens only. |
-| Shell | `src/views/AppShell` + `AppHeader`, `GlobalSidebar`, `Sidebar`, `AiPanel` | Chrome around every page. |
+| Shell | `src/views/AppShell` + `AppHeader`, `GlobalSidebar`, `Sidebar`, `AiPanel` | Frame around every page. |
 | Views | `src/views/{UsersPage,UserDetailPage,InsightsPage,ServicesPage,IdentityManagerPage,SafeguardPage,WipPage,DirectoryPlaceholderPage}` | Page composition + data binding. |
 
 Charts (`BarChart`, `DonutChart`) render with `d3-scale`, `d3-shape`, `d3-selection`, `d3-transition`, `d3-interpolate`, and `d3-ease`. `react` / `react-dom` 19 are the only other runtime dependencies.
@@ -65,13 +65,13 @@ src/
     └── DirectoryPlaceholderPage/ ← empty-directory placeholder
 ```
 
-Repo-level `scripts/` holds standalone WCAG contrast checkers ([a11y-audit.ts](../scripts/a11y-audit.ts), [a11y-verify.ts](../scripts/a11y-verify.ts), [wcag.ts](../scripts/wcag.ts)), run directly with `node scripts/<file>.ts`. `plans/` and `skills/` hold planning docs and transition-design notes; neither ships in the app.
+Repository-level `scripts/` holds standalone WCAG contrast checkers ([a11y-audit.ts](../scripts/a11y-audit.ts), [a11y-verify.ts](../scripts/a11y-verify.ts), [wcag.ts](../scripts/wcag.ts)), run directly with `node scripts/<file>.ts`. `plans/` and `skills/` hold planning docs and transition-design notes; neither ships in the app.
 
 ---
 
 ## Architecture notes
 
-### A1 — Vertical model is the extension point
+### A1: Vertical model is the extension point
 
 The `Vertical` record in [src/lib/verticals.ts](../src/lib/verticals.ts) drives:
 - Product chooser entry ([productMenu.tsx](../src/lib/productMenu.tsx))
@@ -87,30 +87,30 @@ To add a vertical:
 
 No component changes needed.
 
-### A2 — AI panel remounts on every navigation
+### A2: AI panel remounts on every navigation
 
-Each page mounts its own `<AppShell>`, which mounts a fresh `<AiPanel>`. Only `aiOpen` lives in context, so the in-progress transcript is wiped on every route change. The saved conversation list is unaffected — it is persisted per-vertical in `localStorage` via [chatHistoryStore.ts](../src/lib/chatHistoryStore.ts) (schema-versioned, capped at 50 entries, oldest dropped on quota errors) — so users can re-open the panel after navigating and pick the prior chat from **Chat history**.
+Each page mounts its own `<AppShell>`, which mounts a fresh `<AiPanel>`. Only `aiOpen` lives in context, so the in-progress transcript is wiped on every route change. The saved conversation list is unaffected. It is persisted per-vertical in `localStorage` through [chatHistoryStore.ts](../src/lib/chatHistoryStore.ts), which is schema-versioned, capped at 50 entries, and drops the oldest on quota errors, so users can re-open the panel after navigating and pick the prior chat from **Chat history**.
 
-If the remount itself becomes a problem, lift `messages`/`stream`/`isTyping` into `AppShellContext`, or render `<AiPanel>` once in `App.tsx` above the route switch. See also [A4](#a4--shell-remount-cost).
+If the remount itself becomes a problem, lift `messages`/`stream`/`isTyping` into `AppShellContext`, or render `<AiPanel>` once in `App.tsx` above the route switch. See also [A4](#a4-shell-remount-cost).
 
-### A3 — No backend boundary
+### A3: No backend boundary
 
-`UsersContext.updateUser` is synchronous, optimistic, and total. No loading state, error state, or conflict handling. First real integration must decide: server vs optimistic, partial-success patches, pagination.
+`UsersContext.updateUser` is synchronous, optimistic, and total. No loading state, error state, or conflict handling. First real integration must decide: server or optimistic, partial-success patches, pagination.
 
-### A4 — Shell remount cost
+### A4: Shell remount cost
 
 Every navigation tears down and re-instantiates the header, both sidebars, and the AI panel. Invisible today; will be measurable as the app grows. Fix: render `<AppShell>{routedChild}</AppShell>` once in `App.tsx`.
 
-### A5 — Icons are one 730 KB JSON
+### A5: Icons are one 730 KB JSON
 
-[src/icons/manifest.json](../src/icons/manifest.json) is ~730 KB raw (1,511 icons). [Icon.tsx](../src/components/Icon/Icon.tsx) imports the whole manifest and resolves icons by dynamic name, so the bundler can't tree-shake unused icons — only a small fraction are actually referenced.
+[src/icons/manifest.json](../src/icons/manifest.json) is ~730 KB raw (1,511 icons). [Icon.tsx](../src/components/Icon/Icon.tsx) imports the whole manifest and resolves icons by dynamic name, so the bundler cannot tree-shake unused icons. Only a small fraction are actually referenced.
 
-> **Note:** Icon tree-shaking is still **pending**. Because all 1,511 icons are bundled, `pnpm build` emits a chunk-size warning — the JS chunk is ~1.13 MB (~230 KB gzipped), over Vite's 500 kB limit. This is expected until the mitigation below lands.
+> **Note:** Icon tree-shaking is still **pending**. Because all 1,511 icons are bundled, `pnpm build` emits a chunk-size warning. The JS chunk is ~1.13 MB (~230 KB gzipped), over Vite's 500 kB limit. This is expected until the mitigation below lands.
 
 Mitigations:
 - Generate a build-time manifest of only the names referenced in `src/**`.
 - Switch to `import.meta.glob('./icons/*.svg', { as: 'raw' })`.
 
-### A6 — No 404 surface
+### A6: No 404 surface
 
-Unknown hashes silently land on `usersList`. Fine for the PoC; production needs a `notFound` route + page.
+Unknown hashes silently land on `usersList`. Fine for the proof of concept; production needs a `notFound` route plus page.

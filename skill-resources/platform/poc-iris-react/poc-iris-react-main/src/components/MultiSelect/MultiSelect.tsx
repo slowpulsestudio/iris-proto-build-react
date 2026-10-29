@@ -5,6 +5,7 @@ import {
   useRef,
   useState,
   type ReactNode,
+  type Ref,
 } from 'react';
 import { createPortal } from 'react-dom';
 import { cx } from '../../lib/cx.js';
@@ -37,6 +38,16 @@ export interface MultiSelectProps {
   searchPlaceholder?: string;
   ariaLabel?: string;
   className?: string;
+  /**
+   * Render a custom trigger instead of the default labelled button. Attach the
+   * supplied `ref` and `onClick` so positioning and toggling keep working.
+   */
+  renderTrigger?: (args: {
+    ref: Ref<HTMLButtonElement>;
+    onClick: () => void;
+    expanded: boolean;
+    count: number;
+  }) => ReactNode;
 }
 
 interface Pos {
@@ -62,6 +73,7 @@ export function MultiSelect({
   searchPlaceholder = 'Search…',
   ariaLabel = 'Multi-select',
   className,
+  renderTrigger,
 }: MultiSelectProps) {
   const [open, setOpen] = useState(false);
   const [pos, setPos] = useState<Pos | null>(null);
@@ -199,17 +211,21 @@ export function MultiSelect({
 
   return (
     <>
-      <button
-        ref={triggerRef}
-        type="button"
-        className={cx(styles.trigger, className)}
-        onClick={toggleOpen}
-        aria-haspopup="listbox"
-        aria-expanded={open}
-      >
-        <span className={styles.triggerLabel}>{triggerLabel}</span>
-        <Icon name="CaretDown" size="16px" className={styles.caret} />
-      </button>
+      {renderTrigger ? (
+        renderTrigger({ ref: triggerRef, onClick: toggleOpen, expanded: open, count })
+      ) : (
+        <button
+          ref={triggerRef}
+          type="button"
+          className={cx(styles.trigger, className)}
+          onClick={toggleOpen}
+          aria-haspopup="listbox"
+          aria-expanded={open}
+        >
+          <span className={styles.triggerLabel}>{triggerLabel}</span>
+          <Icon name="CaretDown" size="16px" className={styles.caret} />
+        </button>
+      )}
 
       {open &&
         pos &&

@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { BorderBeam } from 'border-beam';
 import { cx } from '../../lib/cx.js';
@@ -15,9 +15,12 @@ export interface ActionItem {
   onClick?: () => void;
   disabled?: boolean;
   /**
-   * Hide the textual label and render the action as an icon-only button.
-   * The label is preserved as `aria-label` and surfaced visually via a
-   * `Tooltip` on hover/focus so the action stays discoverable.
+   * Force the icon-only rendering (label hidden, preserved as `aria-label` and
+   * surfaced via a `Tooltip`). Leave `undefined` to let the bar decide
+   * responsively — it collapses every action to icon-only when the fully
+   * labeled layout no longer fits its container. Pass an explicit `false` to
+   * opt a signature action (e.g. Ask AI) out of that auto-collapse so it always
+   * keeps its label.
    */
   iconOnly?: boolean;
   /**
@@ -100,28 +103,81 @@ export function ActionBar({
     return () => document.removeEventListener('keydown', onKey);
   }, [open, onDismiss]);
 
+  // Responsive collapse: measure a hidden, always-fully-labeled copy of the bar
+  // (`ghostRef`) against the width actually available to it and switch every
+  // action to icon-only when the labeled layout would overflow. Measuring an
+  // always-labeled ghost — rather than the live bar — means the "natural" width
+  // is stable regardless of the current collapsed state, so the decision cannot
+  // oscillate at the threshold and stays correct when the action set changes.
+  const ghostRef = useRef<HTMLDivElement>(null);
+  const availRef = useRef<HTMLDivElement>(null);
+  const [collapsed, setCollapsed] = useState(false);
+  useLayoutEffect(() => {
+    if (typeof ResizeObserver === 'undefined') return undefined;
+    const ghost = ghostRef.current;
+    if (!ghost) return undefined;
+
+    // Breathing room kept on each side of the fixed floating pill.
+    const FLOATING_MARGIN = 24;
+
+    const measure = () => {
+      const natural = ghost.scrollWidth;
+      if (!natural) return;
+      const available =
+        layout === 'inline'
+          ? (availRef.current?.clientWidth ?? 0)
+          : window.innerWidth - FLOATING_MARGIN * 2;
+      // Not laid out yet (0) — keep the current state rather than flip blindly.
+      if (available <= 0) return;
+      setCollapsed(natural > available);
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    // Observe the ghost so an action-set change re-measures, and the available
+    // region (inline: the centering wrapper; floating: the viewport).
+    ro.observe(ghost);
+    if (layout === 'inline') {
+      if (availRef.current) ro.observe(availRef.current);
+    } else {
+      ro.observe(document.documentElement);
+    }
+    return () => ro.disconnect();
+  }, [layout, mounted]);
+
   if (!mounted) return null;
 
   const nonEmptyGroups = groups.filter((g) => g && g.length > 0);
 
-  const bar = (
+  // Renders the bar. `measure` produces the hidden ghost: all labels forced on,
+  // beam/tooltip skipped, and removed from the a11y tree so its duplicate
+  // count/actions are neither announced nor focusable.
+  const renderBar = (measure: boolean) => (
     <div
-      role="toolbar"
-      aria-label="Bulk actions"
-      className={cx(styles.bar, styles[layout], entered && styles.barOpen, className)}
+      ref={measure ? ghostRef : undefined}
+      role={measure ? undefined : 'toolbar'}
+      aria-label={measure ? undefined : 'Bulk actions'}
+      aria-hidden={measure || undefined}
+      className={cx(
+        styles.bar,
+        measure ? styles.ghost : styles[layout],
+        !measure && entered && styles.barOpen,
+        !measure && className,
+      )}
     >
       <div className={styles.dismiss}>
         <button
           type="button"
-          onClick={onDismiss}
+          onClick={measure ? undefined : onDismiss}
           aria-label="Clear selection"
+          tabIndex={measure ? -1 : undefined}
           className={styles.dismissBtn}
         >
           <Icon name="X" size="16px" />
         </button>
       </div>
 
-      <p className={styles.count} aria-live="polite">
+      <p className={styles.count} aria-live={measure ? undefined : 'polite'}>
         <span className={styles.countStrong}>{selectedCount}</span>
         <span className={styles.countMuted}> of </span>
         <span className={styles.countStrong}>{totalCount}</span>
@@ -131,26 +187,43 @@ export function ActionBar({
       {nonEmptyGroups.map((group, gi) => (
         <div key={gi} className={styles.group} role="group">
           <span className={styles.separator} aria-hidden="true" />
-          {group.map((item, i) => (
-            <ActionButton key={`${i}-${item.label}`} {...item} />
+          {group.map((item) => (
+            <ActionButton
+              key={item.label}
+              {...item}
+              iconOnly={measure ? false : (item.iconOnly ?? collapsed)}
+              beam={measure ? false : item.beam}
+            />
           ))}
         </div>
       ))}
     </div>
   );
 
+  const bar = renderBar(false);
+  const ghost = renderBar(true);
+
   // Inline: stay in the document flow but overlay the pagination/table below on
   // a raised z-index instead of pushing it — the wrapper consumes no height.
   if (layout === 'inline') {
     return (
       <div className={styles.inlineWrap}>
-        <div className={styles.inlineInner}>{bar}</div>
+        <div className={styles.inlineInner} ref={availRef}>
+          {bar}
+          {ghost}
+        </div>
       </div>
     );
   }
 
   // Floating: portal a fixed pill above everything at the viewport bottom.
-  return createPortal(bar, document.body);
+  return createPortal(
+    <>
+      {bar}
+      {ghost}
+    </>,
+    document.body,
+  );
 }
 
 function ActionButton({

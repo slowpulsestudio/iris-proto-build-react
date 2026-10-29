@@ -1,4 +1,4 @@
-import { useRoute } from './lib/router.js';
+import { useRoute, type Route } from './lib/router.js';
 import { UsersProvider } from './lib/usersStore.js';
 import { DirectoryProvider } from './lib/directoryStore.js';
 import { FIRST_NODE_ID } from './lib/directoryData.js';
@@ -20,6 +20,57 @@ import { IdentityPlaceholder } from './views/IdentityManagerPage/IdentityPlaceho
 import { IdentitySectionPage } from './views/IdentityManagerPage/IdentitySectionPage.js';
 import { SafeguardPage } from './views/SafeguardPage/SafeguardPage.js';
 
+function renderRoute(route: Route) {
+  switch (route.name) {
+    case 'userDetail':
+      return <UserDetailPage userId={route.params.id} />;
+    case 'usersList':
+      return <UsersPage />;
+    case 'treeRoot':
+      return <TreeListPage nodeId={FIRST_NODE_ID} />;
+    case 'treeList':
+      return <TreeListPage nodeId={route.params.nodeId} />;
+    case 'treeDetail':
+      return <TreeDetailPage nodeId={route.params.nodeId} objectId={route.params.objectId} />;
+    case 'favoritesList':
+      return <FavoritesPage />;
+    case 'groups':
+      return <WipPage title="Groups" icon="UsersThree" />;
+    case 'devices':
+      return <WipPage title="Devices" icon="Devices" />;
+    case 'agents':
+      return <WipPage title="Agents" icon="Robot" />;
+    case 'applications':
+      return <WipPage title="Applications" icon="Browsers" />;
+    case 'accessTemplates':
+      return <WipPage title="Access templates" icon="UserCircleCheck" />;
+    case 'managementUnits':
+      return <WipPage title="Management units" icon="FolderSimpleStar" />;
+    case 'insights':
+      return <InsightsPage />;
+    case 'services':
+      return <ServicesPage />;
+    case 'identityHome':
+      return <IdentityManagerPage />;
+    case 'identityInsights':
+      return <IdentityInsightsPage />;
+    case 'identitySettings':
+      return (
+        <IdentityPlaceholder title="Settings" icon="GearFine" activeItem="#/identity/settings" />
+      );
+    case 'identityHelp':
+      return (
+        <IdentityPlaceholder title="Help with" icon="Question" activeItem="#/identity/help" />
+      );
+    case 'identitySection':
+      return <IdentitySectionPage groupId={route.params.group} itemValue={route.params.item} />;
+    case 'safeguardHome':
+      return <SafeguardPage />;
+    default:
+      return null;
+  }
+}
+
 export default function App() {
   const route = useRoute();
   const toast = useToastMessage();
@@ -27,41 +78,7 @@ export default function App() {
     <UsersProvider>
       <DirectoryProvider>
         <AppShellProvider>
-          {route.name === 'userDetail' && <UserDetailPage userId={route.params.id} />}
-          {route.name === 'usersList' && <UsersPage />}
-          {(route.name === 'treeRoot' || route.name === 'treeList') && (
-            <TreeListPage
-              nodeId={route.name === 'treeList' ? route.params.nodeId : FIRST_NODE_ID}
-            />
-          )}
-          {route.name === 'treeDetail' && (
-            <TreeDetailPage nodeId={route.params.nodeId} objectId={route.params.objectId} />
-          )}
-          {route.name === 'favoritesList' && <FavoritesPage />}
-          {route.name === 'groups' && <WipPage title="Groups" icon="UsersThree" />}
-          {route.name === 'devices' && <WipPage title="Devices" icon="Devices" />}
-          {route.name === 'agents' && <WipPage title="Agents" icon="Robot" />}
-          {route.name === 'applications' && <WipPage title="Applications" icon="Browsers" />}
-          {route.name === 'accessTemplates' && (
-            <WipPage title="Access templates" icon="UserCircleCheck" />
-          )}
-          {route.name === 'managementUnits' && (
-            <WipPage title="Management units" icon="FolderSimpleStar" />
-          )}
-          {route.name === 'insights' && <InsightsPage />}
-          {route.name === 'services' && <ServicesPage />}
-          {route.name === 'identityHome' && <IdentityManagerPage />}
-          {route.name === 'identityInsights' && <IdentityInsightsPage />}
-          {route.name === 'identitySettings' && (
-            <IdentityPlaceholder title="Settings" icon="GearFine" activeItem="#/identity/settings" />
-          )}
-          {route.name === 'identityHelp' && (
-            <IdentityPlaceholder title="Help with" icon="Question" activeItem="#/identity/help" />
-          )}
-          {route.name === 'identitySection' && (
-            <IdentitySectionPage groupId={route.params.group} itemValue={route.params.item} />
-          )}
-          {route.name === 'safeguardHome' && <SafeguardPage />}
+          {renderRoute(route)}
           <CommandPalette />
           <Toast message={toast.message} onDismiss={toast.dismiss} />
         </AppShellProvider>

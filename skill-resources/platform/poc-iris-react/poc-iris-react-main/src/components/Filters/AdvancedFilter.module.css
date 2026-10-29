@@ -1,0 +1,63 @@
+/* AdvancedFilter — builder body rendered inside the FilterBar popover.
+   Token-driven only. */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--oi-spacing-s);
+  padding: var(--oi-spacing-s);
+  min-width: 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  min-width: 0;
+}
+
+/* Nested group — inset dashed drop-zone, transparent so it reads against the
+   popover surface. */
+.nested {
+  flex: 1;
+  min-width: 0;
+  padding: var(--oi-spacing-xs);
+  border: var(--oi-border-width-default) dashed var(--oi-border-color-strong);
+  border-radius: var(--oi-border-radius-l);
+  background-color: var(--oi-background-color-secondary);
+}
+
+/* Dismiss X for a nested group, aligned to its top-right. */
+.groupRemove {
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+/* AND / OR connector chip. */
+.connector {
+  flex-shrink: 0;
+  padding-block: var(--oi-spacing-xs);
+  padding-inline: var(--oi-spacing-s);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-default);
+  border-radius: var(--oi-border-radius-max);
+  background-color: var(--oi-background-color-primary);
+  color: var(--oi-content-color-secondary);
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+  font-weight: var(--oi-text-caption-strong-font-weight, var(--oi-text-caption-font-weight));
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.connector:hover {
+  background-color: var(--oi-background-color-secondary);
+  color: var(--oi-content-color-primary);
+}
+
+.connector:focus-visible {
+  outline: var(--oi-border-width-l) var(--oi-border-style-solid)
+    var(--oi-border-color-focus);
+  outline-offset: var(--oi-border-width-l);
+}
+

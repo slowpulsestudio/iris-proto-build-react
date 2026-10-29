@@ -151,7 +151,7 @@
   max-width: 100%;
   padding: var(--oi-spacing-s) var(--oi-spacing-m);
   background-color: var(--oi-button-background-primary, var(--oi-base-color-brand));
-  color: var(--oi-content-color-constant);
+  color: var(--oi-button-foreground-primary, var(--oi-content-color-constant));
   border-radius: var(--oi-border-radius-l);
   /* Subtle chat-tail towards the user side. */
   border-bottom-right-radius: var(--oi-spacing-xs);
@@ -540,7 +540,7 @@
 .feedbackSend .feedbackSendActive:hover,
 .feedbackSend .feedbackSendActive:active {
   background-color: var(--oi-button-background-primary, var(--oi-base-color-brand));
-  color: var(--oi-content-color-constant);
+  color: var(--oi-button-foreground-primary, var(--oi-content-color-constant));
   box-shadow: var(--oi-shadow-low);
   border-color: var(--oi-button-background-primary, var(--oi-base-color-brand));
 }
@@ -724,10 +724,12 @@
   flex-direction: column;
   align-items: stretch;
   width: 100%;
-  /* 32px between the heading and the chip group, matching the Figma
-     `Content` node gap. The composer is rendered in its own wrap below
-     `.body`, so the heading + chips share a single 32px rhythm here. */
-  gap: var(--oi-spacing-xxl);
+  gap: var(--oi-spacing-l);
+}
+
+.emptyAvatar {
+  display: flex;
+  justify-content: center;
 }
 
 .emptyHeading {
@@ -1308,7 +1310,7 @@
 /* Filled — send, send-recording. Brand-blue circle with white icon + shadow. */
 .cbtnFilled {
   background-color: var(--oi-button-background-primary, var(--oi-base-color-brand));
-  color: var(--oi-content-color-constant);
+  color: var(--oi-button-foreground-primary, var(--oi-content-color-constant));
   box-shadow: var(--oi-shadow-low);
 }
 

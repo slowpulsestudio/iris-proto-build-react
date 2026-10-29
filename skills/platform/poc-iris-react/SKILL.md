@@ -17,7 +17,7 @@ Four layers, each only depending on the layer below:
 
 | Layer | Path | Responsibility |
 |---|---|---|
-| Tokens | `src/iris-shell/src/tokens/*.css` | `--oi-*` CSS variables, 11 themes |
+| Tokens | `src/iris-shell/src/tokens/*.css` | `--oi-*` CSS variables, 13 themes |
 | Components | `src/iris-shell/src/components/**` | Stateless UI primitives, tokens only |
 | Shell | `AppShell` + `AppHeader`, `GlobalSidebar`, `Sidebar`, `AiPanel` | Chrome around every page |
 | Views | `src/views/**` | Page composition and data binding |

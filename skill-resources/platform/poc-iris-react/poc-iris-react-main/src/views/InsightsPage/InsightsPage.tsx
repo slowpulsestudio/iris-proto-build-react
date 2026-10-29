@@ -1,4 +1,4 @@
-import { useMemo, useState, type MouseEvent } from 'react';
+import { useEffect, useMemo, useState, type MouseEvent } from 'react';
 import { AppShell } from '../AppShell/AppShell.js';
 import { navigate } from '../../lib/router.js';
 import { useUsers } from '../../lib/usersStore.js';
@@ -13,6 +13,8 @@ import { DataTable, type DataTableColumn } from '../../components/DataTable/Data
 import { StatCard } from '../../components/StatCard/StatCard.js';
 import { BarChart } from '../../components/BarChart/BarChart.js';
 import { DonutChart } from '../../components/DonutChart/DonutChart.js';
+import { EmptyFigure } from '../../components/EmptyFigure/EmptyFigure.js';
+import { Elevator, Riffle } from '@lucasmarkes/hairline/react';
 import {
   STAT_CARDS,
   USERS_BY_DIRECTORY,
@@ -90,6 +92,19 @@ export function InsightsPage() {
   const [tab, setTab] = useState('overview');
   const { getUser } = useUsers();
 
+  // Play the staggered card entrance once the overview tab is mounted.
+  // Starting false (cards hidden) then flipping on the next frame is the
+  // React-friendly equivalent of the reflow the texts-reveal snippet does.
+  const [cardsShown, setCardsShown] = useState(false);
+  useEffect(() => {
+    if (tab !== 'overview') {
+      setCardsShown(false);
+      return;
+    }
+    const id = requestAnimationFrame(() => setCardsShown(true));
+    return () => cancelAnimationFrame(id);
+  }, [tab]);
+
   // Overlay activity metadata (role/department/lastActive) onto real users so
   // each row's link resolves to a valid UserDetailPage.
   const recentRows = useMemo<RecentRow[]>(
@@ -151,7 +166,7 @@ export function InsightsPage() {
               </div>
             </div>
 
-            <div className={styles.cardsGridGroup}>
+            <div className={`${styles.cardsGridGroup} ${cardsShown ? styles.isShown : ''}`}>
               <div className={styles.statGrid}>
                 {STAT_CARDS.map((s) => (
                   <StatCard
@@ -159,7 +174,7 @@ export function InsightsPage() {
                     label={s.label}
                     value={s.value}
                     trend={s.trend}
-                    className={styles.noShadowCard}
+                    className={`${styles.noShadowCard} ${styles.revealCard}`}
                   />
                 ))}
               </div>
@@ -168,21 +183,21 @@ export function InsightsPage() {
                 <Card
                   title="Users by Directory"
                   helper="Active accounts per source"
-                  className={styles.noShadowCard}
+                  className={`${styles.noShadowCard} ${styles.revealCard}`}
                 >
                   <BarChart data={USERS_BY_DIRECTORY} color="blue" />
                 </Card>
                 <Card
                   title="Users by Region"
                   helper="Distribution across geographies"
-                  className={styles.noShadowCard}
+                  className={`${styles.noShadowCard} ${styles.revealCard}`}
                 >
                   <BarChart data={USERS_BY_REGION} color="purple" />
                 </Card>
                 <Card
                   title="Object Distribution"
                   helper="Managed objects by type"
-                  className={`${styles.noShadowCard} ${styles.distributionCard}`}
+                  className={`${styles.noShadowCard} ${styles.distributionCard} ${styles.revealCard}`}
                 >
                   <DonutChart segments={DISTRIBUTION} />
                 </Card>
@@ -199,10 +214,20 @@ export function InsightsPage() {
           </>
         )}
 
-        {tab !== 'overview' && (
-          <Card title={tab === 'operations' ? 'Operations' : 'Directories'}>
-            <p className={styles.empty}>Coming soon.</p>
-          </Card>
+        {tab === 'operations' && (
+          <EmptyFigure
+            figure={Elevator}
+            title="No operations yet"
+            description="Operational activity across your directories will show up here."
+          />
+        )}
+
+        {tab === 'directories' && (
+          <EmptyFigure
+            figure={Riffle}
+            title="No directories yet"
+            description="Connect a directory source to see its breakdown here."
+          />
         )}
       </div>
     </AppShell>

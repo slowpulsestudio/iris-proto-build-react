@@ -35,10 +35,28 @@
   left: 50%;
   z-index: 50;
   transform: translate(-50%, var(--oi-spacing-m));
+  /* Never let the fixed pill run past the viewport on narrow screens; the JS
+     responsive collapse aims to prevent this, but this is a hard safety net. */
+  max-inline-size: calc(100vw - 2 * var(--oi-spacing-l));
 }
 
 .floating.barOpen {
   transform: translate(-50%, 0);
+}
+
+/* ---------- ghost: hidden always-labeled copy used only for width measurement ---------- */
+
+/* Laid out (so it has a real intrinsic width to read) but visually and
+   interactively inert. Not `display:none` — that would report zero width. */
+.ghost {
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transform: none;
+  transition: none;
 }
 
 /* ---------- inline: overlay the pagination footer without reflowing it ---------- */

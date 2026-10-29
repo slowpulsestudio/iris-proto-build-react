@@ -82,10 +82,10 @@
   margin-bottom: var(--oi-spacing-xl);
 }
 
-/* When a filter bar follows the toolbar, the big bottom margin (which separates
-   the toolbar from the content below) collapses to a tight gap. */
+/* When a filter bar follows the toolbar, drop the big bottom margin so the grey
+   filter band sits flush beneath the toolbar. */
 .toolbar:has(+ .filtersBar) {
-  margin-bottom: var(--oi-spacing-s);
+  margin-bottom: 0;
 }
 
 .search {
@@ -100,9 +100,10 @@
   flex-shrink: 0;
 }
 
-/* Filter bar sits directly under the toolbar. The header column uses an
-   `--oi-spacing-m` gap; pull the bar up so the toolbar → filters gap is
-   exactly `--oi-spacing-s` (8px). */
 .filtersBar {
-  margin-top: calc(var(--oi-spacing-s) - var(--oi-spacing-m));
+  margin-top: var(--oi-spacing-s);
+  padding: var(--oi-spacing-s) var(--oi-spacing-xl);
+  background-color: var(--oi-background-color-secondary);
+  border-top: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
 }

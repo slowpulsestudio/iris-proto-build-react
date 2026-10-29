@@ -151,6 +151,7 @@ vite.config.ts.timestamp-*
 ehthumbs.db
 Thumbs.db
 
-# Local docs (kept out of version control for now)
-skills/
+# Local (kept out of version control for now)
 plans/
+AGENTS.md
+.agents/

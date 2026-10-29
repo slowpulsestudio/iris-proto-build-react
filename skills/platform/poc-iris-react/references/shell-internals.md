@@ -30,10 +30,13 @@ No global state library. State is split by lifetime:
 
 | Concern | Where |
 |---|---|
-| Shell chrome (AI panel open, secondary nav) | `AppShellContext` — lives above the route switch |
+| Shell chrome (AI panel open, search / command palette open, secondary nav, pending AI prompt, Identity Manager "Preview as" role) | `AppShellContext` — lives above the route switch |
 | In-page ephemeral state (search, selection) | `useState` in the page component |
 | Theme, sidebar pin | `localStorage` via `useTheme`, `useSidebarPinned` |
 | AI chat history | `localStorage` via `chatHistoryStore` (50 conversations per vertical) |
+| Recent searches, favorites, sidebar group state | `searchHistoryStore`, `useFavorites`, `useSidebarGroups` |
+| Mock data (users, directory) | `usersStore`, `directoryStore` providers |
+| Toasts | `showToast()` from `toastStore` |
 
 Long-lived shell state must go in `AppShellContext`. Page-scoped state must not leak into `AppShellContext`.
 
@@ -45,7 +48,7 @@ Long-lived shell state must go in `AppShellContext`. Page-scoped state must not 
 
 ## Themes
 
-The shell supports 11 themes (`light`, `dark`, `hc-light`, `hc-dark`, plus custom product themes). Themes are activated by a class on `<body>` (e.g. `class="theme-light"`). The active theme is controlled by `useTheme()` and persisted in `localStorage` under the key `ars.theme`.
+The shell supports 13 themes: 4 core design-system themes (`light`, `dark`, `hc-light`, `hc-dark`) plus 9 "more themes" based on popular VS Code themes (`dracula`, `night-owl`, `ayu`, `tokyo-night`, `catppuccin`, `monokai`, `synthwave`, `aura`, `flexoki`). The extra themes are declared in `src/lib/moreThemes.ts`, with their colours in `src/tokens/more-themes/`. Themes are activated by a class on `<body>` (e.g. `class="theme-light"`). The active theme is controlled by `useTheme()` and persisted in `localStorage` under the key `ars.theme`.
 
 Never hardcode a colour or token value that varies by theme.
 
@@ -57,7 +60,7 @@ Never hardcode a colour or token value that varies by theme.
 
 ## AI panel
 
-The AI panel (`AiPanel`) attaches context from the current page via `setAiContext([...])` + `setAiOpen(true)` in `AppShellContext`. The panel clears context on send via `clearAiContext()`. Chat history is persisted per-vertical in `localStorage` and capped at 50 conversations.
+The AI panel (`AiPanel`) attaches context from the current page via `setAiContext([...])` + `setAiOpen(true)` in `AppShellContext`. The panel clears context on send via `clearAiContext()`. To open the panel with its input pre-filled but not sent, set `setPendingAiPrompt(text)` alongside `setAiOpen(true)`. Chat history is persisted per-vertical in `localStorage` and capped at 50 conversations.
 
 **A failed response looks like:**
 - Passing AI context through props instead of `AppShellContext`

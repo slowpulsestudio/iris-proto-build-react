@@ -8,6 +8,7 @@ import {
 } from 'react';
 import { cx } from '../../lib/cx.js';
 import { navigate } from '../../lib/router.js';
+import { prefersReducedMotion } from '../../lib/motion.js';
 import { useFavorites } from '../../lib/useFavorites.js';
 import { SegmentedControl } from '../SegmentedControl/SegmentedControl.js';
 import { MultiSelect, type MultiSelectOption } from '../MultiSelect/MultiSelect.js';
@@ -42,8 +43,13 @@ export interface SidebarProps {
 const VIEW_OPTIONS = [
   { value: 'flat', label: 'Flat view', icon: 'BuildingOffice' },
   { value: 'tree', label: 'Tree view', icon: 'TreeView' },
-  { value: 'favourites', label: 'Favourites', icon: 'Heart' },
+  { value: 'favourites', label: 'Favourites', icon: 'Heart', celebrate: true },
 ];
+
+// Switching entities navigates and remounts this Sidebar, so the indicator
+// would snap into place on mount. Remember the previously-active nav value so a
+// fresh mount can glide the bar from where it came from.
+let lastActiveNav: string | null = null;
 
 /** Directories available in the directory multi-select. */
 const DIRECTORIES: MultiSelectOption[] = [
@@ -129,18 +135,22 @@ export function Sidebar({
   const indicatorRef = useRef<HTMLSpanElement | null>(null);
   const didPaintRef = useRef(false);
 
-  const moveIndicator = (animate: boolean) => {
+  // The nav's NavItems render in `navItems` order, so index maps a value to its
+  // row element (the indicator span is a <span>, excluded by the selector).
+  const rowForValue = (val: string): HTMLElement | null => {
     const nav = navRef.current;
+    if (!nav) return null;
+    const idx = navItems.findIndex((n) => n.value === val);
+    if (idx < 0) return null;
+    return nav.querySelectorAll<HTMLElement>('a, button')[idx] ?? null;
+  };
+
+  const writeIndicator = (row: HTMLElement, animate: boolean) => {
     const ind = indicatorRef.current;
-    if (!nav || !ind) return;
-    const active = nav.querySelector<HTMLElement>('[aria-current="page"]');
-    if (!active) {
-      ind.style.height = '0px';
-      return;
-    }
+    if (!ind) return;
     const write = () => {
-      ind.style.transform = `translateY(${active.offsetTop}px)`;
-      ind.style.height = `${active.offsetHeight}px`;
+      ind.style.transform = `translateY(${row.offsetTop}px)`;
+      ind.style.height = `${row.offsetHeight}px`;
     };
     if (animate) {
       write();
@@ -153,9 +163,38 @@ export function Sidebar({
     }
   };
 
+  const moveIndicator = (animate: boolean) => {
+    const nav = navRef.current;
+    const ind = indicatorRef.current;
+    if (!nav || !ind) return;
+    const active = nav.querySelector<HTMLElement>('[aria-current="page"]');
+    if (!active) {
+      ind.style.height = '0px';
+      return;
+    }
+    writeIndicator(active, animate);
+  };
+
   useLayoutEffect(() => {
-    moveIndicator(didPaintRef.current);
+    // Glide from the previously-active row when this control was just remounted
+    // by a navigation, instead of snapping the bar to the new position.
+    const prev = lastActiveNav;
+    const canGlide =
+      !didPaintRef.current &&
+      prev != null &&
+      prev !== activeNav &&
+      !prefersReducedMotion() &&
+      navItems.some((n) => n.value === prev) &&
+      navItems.some((n) => n.value === activeNav);
+    const prevRow = canGlide ? rowForValue(prev) : null;
+    if (prevRow) {
+      writeIndicator(prevRow, false);
+      requestAnimationFrame(() => moveIndicator(true));
+    } else {
+      moveIndicator(didPaintRef.current);
+    }
     didPaintRef.current = true;
+    lastActiveNav = activeNav;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeNav, navItems]);
 

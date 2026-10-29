@@ -96,20 +96,30 @@
 }
 
 /* Shared active bar that slides between rows. JS writes translateY + height
-   from the active NavItem's offsetTop / offsetHeight. */
+   from the active NavItem's offsetTop / offsetHeight; the ::before renders the
+   inset brand bar so it matches GlobalSidebar's .itemActive indicator exactly. */
 .navIndicator {
   position: absolute;
   left: calc(var(--oi-spacing-l) - var(--oi-spacing-xs));
   top: 0;
   width: 2px;
   height: 0;
-  background-color: var(--oi-base-color-brand);
-  border-radius: var(--oi-border-radius-default);
   transform: translateY(0);
   transition:
     transform var(--oi-motion-duration-default) var(--oi-motion-ease-emphasized),
     height var(--oi-motion-duration-default) var(--oi-motion-ease-emphasized);
   pointer-events: none;
+}
+
+.navIndicator::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: var(--oi-spacing-xs);
+  bottom: var(--oi-spacing-xs);
+  width: 2px;
+  background-color: var(--oi-base-color-brand);
+  border-radius: var(--oi-border-radius-s);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,0 +1,64 @@
+/* Flexoki Dark — source: https://github.com/kepano/flexoki (README color reference)
+   Partial color override (structural tokens inherited from :root). Uses the
+   Flexoki base scale for surfaces/text and the 400-level accents for dark UI. */
+body.theme-flexoki {
+  /* backgrounds */
+  --oi-background-color-primary: #100F0F;
+  --oi-background-color-blanket: rgba(0, 0, 0, 0.55);
+  --oi-background-color-secondary: #1C1B1A;
+  --oi-background-color-tertiary: #282726;
+  --oi-background-color-brand: rgba(67, 133, 190, 0.16);
+  --oi-background-color-info: rgba(58, 169, 159, 0.14);
+  --oi-background-color-success: rgba(135, 154, 57, 0.14);
+  --oi-background-color-warning: rgba(208, 162, 21, 0.14);
+  --oi-background-color-error: rgba(209, 77, 65, 0.16);
+  /* base accents */
+  --oi-base-color-brand: #4385BE;
+  --oi-base-color-info: #3AA99F;
+  --oi-base-color-success: #879A39;
+  --oi-base-color-warning: #D0A215;
+  --oi-base-color-error: #D14D41;
+  /* borders */
+  --oi-border-color-strong: #6F6E69;
+  --oi-border-color-default: #403E3C;
+  --oi-border-color-muted: #282726;
+  --oi-border-color-focus: #4385BE;
+  --oi-border-color-badge-info: #3AA99F;
+  --oi-border-color-badge-success: #879A39;
+  --oi-border-color-badge-error: #D14D41;
+  --oi-border-color-badge-warning: #D0A215;
+  /* content */
+  --oi-content-color-primary: #CECDC3;
+  --oi-content-color-secondary: #B7B5AC;
+  --oi-content-color-tertiary: #878580;
+  --oi-content-color-brand: #4385BE;
+  --oi-content-color-info: #3AA99F;
+  --oi-content-color-success: #879A39;
+  --oi-content-color-warning: #D0A215;
+  --oi-content-color-error: #E8705F;
+  --oi-content-color-link: #4385BE;
+  --oi-content-color-link-hover: #5E9ECF;
+  --oi-content-color-link-visited: #8B7EC8;
+  --oi-content-color-inked: #FFFCF0;
+  --oi-content-color-disabled: rgba(206, 205, 195, 0.38);
+  /* buttons (primary uses the theme's own cyan with dark label, per source) */
+  --oi-button-background-primary: #3AA99F;
+  --oi-button-background-primary-hover: #2F968D;
+  --oi-button-background-primary-active: #2F968D;
+  --oi-button-foreground-primary: #100F0F;
+  --oi-button-background-secondary: #100F0F;
+  --oi-button-background-secondary-hover: #282726;
+  --oi-button-background-secondary-active: #403E3C;
+  --oi-button-background-disabled: #282726;
+  /* charts (categorical series) */
+  --oi-chart-color-1: #4385BE;
+  --oi-chart-color-2: #8B7EC8;
+  --oi-chart-color-3: #DA702C;
+  --oi-chart-color-4: #879A39;
+  /* shadows (match default dark theme) */
+  --oi-shadow-none: none;
+  --oi-shadow-low: inset 0px 0.5px 0px rgba(255, 255, 255, 0.12), inset 0px 0px 0px 0.5px rgba(255, 255, 255, 0.11);
+  --oi-shadow-mid: 0px 0px 0px 1px rgba(255, 255, 255, 0.16), 0px 2px 12px rgba(59, 51, 69, 0.16);
+  --oi-shadow-high: 0px 12px 56px rgba(255, 255, 255, 0.07), inset 0px 0px 0px 1px rgba(255, 255, 255, 0.16);
+  --oi-focus-ring: 0 0 0 1.5px var(--oi-background-color-primary), 0 0 0 3px var(--oi-border-color-focus);
+}

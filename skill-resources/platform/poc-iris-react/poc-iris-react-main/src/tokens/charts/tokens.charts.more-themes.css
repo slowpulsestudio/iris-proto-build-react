@@ -1,6 +1,6 @@
 /* Chart categorical series tokens — "MORE THEMES".
  *
- * All 7 more-themes are dark, so they share the exact same categorical series
+ * All 9 more-themes are dark, so they share the exact same categorical series
  * palette as the core Dark theme (the app's primitive `-400` shades). This
  * file overrides the per-theme chart colors that ship inside each theme's own
  * file (src/tokens/more-themes/tokens.*.css) WITHOUT editing them — it is
@@ -13,10 +13,12 @@
 body.theme-dracula,
 body.theme-night-owl,
 body.theme-ayu,
-body.theme-one-dark-pro,
 body.theme-tokyo-night,
 body.theme-catppuccin,
-body.theme-monokai {
+body.theme-monokai,
+body.theme-synthwave,
+body.theme-aura,
+body.theme-flexoki {
   --oi-chart-color-1: var(--oi-color-blue-400);
   --oi-chart-color-2: var(--oi-color-purple-400);
   --oi-chart-color-3: var(--oi-color-orange-400);

@@ -18,10 +18,13 @@
   background-color: var(--oi-background-color-secondary);
   border: 0.5px var(--oi-border-style-solid) var(--oi-border-color-muted);
   border-radius: var(--oi-border-radius-max);
-  transition: border-color var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+  transition:
+    border-color var(--oi-motion-duration-short) var(--oi-motion-ease-default),
+    background-color var(--oi-motion-duration-short) var(--oi-motion-ease-default);
 }
 
 .fieldFocused {
+  background-color: var(--oi-background-color-primary);
   border-color: var(--oi-border-color-default);
 }
 

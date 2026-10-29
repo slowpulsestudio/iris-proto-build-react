@@ -9,10 +9,52 @@
   gap: var(--oi-spacing-l);
   padding: var(--oi-spacing-l);
   min-width: 0;
+  /* Staggered card reveal tokens (transitions-dev motion scale). */
+  --reveal-dur: 500ms; /* --duration-very-slow */
+  --reveal-distance: 12px; /* --distance-medium */
+  --reveal-step: 40ms; /* --duration-stagger */
+  --reveal-blur: 3px; /* --blur-medium */
+  --reveal-ease: cubic-bezier(0.22, 1, 0.36, 1); /* --ease-smooth-out */
 }
 
 .noShadowCard {
   box-shadow: none;
+}
+
+/* Staggered card loading — adapted from transitions-dev "texts reveal":
+   each card rises + unblurs into place, delayed one stagger step after
+   the last within its grid (3 x 40ms = 80ms max, well under budget).
+   The .isShown toggle on the page plays the entrance. */
+.revealCard {
+  opacity: 0;
+  transform: translateY(var(--reveal-distance));
+  filter: blur(var(--reveal-blur));
+  transition:
+    opacity var(--reveal-dur) var(--reveal-ease),
+    transform var(--reveal-dur) var(--reveal-ease),
+    filter var(--reveal-dur) var(--reveal-ease);
+  will-change: transform, opacity, filter;
+}
+
+.page.isShown .revealCard {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+.statGrid .revealCard:nth-child(2),
+.chartGrid .revealCard:nth-child(2) {
+  transition-delay: calc(var(--reveal-step) * 1);
+}
+.statGrid .revealCard:nth-child(3),
+.chartGrid .revealCard:nth-child(3) {
+  transition-delay: calc(var(--reveal-step) * 2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .revealCard {
+    transition: none !important;
+  }
 }
 
 /* Page-scoped header overrides: drop the header top padding and the

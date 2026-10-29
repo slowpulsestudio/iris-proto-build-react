@@ -24,11 +24,13 @@ body.theme-dark,
 body.theme-hc-dark,
 body.theme-night-owl,
 body.theme-ayu,
-body.theme-one-dark-pro,
 body.theme-tokyo-night,
 body.theme-catppuccin,
 body.theme-monokai,
-body.theme-dracula {
+body.theme-dracula,
+body.theme-synthwave,
+body.theme-aura,
+body.theme-flexoki {
   color-scheme: dark;
 }
 

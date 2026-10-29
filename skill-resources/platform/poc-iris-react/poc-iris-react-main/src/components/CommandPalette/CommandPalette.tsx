@@ -108,6 +108,7 @@ export function CommandPalette() {
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
   const listId = 'command-palette-list';
 
   // Theme-preview bookkeeping: the theme applied when the palette opened, and
@@ -401,6 +402,32 @@ export function CommandPalette() {
     }
   };
 
+  // Focus trap: the dialog is `aria-modal`, so Tab / Shift+Tab must wrap
+  // within the panel instead of escaping to the page behind it.
+  const onPanelKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== 'Tab') return;
+    const panel = panelRef.current;
+    if (!panel) return;
+    const focusables = Array.from(
+      panel.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      ),
+    ).filter((el) => el.offsetParent !== null || el === document.activeElement);
+    if (focusables.length === 0) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    const activeEl = document.activeElement as HTMLElement | null;
+    if (e.shiftKey) {
+      if (activeEl === first || !panel.contains(activeEl)) {
+        e.preventDefault();
+        last.focus();
+      }
+    } else if (activeEl === last || !panel.contains(activeEl)) {
+      e.preventDefault();
+      first.focus();
+    }
+  };
+
   if (!mounted) return null;
 
   let rowIndex = -1;
@@ -408,14 +435,17 @@ export function CommandPalette() {
   return createPortal(
     <div
       className={cx(styles.root, searchOpen && styles.rootOpen)}
+      role="presentation"
       onClick={close}
     >
       <div
+        ref={panelRef}
         className={cx(styles.panel, searchOpen && styles.panelOpen)}
         role="dialog"
         aria-modal="true"
         aria-label="Search"
         onClick={(e) => e.stopPropagation()}
+        onKeyDown={onPanelKeyDown}
       >
         <div className={styles.searchRow}>
           <Icon name="MagnifyingGlass" size="20px" className={styles.searchIcon} />

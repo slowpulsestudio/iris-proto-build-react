@@ -1,4 +1,4 @@
-// A11y audit for the 7 "More themes" — checks WCAG 2.2 Level AA contrast for the
+// A11y audit for the 9 "More themes" — checks WCAG 2.2 Level AA contrast for the
 // current token values in src/tokens/more-themes/*.css.
 //   run: node scripts/a11y-audit.ts
 import { AA_2_2, evaluate, fmt, type Hex } from './wcag.ts';
@@ -17,6 +17,7 @@ interface Theme {
   strong: Hex;
   focus: Hex;
   btnPrimary: Hex;
+  btnLabel?: Hex;
 }
 
 const white: Hex = '#FFFFFF';
@@ -42,25 +43,35 @@ const themes: Record<string, Theme> = {
     brand: '#E6B450', info: '#59C2FF', success: '#AAD94C', warning: '#FFB454', error: '#F26D78',
     link: '#E6B450', strong: '#5C6773', focus: '#E6B450', btnPrimary: '#8A6220',
   },
-  'one-dark-pro': {
-    bg: '#282C34', primary: '#ABB2BF', secondary: '#9199A5', tertiary: '#8D96A5',
-    brand: '#61AFEF', info: '#56B6C2', success: '#98C379', warning: '#E5C07B', error: '#E98C93',
-    link: '#61AFEF', strong: '#727B8F', focus: '#61AFEF', btnPrimary: '#2F79B8',
-  },
   'tokyo-night': {
     bg: '#1A1B26', primary: '#A9B1D6', secondary: '#898EB0', tertiary: '#8188AE',
     brand: '#7AA2F7', info: '#7DCFFF', success: '#9ECE6A', warning: '#E0AF68', error: '#F7768E',
     link: '#7AA2F7', strong: '#656D92', focus: '#7AA2F7', btnPrimary: '#3D59A1',
   },
   catppuccin: {
-    bg: '#1E1E2E', primary: '#CDD6F4', secondary: '#BAC2DE', tertiary: '#9399B0',
+    bg: '#1E1E2E', primary: '#CDD6F4', secondary: '#BAC2DE', tertiary: '#9399B2',
     brand: '#89B4FA', info: '#89DCEB', success: '#A6E3A1', warning: '#F9E2AF', error: '#F38BA8',
-    link: '#89B4FA', strong: '#6C6F86', focus: '#89B4FA', btnPrimary: '#4372C4',
+    link: '#89B4FA', strong: '#6C7086', focus: '#89B4FA', btnPrimary: '#4372C4',
   },
   monokai: {
     bg: '#272822', primary: '#F8F8F2', secondary: '#C9C9C0', tertiary: '#9D9A83',
     brand: '#FF4B85', info: '#66D9EF', success: '#A6E22E', warning: '#FD971F', error: '#FA5E5E',
     link: '#66D9EF', strong: '#75715E', focus: '#F92672', btnPrimary: '#D81B5E',
+  },
+  synthwave: {
+    bg: '#262335', primary: '#FFFFFF', secondary: '#D3CCE3', tertiary: '#848BBD',
+    brand: '#FF7EDB', info: '#36F9F6', success: '#72F1B8', warning: '#FEDE5D', error: '#FF5A63',
+    link: '#F97E72', strong: '#6470B5', focus: '#FF7EDB', btnPrimary: '#614D85',
+  },
+  aura: {
+    bg: '#15141B', primary: '#EDECEE', secondary: '#CDCCCE', tertiary: '#ADACAE',
+    brand: '#A277FF', info: '#82E2FF', success: '#61FFCA', warning: '#FFCA85', error: '#FF6767',
+    link: '#A277FF', strong: '#6D6D6D', focus: '#A277FF', btnPrimary: '#61FFCA', btnLabel: '#15141B',
+  },
+  flexoki: {
+    bg: '#100F0F', primary: '#CECDC3', secondary: '#B7B5AC', tertiary: '#878580',
+    brand: '#4385BE', info: '#3AA99F', success: '#879A39', warning: '#D0A215', error: '#E8705F',
+    link: '#4385BE', strong: '#6F6E69', focus: '#4385BE', btnPrimary: '#3AA99F', btnLabel: '#100F0F',
   },
 };
 
@@ -92,8 +103,8 @@ for (const [name, t] of Object.entries(themes)) {
   console.log(`  ui   border-str ${t.strong}  ${fmt(strong.ratio).padEnd(9)}${tag(strong.ratio, AA_2_2.nonText)}`);
   console.log(`  ui   focus-ring ${t.focus}  ${fmt(focus.ratio).padEnd(9)}${tag(focus.ratio, AA_2_2.nonText)}`);
 
-  // Primary button label (white) on the button fill -> normal-text 4.5:1.
-  const btn = evaluate(white, t.btnPrimary, AA_2_2.normalText);
+  // Primary button label on the button fill -> normal-text 4.5:1.
+  const btn = evaluate(t.btnLabel ?? white, t.btnPrimary, AA_2_2.normalText);
   if (!btn.passes && !name.startsWith('__')) failures++;
   console.log(`  text btn-label  ${t.btnPrimary}  ${fmt(btn.ratio).padEnd(9)}${tag(btn.ratio, AA_2_2.normalText)}`);
 }

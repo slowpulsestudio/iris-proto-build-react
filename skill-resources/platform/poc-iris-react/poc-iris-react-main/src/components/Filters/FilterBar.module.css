@@ -1,0 +1,84 @@
+/* FilterBar — the active-filter band beneath the toolbar. */
+
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--oi-spacing-s);
+  min-width: 0;
+}
+
+.bar:focus {
+  outline: none;
+}
+
+/* Anchor for a group's pill + its dropdown popover. */
+.groupWrap {
+  position: relative;
+  display: inline-flex;
+  max-width: 100%;
+}
+
+/* Clickable trigger region inside the pill (segments share the pill shell). */
+.trigger {
+  display: inline-flex;
+  align-items: stretch;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.trigger:focus-visible {
+  outline: var(--oi-border-width-l) var(--oi-border-style-solid)
+    var(--oi-border-color-focus);
+  outline-offset: calc(-1 * var(--oi-border-width-l));
+}
+
+/* "and/or N more conditions" trailing segment. */
+.moreSeg {
+  color: var(--oi-content-color-secondary);
+  font-size: var(--oi-text-caption-font-size);
+  line-height: var(--oi-text-caption-line-height);
+}
+
+.moreConnector {
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-weight: var(--oi-text-caption-strong-font-weight, var(--oi-text-caption-font-weight));
+}
+
+/* Trailing ghost `+` button for adding filters straight from the bar. */
+.addGhost {
+  align-self: center;
+}
+
+/* Dropdown popover hosting the entire (nested) builder — fluid width. */
+.popover {
+  position: absolute;
+  top: calc(100% + var(--oi-spacing-xs));
+  left: 0;
+  z-index: 20;
+  width: max-content;
+  min-width: 320px;
+  max-width: min(720px, 90vw);
+  border-radius: var(--oi-border-radius-l);
+  background-color: var(--oi-background-color-primary);
+  box-shadow: var(--oi-shadow-mid);
+  animation: filterbar-pop-in var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+@keyframes filterbar-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .popover {
+    animation: none;
+  }
+}

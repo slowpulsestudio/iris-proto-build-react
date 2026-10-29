@@ -10,6 +10,45 @@
   gap: var(--oi-spacing-xl);
   padding: var(--oi-spacing-xxl) var(--oi-spacing-l);
   min-width: 0;
+  /* Staggered card reveal tokens (transitions-dev motion scale). */
+  --reveal-dur: 500ms; /* --duration-very-slow */
+  --reveal-distance: 12px; /* --distance-medium */
+  --reveal-step: 40ms; /* --duration-stagger */
+  --reveal-blur: 3px; /* --blur-medium */
+  --reveal-ease: cubic-bezier(0.22, 1, 0.36, 1); /* --ease-smooth-out */
+}
+
+/* Staggered card loading — adapted from transitions-dev "texts reveal":
+   each tile / card rises + unblurs into place, delayed one stagger step
+   (per --i index) after the last. Staggered within each grid so the
+   6-item total (5 x 40ms = 200ms) stays under the ~300ms budget. */
+.reveal {
+  opacity: 0;
+  transform: translateY(var(--reveal-distance));
+  filter: blur(var(--reveal-blur));
+  transition:
+    opacity var(--reveal-dur) var(--reveal-ease),
+    transform var(--reveal-dur) var(--reveal-ease),
+    filter var(--reveal-dur) var(--reveal-ease);
+  transition-delay: calc(var(--reveal-step) * var(--i, 0));
+  will-change: transform, opacity, filter;
+}
+
+.isShown .reveal {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transition: none !important;
+  }
+}
+
+.bottomSpacer {
+  flex: 0 0 auto;
+  height: var(--oi-spacing-xl);
 }
 
 /* ── Hero: greeting + launcher + chips ── */
@@ -116,7 +155,6 @@
   background-color: var(--oi-background-color-primary);
   border: 0.5px var(--oi-border-style-solid) var(--oi-border-color-default);
   border-radius: var(--oi-border-radius-l);
-  box-shadow: var(--oi-shadow-low);
 }
 
 .tileHeader {
@@ -127,10 +165,11 @@
 }
 
 .tileValue {
+  margin: 0;
   font-family: var(--oi-font-family-code);
-  font-size: var(--oi-text-heading-04-font-size);
-  line-height: var(--oi-text-heading-04-line-height);
-  font-weight: var(--oi-font-weight-600);
+  font-size: var(--oi-text-heading-03-font-size);
+  line-height: var(--oi-text-heading-03-line-height);
+  font-weight: var(--oi-font-weight-400);
   color: var(--oi-content-color-primary);
   font-variant-numeric: tabular-nums;
 }
@@ -148,7 +187,7 @@
 /* Dummy sparkline: full-bleed to the tile's side + bottom edges. */
 .spark {
   width: calc(100% + 2 * var(--oi-spacing-l));
-  height: 56px;
+  height: 48px;
   margin: auto calc(-1 * var(--oi-spacing-l)) 0;
   display: block;
   overflow: visible;
@@ -204,7 +243,8 @@
   gap: var(--oi-spacing-m);
   min-height: 124px;
   padding: var(--oi-spacing-m) var(--oi-spacing-l);
-  background-color: var(--oi-background-color-secondary);
+  background-color: var(--oi-background-color-primary);
+  border: 0.5px var(--oi-border-style-solid) var(--oi-border-color-default);
   border-radius: var(--oi-border-radius-l);
   text-decoration: none;
 }
@@ -219,6 +259,18 @@
   flex-direction: column;
   gap: var(--oi-spacing-xs);
   min-width: 0;
+}
+
+.cardTitleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--oi-spacing-s);
+  min-width: 0;
+}
+
+.cardIcon {
+  flex-shrink: 0;
+  color: var(--oi-content-color-secondary);
 }
 
 .cardTitle {
@@ -250,6 +302,20 @@
 
 .card:hover .cardLink {
   color: var(--oi-content-color-link-hover);
+}
+
+.cardArrow {
+  transition: transform var(--oi-motion-duration-short) var(--oi-motion-ease-default);
+}
+
+.card:hover .cardArrow {
+  transform: translateX(var(--oi-spacing-xs));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cardArrow {
+    transition: none;
+  }
 }
 
 @media (max-width: 1100px) {

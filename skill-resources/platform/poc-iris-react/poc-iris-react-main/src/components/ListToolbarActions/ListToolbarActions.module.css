@@ -1,0 +1,45 @@
+.toolbarSeparator {
+  align-self: center;
+  width: 1px;
+  height: 20px;
+  background: var(--oi-border-color-default);
+  flex-shrink: 0;
+}
+
+/* Filter button content: funnel icon (with an accent dot when filters are
+   active) followed by the label. Block-level flex avoids the inline-baseline
+   offset that pushed the content above the button's vertical centre. */
+.filterContent {
+  display: flex;
+  align-items: center;
+  gap: var(--oi-button-gap-default);
+}
+
+.filterLead {
+  display: inline-flex;
+}
+
+.filterActive {
+  position: relative;
+}
+
+.filterDot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: var(--oi-spacing-s);
+  height: var(--oi-spacing-s);
+  border-radius: 50%;
+  background-color: var(--oi-content-color-brand);
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-background-color-primary);
+}
+
+.addBtn {
+  gap: var(--oi-button-gap-s);
+}
+
+.addBtn > span:last-child {
+  width: 16px !important;
+  height: 16px !important;
+}

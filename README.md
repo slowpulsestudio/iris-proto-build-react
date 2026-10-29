@@ -177,7 +177,7 @@ The `poc-iris-react` baseline is manually updated by Ryan from Abhi's shell repo
 | `workflow/general` | Core execution rules — always include |
 | `workflow/architecture` | General code structure rules |
 | `workflow/deep-linking` | URL-addressable tree navigation |
-| `workflow/figma-read-from-mcp` | If the project uses Figma for design. Automatically gathers your products master library. |
+| `workflow/figma-read-from-mcp` | If the project uses Figma for design. Automatically gathers your products master library. Includes Iris UI design-style rules (tokens, elevation, themes, accessibility). |
 | `workflow/figma-write-to-canvas` | Writing design frames to Figma canvas from code |
 | `workflow/figma-update-existing-screen` | Audit-first flow for updating existing `poc-iris-react` screens one discrepancy at a time |
 | `workflow/git` | Source control rules |

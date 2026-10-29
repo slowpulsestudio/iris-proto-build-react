@@ -1,0 +1,63 @@
+/* Synthwave '84 — source: https://github.com/robb0wen/synthwave-vscode (themes/synthwave-color-theme.json)
+   Partial color override (structural tokens inherited from :root). The neon
+   "glow" is an editor text-shadow effect, not a palette color — not ported. */
+body.theme-synthwave {
+  /* backgrounds */
+  --oi-background-color-primary: #262335;
+  --oi-background-color-blanket: rgba(0, 0, 0, 0.55);
+  --oi-background-color-secondary: #241B2F;
+  --oi-background-color-tertiary: #2A2139;
+  --oi-background-color-brand: rgba(255, 126, 219, 0.16);
+  --oi-background-color-info: rgba(54, 249, 246, 0.14);
+  --oi-background-color-success: rgba(114, 241, 184, 0.14);
+  --oi-background-color-warning: rgba(254, 222, 93, 0.14);
+  --oi-background-color-error: rgba(254, 68, 80, 0.16);
+  /* base accents */
+  --oi-base-color-brand: #FF7EDB;
+  --oi-base-color-info: #36F9F6;
+  --oi-base-color-success: #72F1B8;
+  --oi-base-color-warning: #FEDE5D;
+  --oi-base-color-error: #FE4450;
+  /* borders */
+  --oi-border-color-strong: #6470B5;
+  --oi-border-color-default: #444251;
+  --oi-border-color-muted: #403853;
+  --oi-border-color-focus: #FF7EDB;
+  --oi-border-color-badge-info: #36F9F6;
+  --oi-border-color-badge-success: #72F1B8;
+  --oi-border-color-badge-error: #FE4450;
+  --oi-border-color-badge-warning: #FEDE5D;
+  /* content */
+  --oi-content-color-primary: #FFFFFF;
+  --oi-content-color-secondary: #D3CCE3;
+  --oi-content-color-tertiary: #848BBD;
+  --oi-content-color-brand: #FF7EDB;
+  --oi-content-color-info: #36F9F6;
+  --oi-content-color-success: #72F1B8;
+  --oi-content-color-warning: #FEDE5D;
+  --oi-content-color-error: #FF5A63;
+  --oi-content-color-link: #F97E72;
+  --oi-content-color-link-hover: #FF7EDB;
+  --oi-content-color-link-visited: #FF7EDB;
+  --oi-content-color-inked: #FFFFFF;
+  --oi-content-color-disabled: rgba(255, 255, 255, 0.38);
+  /* buttons (primary uses the theme's own purple with white label) */
+  --oi-button-background-primary: #614D85;
+  --oi-button-background-primary-hover: #54446F;
+  --oi-button-background-primary-active: #54446F;
+  --oi-button-background-secondary: #262335;
+  --oi-button-background-secondary-hover: #2A2139;
+  --oi-button-background-secondary-active: #34294F;
+  --oi-button-background-disabled: #2A2139;
+  /* charts (categorical series) */
+  --oi-chart-color-1: #7DD3FC;
+  --oi-chart-color-2: #FF7EDB;
+  --oi-chart-color-3: #FEDE5D;
+  --oi-chart-color-4: #72F1B8;
+  /* shadows (match default dark theme) */
+  --oi-shadow-none: none;
+  --oi-shadow-low: inset 0px 0.5px 0px rgba(255, 255, 255, 0.12), inset 0px 0px 0px 0.5px rgba(255, 255, 255, 0.11);
+  --oi-shadow-mid: 0px 0px 0px 1px rgba(255, 255, 255, 0.16), 0px 2px 12px rgba(59, 51, 69, 0.16);
+  --oi-shadow-high: 0px 12px 56px rgba(255, 255, 255, 0.07), inset 0px 0px 0px 1px rgba(255, 255, 255, 0.16);
+  --oi-focus-ring: 0 0 0 1.5px var(--oi-background-color-primary), 0 0 0 3px var(--oi-border-color-focus);
+}

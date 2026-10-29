@@ -9,7 +9,38 @@ import { IDENTITY_NAV_GROUPS, IDENTITY_ROLES, filterIdentityGroups } from '../..
 import type { NavStatus } from '../../lib/verticals.js';
 
 /** Greeting name shown on Home. Presentation-only mock. */
-export const HOME_USER_NAME = 'Abhi';
+export const HOME_USER_NAME = 'Sara';
+
+type Daypart = 'morning' | 'afternoon' | 'evening' | 'night';
+
+/** Greeting variations per time of day; one is chosen deterministically. */
+const GREETINGS: Record<Daypart, readonly string[]> = {
+  morning: ['Good morning', 'Morning', 'Rise and shine'],
+  afternoon: ['Good afternoon', 'Afternoon', 'Hope the day is going well'],
+  evening: ['Good evening', 'Evening', 'Winding down for the day'],
+  night: ['Still up', 'Working late', 'Burning the midnight oil'],
+};
+
+function daypart(hour: number): Daypart {
+  if (hour < 5) return 'night';
+  if (hour < 12) return 'morning';
+  if (hour < 18) return 'afternoon';
+  return 'evening';
+}
+
+/**
+ * Time-of-day greeting based on the viewer's local clock. Deterministic: the
+ * daypart selects the phrase pool, and the local calendar day picks which
+ * variation within it — so the greeting is stable across a given day and
+ * rotates day to day (never random).
+ */
+export function timeGreeting(date = new Date()): string {
+  const pool = GREETINGS[daypart(date.getHours())];
+  // Days elapsed in the viewer's local timezone (offset shifts UTC to local).
+  const localMs = date.getTime() - date.getTimezoneOffset() * 60_000;
+  const dayIndex = Math.floor(localMs / 86_400_000);
+  return pool[dayIndex % pool.length];
+}
 
 export interface HomeChip {
   label: string;
@@ -42,7 +73,7 @@ export const HOME_STAT_TILES: HomeStatTile[] = [
     spark: [0, 1, 0, 2, 1, 0, 3, 8, 5, 2, 0, 1, 0, 0, 4, 1, 0, 2, 0],
   },
   {
-    value: '999',
+    value: '990',
     label: 'Requests to approve',
     route: '#/identity/my-team/approvals',
     spark: [0, 0, 1, 0, 3, 1, 0, 6, 9, 4, 1, 0, 2, 0, 1, 0, 5, 0, 1],
@@ -66,7 +97,7 @@ export const HOME_STAT_TILES: HomeStatTile[] = [
     spark: [0, 1, 0, 0, 2, 0, 4, 1, 0, 3, 0, 1, 0, 6, 2, 0, 1, 0, 0],
   },
   {
-    value: '7295',
+    value: '7095',
     label: 'Policy violations to approve',
     route: '#/identity/governance/policy-violations',
     spark: [0, 0, 1, 0, 2, 0, 0, 9, 1, 0, 0, 3, 0, 1, 0, 0, 2, 0, 1],
@@ -78,6 +109,7 @@ export interface HomeActionCard {
   description: string;
   linkLabel: string;
   route: string;
+  icon: string;
 }
 
 /** The six info/action cards on Home. Targets are the closest real routes. */
@@ -87,36 +119,42 @@ export const HOME_ACTION_CARDS: HomeActionCard[] = [
     description: 'Specify your password questions to be able to unlock your user account.',
     linkLabel: 'Specify password questions',
     route: '#/identity/my-access/password-reset',
+    icon: 'Key',
   },
   {
     title: 'Browser Notifications',
     description: 'Allow this website to send you browser notifications.',
     linkLabel: 'Allow browser notifications',
     route: '#/identity/settings',
+    icon: 'Bell',
   },
   {
     title: 'New Request',
     description: 'Request products for yourself or for others.',
     linkLabel: 'Request products',
     route: '#/identity/my-access/request-access',
+    icon: 'FilePlus',
   },
   {
     title: 'Application KPI Overview',
     description: 'Get an overview of the KPIs for your applications.',
     linkLabel: 'View KPI overview',
     route: '#/identity/insights',
+    icon: 'ChartBar',
   },
   {
     title: 'Team Role',
     description: 'Manage the entitlements required for your team using a team role.',
     linkLabel: 'Create team role',
     route: '#/identity/modeling/business-roles',
+    icon: 'UsersThree',
   },
   {
     title: 'My Direct Reports',
     description: 'View and manage identities you are directly responsible for.',
     linkLabel: 'Create identity',
     route: '#/identity/my-team/direct-reports',
+    icon: 'UserList',
   },
 ];
 

@@ -70,6 +70,7 @@
 /* variants mirror Button */
 .variant_primary {
   background-color: var(--oi-button-background-primary);
+  color: var(--oi-button-foreground-primary, var(--oi-content-color-constant));
 }
 .variant_primary:hover:not(:disabled) {
   background-color: var(--oi-button-background-primary-hover);

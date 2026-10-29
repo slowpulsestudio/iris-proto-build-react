@@ -54,7 +54,7 @@
 /* ---------- variants ---------- */
 .variant_primary {
   background-color: var(--oi-button-background-primary);
-  color: var(--oi-content-color-constant);
+  color: var(--oi-button-foreground-primary, var(--oi-content-color-constant));
   box-shadow: var(--oi-shadow-low);
 }
 .variant_primary:hover:not(:disabled) {

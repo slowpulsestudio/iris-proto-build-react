@@ -63,3 +63,52 @@
   line-height: var(--oi-text-caption-strong-line-height);
   font-weight: var(--oi-text-caption-strong-font-weight);
 }
+
+/* Particle-burst celebration ------------------------------------------------
+   Opt-in per item via `celebrate`. The icon keeps the standard default/active
+   colours; only the particle spray is added on select. Tunables scoped here so
+   they don't leak to :root. */
+.root {
+  --like-particle-dur: 600ms;
+  --like-particle-size: 2.5px;
+}
+
+/* Anchors the absolutely-positioned particles over the icon. */
+.iconWrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.particles {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  color: var(--oi-base-color-error);
+}
+
+.particles i {
+  position: absolute;
+  left: calc(var(--like-particle-size) * var(--psize, 1) / -2);
+  top: calc(var(--like-particle-size) * var(--psize, 1) / -2);
+  width: calc(var(--like-particle-size) * var(--psize, 1));
+  height: calc(var(--like-particle-size) * var(--psize, 1));
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0;
+  animation: sc-like-burst var(--pdur, var(--like-particle-dur)) ease-out var(--pdelay, 0ms) forwards;
+}
+
+@keyframes sc-like-burst {
+  0% { opacity: 0; transform: translate(0, 0) scale(0.4); }
+  20% { opacity: 1; transform: translate(calc(var(--px) * 0.25), calc(var(--py) * 0.25)) scale(1); }
+  100% { opacity: 0; transform: translate(var(--px), var(--py)) scale(var(--p-end-scale, 0.6)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .particles i {
+    animation: none !important;
+  }
+}

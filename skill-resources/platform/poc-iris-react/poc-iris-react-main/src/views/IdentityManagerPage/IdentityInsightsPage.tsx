@@ -1,4 +1,4 @@
-import { type MouseEvent } from 'react';
+import { useEffect, useState, type MouseEvent } from 'react';
 import { AppShell } from '../AppShell/AppShell.js';
 import { navigate } from '../../lib/router.js';
 import { IDENTITY_INSIGHTS_ROUTE } from '../../lib/identityNav.js';
@@ -97,6 +97,14 @@ export function IdentityInsightsPage() {
   const byGroup = navCoverageByGroup();
   const roles = roleCoverage();
 
+  // Play the staggered card entrance on mount. Starting hidden then flipping
+  // on the next frame is the React-friendly reflow equivalent.
+  const [shown, setShown] = useState(false);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setShown(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
   const stacked = byGroup.map((g) => ({ label: shortLabel(g), web: g.web, fat: g.fat, planned: g.planned }));
   // "Modernization by area" excludes the Build-section groups (all fat client).
   const modernByArea = byGroup
@@ -115,7 +123,7 @@ export function IdentityInsightsPage() {
       activeGlobalItem={IDENTITY_INSIGHTS_ROUTE}
       showSecondarySidebar={false}
     >
-      <div className={styles.page}>
+      <div className={`${styles.page} ${shown ? styles.isShown : ''}`}>
         <ContentHeader
           variant="detail"
           icon="PresentationChart"
@@ -127,40 +135,31 @@ export function IdentityInsightsPage() {
 
         {/* KPI row */}
         <div className={styles.statGrid}>
-          <StatCard label="Destinations" value={String(totals.total)} className={styles.noShadowCard} />
+          <StatCard label="Destinations" value={String(totals.total)} className={`${styles.noShadowCard} ${styles.revealCard}`} />
           <StatCard
             label="Modernized"
             value={pct(totals.pctModern)}
             trend={{ direction: 'up', value: `${totals.web} of ${totals.total}`, tone: 'success' }}
-            className={styles.noShadowCard}
+            className={`${styles.noShadowCard} ${styles.revealCard}`}
           />
           <StatCard
             label="In fat client"
             value={String(totals.fat)}
             trend={{ direction: 'warning', value: 'legacy', tone: 'warning' }}
-            className={styles.noShadowCard}
+            className={`${styles.noShadowCard} ${styles.revealCard}`}
           />
         </div>
 
         {/* Charts — uniform 3-column grid */}
         <div className={styles.chartGrid}>
-          <Card title="Overall modernization" helper="Share on the unified web shell" className={styles.noShadowCard}>
+          <Card title="Overall modernization" helper="Share on the unified web shell" className={`${styles.noShadowCard} ${styles.revealCard}`}>
             <GaugeArc value={totals.pctModern} />
           </Card>
-          <Card title="Modernization trend" helper="Web share over the last 12 months" className={styles.noShadowCard}>
+          <Card title="Modernization trend" helper="Web share over the last 12 months" className={`${styles.noShadowCard} ${styles.revealCard}`}>
             <AreaTrend data={MODERNIZATION_TREND} labels={TREND_MONTHS} />
           </Card>
-          <Card title="Status mix" helper="Web vs fat client vs planned" className={styles.noShadowCard}>
+          <Card title="Status mix" helper="Web vs fat client vs planned" className={`${styles.noShadowCard} ${styles.revealCard}`}>
             <DonutChart segments={statusSegments} strokeWidth={10} />
-          </Card>
-          <Card title="Status by area" helper="Destinations per group, split by status" className={styles.noShadowCard}>
-            <StackedBar data={stacked} />
-          </Card>
-          <Card title="Modernization by area" helper="Percent of each area on web" className={styles.noShadowCard}>
-            <HBars data={modernByArea} />
-          </Card>
-          <Card title="Reach by role" helper="Destinations each persona can open" className={styles.noShadowCard}>
-            <VBars data={roleBars} />
           </Card>
         </div>
 
@@ -172,6 +171,19 @@ export function IdentityInsightsPage() {
           </header>
           <DataTable rows={byGroup} columns={COVERAGE_COLUMNS} ariaLabel="Navigation coverage by area" />
         </section>
+
+        {/* Per-area breakdown charts — uniform 3-column grid */}
+        <div className={styles.chartGrid}>
+          <Card title="Status by area" helper="Destinations per group, split by status" className={`${styles.noShadowCard} ${styles.revealCard}`}>
+            <StackedBar data={stacked} />
+          </Card>
+          <Card title="Modernization by area" helper="Percent of each area on web" className={`${styles.noShadowCard} ${styles.revealCard}`}>
+            <HBars data={modernByArea} />
+          </Card>
+          <Card title="Reach by role" helper="Destinations each persona can open" className={`${styles.noShadowCard} ${styles.revealCard}`}>
+            <VBars data={roleBars} />
+          </Card>
+        </div>
       </div>
     </AppShell>
   );

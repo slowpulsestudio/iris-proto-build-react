@@ -12,6 +12,8 @@ import { DescriptionList } from '../../components/DescriptionList/DescriptionLis
 import { Link, type LinkTone } from '../../components/Link/Link.js';
 import { Menu } from '../../components/Menu/Menu.js';
 import { Tooltip } from '../../components/Tooltip/Tooltip.js';
+import { EmptyFigure } from '../../components/EmptyFigure/EmptyFigure.js';
+import { Dish } from '@lucasmarkes/hairline/react';
 import { EditPropertiesSheet } from './EditPropertiesSheet.js';
 import { ResetPasswordModal } from './ResetPasswordModal/ResetPasswordModal.js';
 import { DeleteUserModal } from './DeleteUserModal/DeleteUserModal.js';
@@ -177,9 +179,7 @@ export function UserDetailPage({ userId }: UserDetailPageProps) {
           />
         )}
         {tab !== 'overview' && (
-          <Card title={TABS.find((t) => t.value === tab)?.label}>
-            <p className={styles.placeholder}>Coming soon.</p>
-          </Card>
+          <EmptyFigure figure={Dish} label={TABS.find((t) => t.value === tab)?.label} />
         )}
       </div>
 

@@ -149,6 +149,25 @@ const VIEW_ROUTES: Record<string, string> = {
   favourites: '#/favorites',
 };
 
+function handleGlobalNavChange(value: string) {
+  if (value.startsWith('#')) {
+    navigate(value);
+    return;
+  }
+  const target = GLOBAL_NAV_ROUTES[value];
+  if (target) navigate(target);
+}
+
+function handleSecondaryNavChange(value: string) {
+  const target = SECONDARY_NAV_ROUTES[value];
+  if (target) navigate(target);
+}
+
+function handleViewChange(value: string) {
+  const target = VIEW_ROUTES[value];
+  if (target) navigate(target);
+}
+
 export interface AppShellProps {
   breadcrumb: Crumb[];
   /**
@@ -206,25 +225,6 @@ export function AppShell({
       ? filterIdentityGroups(identityRole)
       : vertical.navGroups
     : undefined;
-
-  const handleGlobalNavChange = (value: string) => {
-    if (value.startsWith('#')) {
-      navigate(value);
-      return;
-    }
-    const target = GLOBAL_NAV_ROUTES[value];
-    if (target) navigate(target);
-  };
-
-  const handleSecondaryNavChange = (value: string) => {
-    const target = SECONDARY_NAV_ROUTES[value];
-    if (target) navigate(target);
-  };
-
-  const handleViewChange = (value: string) => {
-    const target = VIEW_ROUTES[value];
-    if (target) navigate(target);
-  };
 
   // Debounce closing the peek so quickly moving cursor between the toggle
   // and the sidebar panel doesn't cause the panel to disappear.

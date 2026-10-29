@@ -1,0 +1,118 @@
+/* ConditionPill — one editable `parameter · operator · value · ✕` row.
+   Token-driven only; segments share a bordered, rounded shell. */
+
+.pill {
+  display: inline-flex;
+  align-items: stretch;
+  max-width: 100%;
+  border: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-default);
+  border-radius: var(--oi-border-radius-l);
+  background-color: var(--oi-background-color-primary);
+  overflow: hidden;
+}
+
+/* Accent ring when any segment inside is focused (hi-fi "focus" state). */
+.pill:focus-within {
+  border-color: var(--oi-border-color-focus);
+}
+
+.seg {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--oi-spacing-xs);
+  min-width: 0;
+  padding-block: var(--oi-spacing-xs);
+  padding-inline: var(--oi-spacing-s);
+  border: none;
+  background-color: transparent;
+  color: var(--oi-content-color-primary);
+  font-family: inherit;
+  font-size: var(--oi-text-body-s-font-size);
+  line-height: var(--oi-text-body-s-line-height);
+  font-weight: var(--oi-text-body-s-font-weight);
+  white-space: nowrap;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* Dividers between adjacent segments. */
+.seg + .seg,
+.pill > * + * {
+  border-left: var(--oi-border-width-default) var(--oi-border-style-solid)
+    var(--oi-border-color-muted);
+}
+
+.seg:hover {
+  background-color: var(--oi-background-color-secondary);
+}
+
+.seg:focus-visible {
+  outline: var(--oi-border-width-l) var(--oi-border-style-solid)
+    var(--oi-border-color-focus);
+  outline-offset: calc(-1 * var(--oi-border-width-l));
+}
+
+.segIcon {
+  color: var(--oi-content-color-secondary);
+  flex-shrink: 0;
+}
+
+.segLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Operator label reads muted per the hi-fi. */
+.segOp {
+  max-width: 9rem;
+}
+
+.segOp .segLabel {
+  color: var(--oi-content-color-secondary);
+}
+
+.segValue {
+  max-width: 10rem;
+  color: var(--oi-content-color-primary);
+}
+
+.segValue > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.placeholder {
+  color: var(--oi-content-color-tertiary);
+  white-space: nowrap;
+}
+
+/* Inline text/date inputs blend into the value segment. */
+.valueInput {
+  width: 7rem;
+  margin: 0;
+  border: none;
+  background-color: transparent;
+  color: var(--oi-content-color-primary);
+  cursor: text;
+}
+
+.valueInput[type='date'] {
+  width: auto;
+  cursor: pointer;
+}
+
+.valueInput::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.segRemove {
+  flex-shrink: 0;
+  color: var(--oi-content-color-secondary);
+}
+
+.segRemove:hover {
+  color: var(--oi-content-color-primary);
+}

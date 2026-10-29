@@ -7,6 +7,8 @@ import { IconButton } from '../../components/IconButton/IconButton.js';
 import { Tooltip } from '../../components/Tooltip/Tooltip.js';
 import { ContentHeader } from '../../components/ContentHeader/ContentHeader.js';
 import { DataTable, type DataTableColumn } from '../../components/DataTable/DataTable.js';
+import { EmptyFigure } from '../../components/EmptyFigure/EmptyFigure.js';
+import { Turntable } from '@lucasmarkes/hairline/react';
 import styles from './FavoritesPage.module.css';
 
 const COLUMNS: DataTableColumn<FavoriteEntry>[] = [
@@ -50,28 +52,32 @@ export function FavoritesPage() {
     <AppShell breadcrumb={[{ label: 'Directory Management' }, { label: 'Favourites' }]}>
       <ContentHeader icon="Heart" title="Favourites" />
 
-      <div className={styles.tableWrap}>
-        <DataTable
-          rows={entries}
-          columns={COLUMNS}
-          ariaLabel="Favourites"
-          rowLabel={(f) => f.name}
-          rowActions={(f) => (
-            <Tooltip label="Remove from favourites">
-              <IconButton
-                icon="Trash"
-                ariaLabel={`Remove ${f.name} from favourites`}
-                size="s"
-                onClick={() => remove(f.id)}
-              />
-            </Tooltip>
-          )}
-          emptyState={{
-            title: 'No favourites yet',
-            description: 'Star an object to see it here.',
-          }}
+      {entries.length === 0 ? (
+        <EmptyFigure
+          figure={Turntable}
+          title="No favourites yet"
+          description="Star an object to see it here."
         />
-      </div>
+      ) : (
+        <div className={styles.tableWrap}>
+          <DataTable
+            rows={entries}
+            columns={COLUMNS}
+            ariaLabel="Favourites"
+            rowLabel={(f) => f.name}
+            rowActions={(f) => (
+              <Tooltip label="Remove from favourites">
+                <IconButton
+                  icon="Trash"
+                  ariaLabel={`Remove ${f.name} from favourites`}
+                  size="s"
+                  onClick={() => remove(f.id)}
+                />
+              </Tooltip>
+            )}
+          />
+        </div>
+      )}
     </AppShell>
   );
 }

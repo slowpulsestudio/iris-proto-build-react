@@ -1,4 +1,4 @@
-import { useMemo, type MouseEvent } from 'react';
+import { useEffect, useMemo, useState, type CSSProperties, type MouseEvent } from 'react';
 import { scaleLinear } from 'd3-scale';
 import { line as d3line, area as d3area, curveMonotoneX } from 'd3-shape';
 import { AppShell } from '../AppShell/AppShell.js';
@@ -7,7 +7,7 @@ import { useAppShell } from '../../lib/appShellContext.js';
 import { Icon } from '../../components/Icon/Icon.js';
 import { IconButton } from '../../components/IconButton/IconButton.js';
 import { HomeLauncher } from './HomeLauncher.js';
-import { HOME_USER_NAME, HOME_CHIPS, HOME_STAT_TILES, HOME_ACTION_CARDS } from './mockIdentityHome.js';
+import { HOME_USER_NAME, HOME_CHIPS, HOME_STAT_TILES, HOME_ACTION_CARDS, timeGreeting } from './mockIdentityHome.js';
 import styles from './IdentityManagerPage.module.css';
 
 /**
@@ -17,6 +17,14 @@ import styles from './IdentityManagerPage.module.css';
  */
 export function IdentityManagerPage() {
   const { setAiOpen, setPendingAiPrompt } = useAppShell();
+
+  // Play the staggered tile / card entrance on mount. Starting hidden then
+  // flipping on the next frame is the React-friendly reflow equivalent.
+  const [shown, setShown] = useState(false);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setShown(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   const openAiWith = (prompt: string) => {
     setPendingAiPrompt(prompt);
@@ -33,7 +41,7 @@ export function IdentityManagerPage() {
       <div className={styles.page}>
         <section className={styles.hero}>
           <h1 className={styles.greeting}>
-            Welcome, {HOME_USER_NAME}! Ask anything or tell us what you need.
+            {timeGreeting()}, {HOME_USER_NAME}! Ask anything or tell us what you need.
           </h1>
 
           <HomeLauncher />
@@ -55,9 +63,13 @@ export function IdentityManagerPage() {
 
         <hr className={styles.divider} />
 
-        <div className={styles.tileGrid}>
+        <div className={`${styles.tileGrid} ${shown ? styles.isShown : ''}`}>
           {HOME_STAT_TILES.map((t, i) => (
-            <div key={t.label} className={styles.tile}>
+            <div
+              key={t.label}
+              className={`${styles.tile} ${styles.reveal}`}
+              style={{ '--i': i } as CSSProperties}
+            >
               <span className={styles.tileHeader}>
                 <span className={styles.tileLabel}>{t.label}</span>
                 <IconButton icon="DotsThree" ariaLabel={`${t.label} options`} size="s" />
@@ -72,22 +84,32 @@ export function IdentityManagerPage() {
 
         <section className={styles.cardSection}>
           <h2 className={styles.sectionTitle}>Quick actions</h2>
-          <div className={styles.cardGrid}>
-            {HOME_ACTION_CARDS.map((c) => (
-              <a key={c.title} href={c.route} className={styles.card} onClick={go(c.route)}>
+          <div className={`${styles.cardGrid} ${shown ? styles.isShown : ''}`}>
+            {HOME_ACTION_CARDS.map((c, i) => (
+              <a
+                key={c.title}
+                href={c.route}
+                className={`${styles.card} ${styles.reveal}`}
+                style={{ '--i': i } as CSSProperties}
+                onClick={go(c.route)}
+              >
                 <span className={styles.cardBody}>
-                  <span className={styles.cardTitle}>{c.title}</span>
+                  <span className={styles.cardTitleRow}>
+                    <Icon name={c.icon} size="20px" className={styles.cardIcon} />
+                    <span className={styles.cardTitle}>{c.title}</span>
+                  </span>
                   <span className={styles.cardDesc}>{c.description}</span>
                 </span>
                 <span className={styles.cardLink}>
                   <span>{c.linkLabel}</span>
-                  <Icon name="ArrowRight" size="16px" />
+                  <Icon name="ArrowRight" size="16px" className={styles.cardArrow} />
                 </span>
               </a>
             ))}
           </div>
         </section>
-        
+
+        <div className={styles.bottomSpacer} aria-hidden="true" />
       </div>
     </AppShell>
   );
