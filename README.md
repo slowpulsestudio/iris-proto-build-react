@@ -11,22 +11,15 @@ It is the recommended approach for UX Research at One Identity as this prototype
 1. **Research prototype:** one per research round, frozen once testing starts.
 2. **Product demo:** one per product, added to over time.
 
-## The Problem This Repo Solves
+## The Problems This Repo Solves
 
 Copilot agents by default are lazy and incompetent prototype builders - they need a whole load of guardrails and explicit instruction to act more like a human Senior Frontend Developer. This skills repo does just that.
 
 For each of the scenarios:
 
-1. **Research prototype:** Each captures a specific flow for user testing and is frozen once the round begins, so the results always match what participants saw. Examples: IM Attestation flow, IT Shop wizard.
+1. **Research prototype:** We have a frozen demo that always matches what participants saw. Examples: IM Attestation flow, IT Shop wizard.
 
-2. **Product demo:** one per product, added to over time.
- Research prototypes: one per research round. 
-Product demos: one per product. Engineering can't yet show all our designs working together, so each demo brings a product's prototypes into one place that we keep adding to. Examples: Safeguard (Simon), Active Roles (Ryan).
-
-
-## Purpose
-
-This is for quick turnaround, hi-fidelity, fully interaction prototyping for research purposes.
+2. **Product demo:** Engineering resource limitations means we can't yet show all our designs working together, so each demo brings a product's prototypes into one place that we keep adding to. Examples: Safeguard (Simon), Active Roles (Ryan).
 
 
 ## How It Works
